@@ -5,65 +5,85 @@
   --color-brand-cyan: #00d9ff;
   --color-brand-pink: #ff6b6b;
   --color-brand-yellow: #feca57;
-  --color-surface-50: #f8f9fa;
-  --color-surface-100: #f1f3f5;
-  --color-surface-200: #e9ecef;
-  --color-surface-800: #1a1a2e;
-  --color-surface-900: #0f0f1a;
-  --color-surface-950: #07070f;
+  --color-surface-50: #f8fafc;
+  --color-surface-100: #f1f5f9;
+  --color-surface-200: #e2e8f0;
+  --color-surface-800: #1e293b;
+  --color-surface-900: #0f172a;
+  --color-surface-950: #020617;
 }
 
 @layer base {
-  * {
-    box-sizing: border-box;
-  }
-  html {
-    scroll-behavior: smooth;
-  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
   body {
     background-color: var(--color-surface-900);
-    color: white;
+    color: #e2e8f0;
     -webkit-font-smoothing: antialiased;
   }
+
   body.light {
     background-color: var(--color-surface-50);
-    color: #111827;
+    color: #1e293b;
   }
+
+  body.light .glass {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  body.light nav.glass {
+    background: rgba(248, 250, 252, 0.9);
+    border-bottom-color: rgba(0, 0, 0, 0.06);
+  }
+
+  body.light .text-gray-400 { color: #64748b; }
+  body.light .text-gray-500 { color: #94a3b8; }
+  body.light .text-gray-600 { color: #94a3b8; }
+
+  body.light textarea,
+  body.light input {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: #1e293b;
+  }
+
+  body.light textarea:focus,
+  body.light input:focus {
+    border-color: var(--color-brand-purple);
+  }
+
   ::selection {
-    background-color: color-mix(in srgb, var(--color-brand-purple) 30%, transparent);
+    background-color: color-mix(in srgb, var(--color-brand-purple) 25%, transparent);
   }
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb {
     background: color-mix(in srgb, var(--color-brand-purple) 20%, transparent);
     border-radius: 999px;
   }
-  ::-webkit-scrollbar-thumb:hover {
-    background: color-mix(in srgb, var(--color-brand-purple) 40%, transparent);
-  }
 }
 
 @utility glass {
-  background: color-mix(in srgb, white 5%, transparent);
+  background: rgba(15, 23, 42, 0.6);
   backdrop-filter: blur(24px);
-  border: 1px solid color-mix(in srgb, white 10%, transparent);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 1rem;
 }
 
 @utility glass-light {
-  background: color-mix(in srgb, white 80%, transparent);
+  background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(24px);
-  border: 1px solid #e5e7eb;
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 1rem;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 @utility text-gradient {
-  background: linear-gradient(to right, var(--color-brand-purple), var(--color-brand-cyan));
+  background: linear-gradient(135deg, var(--color-brand-purple), var(--color-brand-cyan));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
