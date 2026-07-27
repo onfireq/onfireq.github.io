@@ -2,7 +2,7 @@ import { getAllPosts, getAllTags } from "@/lib/blog";
 import BlogListPage from "./BlogListPage";
 
 export const metadata = {
-  title: "博客 | 何亦清",
+  title: "博客 | onfireq",
   description: "偏振控制算法研究与全栈开发的技术博客",
 };
 

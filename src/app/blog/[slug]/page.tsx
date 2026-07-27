@@ -11,7 +11,7 @@ export function generateMetadata({ params }: { params: { slug: string } }) {
   const post = getPostBySlug(params.slug);
   if (!post) return {};
   return {
-    title: `${post.title} | 何亦清`,
+    title: `${post.title} | onfireq`,
     description: post.description,
   };
 }

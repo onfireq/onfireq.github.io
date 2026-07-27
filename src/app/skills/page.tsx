@@ -1,7 +1,7 @@
 import SkillsSection from "@/components/SkillsSection";
 import Footer from "@/components/Footer";
 
-export const metadata = { title: "技能 | 何亦清" };
+export const metadata = { title: "技能 | onfireq" };
 
 export default function SkillsPage() {
   return (

@@ -1,7 +1,7 @@
 import AboutSection from "@/components/AboutSection";
 import Footer from "@/components/Footer";
 
-export const metadata = { title: "关于我 | 何亦清" };
+export const metadata = { title: "关于我 | onfireq" };
 
 export default function AboutPage() {
   return (
