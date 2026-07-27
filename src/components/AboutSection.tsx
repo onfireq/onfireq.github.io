@@ -22,7 +22,7 @@ export default function AboutSection() {
               <div className="w-64 h-64 mx-auto rounded-3xl overflow-hidden shadow-2xl shadow-brand-purple/20">
                 <img
                   src="/images/avatar.jpg"
-                  alt="何亦清"
+                  alt="onfireq"
                   className="w-full h-full object-cover"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;

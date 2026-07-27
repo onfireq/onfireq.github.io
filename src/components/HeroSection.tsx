@@ -35,7 +35,7 @@ export default function HeroSection() {
         >
           你好，我是
           <br />
-          <span className="text-gradient">何亦清</span>
+          <span className="text-gradient">onfireq</span>
         </motion.h1>
 
         <motion.p
