@@ -10,7 +10,6 @@ import { SiZhihu } from "react-icons/si";
 
 const links = [
   { href: "/", label: "首页" },
-  { href: "/skills", label: "技能" },
   { href: "/projects", label: "项目" },
   { href: "/blog", label: "博客" },
   { href: "/about", label: "关于" },

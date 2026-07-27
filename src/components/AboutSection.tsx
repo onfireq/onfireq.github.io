@@ -25,10 +25,6 @@ const stats = [
 const contactItems = [
   { icon: HiGlobe, label: "所在地", value: "中国 · 广州" },
   { icon: HiMail, label: "邮箱", value: "2467708204@qq.com" },
-  { icon: FaWeixin, label: "微信", value: "onfireq" },
-  { icon: FaGithub, label: "GitHub", value: "onfireq", href: "https://github.com/onfireq" },
-  { icon: SiZhihu, label: "知乎", value: "白日梦游", href: "https://www.zhihu.com/people/bai-ri-meng-you-54-77" },
-  { icon: BilibiliIcon, label: "B站", value: "onfireq", href: "https://space.bilibili.com/447249116" },
 ];
 
 export default function AboutSection() {
@@ -98,12 +94,7 @@ export default function AboutSection() {
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {contactItems.map((c, i) => (
             <ScrollReveal key={c.label} delay={i * 0.06}>
-              <a
-                href={c.href || "#"}
-                target={c.href ? "_blank" : undefined}
-                rel={c.href ? "noopener" : undefined}
-                className="glass p-5 flex items-center gap-3 hover:border-brand-purple/30 transition-all block"
-              >
+              <div className="glass p-5 flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-brand-purple/15 flex items-center justify-center text-brand-purple flex-shrink-0">
                   <c.icon size={18} />
                 </div>
@@ -111,7 +102,7 @@ export default function AboutSection() {
                   <div className="text-xs text-gray-500">{c.label}</div>
                   <div className="text-sm truncate">{c.value}</div>
                 </div>
-              </a>
+              </div>
             </ScrollReveal>
           ))}
         </div>
