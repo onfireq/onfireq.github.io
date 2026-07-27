@@ -23,12 +23,12 @@ const stats = [
 ];
 
 const contactItems = [
+  { icon: HiGlobe, label: "所在地", value: "中国 · 广州" },
   { icon: HiMail, label: "邮箱", value: "2467708204@qq.com" },
   { icon: FaWeixin, label: "微信", value: "onfireq" },
   { icon: FaGithub, label: "GitHub", value: "onfireq", href: "https://github.com/onfireq" },
   { icon: SiZhihu, label: "知乎", value: "白日梦游", href: "https://www.zhihu.com/people/bai-ri-meng-you-54-77" },
   { icon: BilibiliIcon, label: "B站", value: "onfireq", href: "https://space.bilibili.com/447249116" },
-  { icon: HiGlobe, label: "所在地", value: "中国 · 广州" },
 ];
 
 export default function AboutSection() {
