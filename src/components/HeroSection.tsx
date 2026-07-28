@@ -48,25 +48,7 @@ export default function HeroSection() {
           专注于偏振控制与扰偏算法的 FPGA 部署，同时热衷于用现代技术构建优雅的数字体验。
         </motion.p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.45 }}
-          className="flex gap-4 flex-wrap"
-        >
-          <a
-            href="/projects"
-            className="px-6 py-3 rounded-full font-semibold text-sm bg-gradient-to-r from-brand-purple to-brand-cyan text-white hover:shadow-lg hover:shadow-brand-purple/25 transition-all"
-          >
-            查看项目
-          </a>
-          <a
-            href="/contact"
-            className="px-6 py-3 rounded-full font-semibold text-sm border border-brand-purple text-brand-purple hover:bg-brand-purple/10 transition-all"
-          >
-            联系我
-          </a>
-        </motion.div>
+
       </div>
 
       {/* Scroll indicator */}
