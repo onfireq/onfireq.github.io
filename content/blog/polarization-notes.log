@@ -1,0 +1,1474 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.7.29)  29 JUL 2026 06:48
+entering extended mode
+ restricted \write18 enabled.
+ file:line:error style messages enabled.
+ %&-line parsing enabled.
+**d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex
+(d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex
+LaTeX2e <2026-06-01>
+L3 programming layer <2026-06-18>
+(d:/texlive/2026/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2025/01/22 v1.4n Standard LaTeX document class
+(d:/texlive/2026/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2025/01/22 v1.4n Standard LaTeX file (size option)
+)
+\c@part=\count276
+\c@section=\count277
+\c@subsection=\count278
+\c@subsubsection=\count279
+\c@paragraph=\count280
+\c@subparagraph=\count281
+\c@figure=\count282
+\c@table=\count283
+\abovecaptionskip=\skip49
+\belowcaptionskip=\skip50
+\bibindent=\dimen150
+) (d:/texlive/2026/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2026/05/19 v2.18d AMS math features
+\@mathmargin=\skip51
+
+For additional information on amsmath, use the `?' option.
+(d:/texlive/2026/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2024/11/17 v2.01 AMS text
+ (d:/texlive/2026/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks17
+\ex@=\dimen151
+)) (d:/texlive/2026/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen152
+) (d:/texlive/2026/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 2022/04/08 v2.04 operator names
+)
+\inf@bad=\count284
+LaTeX Info: Redefining \frac on input line 233.
+\uproot@=\count285
+\leftroot@=\count286
+LaTeX Info: Redefining \overline on input line 398.
+LaTeX Info: Redefining \colon on input line 409.
+\classnum@=\count287
+\DOTSCASE@=\count288
+LaTeX Info: Redefining \ldots on input line 495.
+LaTeX Info: Redefining \dots on input line 498.
+LaTeX Info: Redefining \cdots on input line 619.
+\Mathstrutbox@=\box53
+\strutbox@=\box54
+LaTeX Info: Redefining \big on input line 721.
+LaTeX Info: Redefining \Big on input line 722.
+LaTeX Info: Redefining \bigg on input line 723.
+LaTeX Info: Redefining \Bigg on input line 724.
+\big@size=\dimen153
+LaTeX Font Info:    Redeclaring font encoding OML on input line 742.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 743.
+\macc@depth=\count289
+LaTeX Info: Redefining \bmod on input line 904.
+LaTeX Info: Redefining \pmod on input line 909.
+LaTeX Info: Redefining \smash on input line 939.
+LaTeX Info: Redefining \relbar on input line 969.
+LaTeX Info: Redefining \Relbar on input line 970.
+\c@MaxMatrixCols=\count290
+\dotsspace@=\muskip17
+\c@parentequation=\count291
+\dspbrk@lvl=\count292
+\tag@help=\toks18
+\row@=\count293
+\column@=\count294
+\maxfields@=\count295
+\andhelp@=\toks19
+\eqnshift@=\dimen154
+\alignsep@=\dimen155
+\tagshift@=\dimen156
+\tagwidth@=\dimen157
+\totwidth@=\dimen158
+\lineht@=\dimen159
+\@envbody=\toks20
+\multlinegap=\skip52
+\multlinetaggap=\skip53
+\mathdisplay@stack=\toks21
+LaTeX Info: Redefining \[ on input line 2965.
+LaTeX Info: Redefining \] on input line 2966.
+) (d:/texlive/2026/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+ (d:/texlive/2026/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+)) (d:/texlive/2026/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+File: l3backend-pdftex.def 2026-02-18 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count296
+)
+No file polarization-notes.aux.
+\openout1 = `polarization-notes.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:9: LaTeX Error: Unicode character 偏 (U+504F)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.9 \maketitle
+              
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:9: LaTeX Error: Unicode character 振 (U+632F)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.9 \maketitle
+              
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:9: LaTeX Error: Unicode character 控 (U+63A7)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.9 \maketitle
+              
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:9: LaTeX Error: Unicode character 制 (U+5236)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.9 \maketitle
+              
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:9: LaTeX Error: Unicode character 算 (U+7B97)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.9 \maketitle
+              
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:9: LaTeX Error: Unicode character 法 (U+6CD5)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.9 \maketitle
+              
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:9: LaTeX Error: Unicode character 笔 (U+7B14)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.9 \maketitle
+              
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:9: LaTeX Error: Unicode character 记 (U+8BB0)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.9 \maketitle
+              
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+LaTeX Warning: No \author given.
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:11: LaTeX Error: Unicode character 算 (U+7B97)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.11 \section{SPGD 算法}
+                          
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:11: LaTeX Error: Unicode character 法 (U+6CD5)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.11 \section{SPGD 算法}
+                          
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:13: LaTeX Error: Unicode character 随 (U+968F)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.13 随
+        机并行梯度下降（SPGD）算法的核心更新公式：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:13: LaTeX Error: Unicode character 机 (U+673A)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.13 随机
+           并行梯度下降（SPGD）算法的核心更新公式：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:13: LaTeX Error: Unicode character 并 (U+5E76)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.13 随机并
+              行梯度下降（SPGD）算法的核心更新公式：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:13: LaTeX Error: Unicode character 行 (U+884C)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.13 随机并行
+                 梯度下降（SPGD）算法的核心更新公式：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:13: LaTeX Error: Unicode character 梯 (U+68AF)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.13 随机并行梯
+                    度下降（SPGD）算法的核心更新公式：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:13: LaTeX Error: Unicode character 度 (U+5EA6)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.13 随机并行梯度
+                       下降（SPGD）算法的核心更新公式：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:13: LaTeX Error: Unicode character 下 (U+4E0B)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.13 随机并行梯度下
+                          降（SPGD）算法的核心更新公式：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:13: LaTeX Error: Unicode character 降 (U+964D)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.13 随机并行梯度下降
+                             （SPGD）算法的核心更新公式：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:13: LaTeX Error: Unicode character （ (U+FF08)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.13 随机并行梯度下降（
+                                SPGD）算法的核心更新公式：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:13: LaTeX Error: Unicode character ） (U+FF09)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.13 随机并行梯度下降（SPGD）
+                                       算法的核心更新公式：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:13: LaTeX Error: Unicode character 算 (U+7B97)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.13 随机并行梯度下降（SPGD）算
+                                          法的核心更新公式：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:13: LaTeX Error: Unicode character 法 (U+6CD5)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.13 随机并行梯度下降（SPGD）算法
+                                             的核心更新公式：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:13: LaTeX Error: Unicode character 的 (U+7684)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.13 随机并行梯度下降（SPGD）算法的
+                                                核心更新公式：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:13: LaTeX Error: Unicode character 核 (U+6838)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.13 ...��并行梯度下降（SPGD）算法的核
+                                                  心更新公式：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:13: LaTeX Error: Unicode character 心 (U+5FC3)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.13 ...��行梯度下降（SPGD）算法的核心
+                                                  更新公式：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:13: LaTeX Error: Unicode character 更 (U+66F4)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.13 ...��梯度下降（SPGD）算法的核心更
+                                                  新公式：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:13: LaTeX Error: Unicode character 新 (U+65B0)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.13 ...��度下降（SPGD）算法的核心更新
+                                                  公式：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:13: LaTeX Error: Unicode character 公 (U+516C)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.13 ...��下降（SPGD）算法的核心更新公
+                                                  式：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:13: LaTeX Error: Unicode character 式 (U+5F0F)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.13 ...��降（SPGD）算法的核心更新公式
+                                                  ：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:13: LaTeX Error: Unicode character ： (U+FF1A)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.13 ...��（SPGD）算法的核心更新公式：
+                                                  
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+LaTeX Font Info:    Trying to load font information for U+msa on input line 15.
+(d:/texlive/2026/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 15.
+ (d:/texlive/2026/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:19: LaTeX Error: Unicode character 其 (U+5176)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.19 其
+        中：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:19: LaTeX Error: Unicode character 中 (U+4E2D)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.19 其中
+           ：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:19: LaTeX Error: Unicode character ： (U+FF1A)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.19 其中：
+              
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:21: LaTeX Error: Unicode character 是 (U+662F)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.21 \item $\mu$ 是
+                    增益系数
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:21: LaTeX Error: Unicode character 增 (U+589E)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.21 \item $\mu$ 是增
+                       益系数
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:21: LaTeX Error: Unicode character 益 (U+76CA)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.21 \item $\mu$ 是增益
+                          系数
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:21: LaTeX Error: Unicode character 系 (U+7CFB)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.21 \item $\mu$ 是增益系
+                             数
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:21: LaTeX Error: Unicode character 数 (U+6570)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.21 \item $\mu$ 是增益系数
+                                
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:22: LaTeX Error: Unicode character 是 (U+662F)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.22 \item $\Delta J$ 是
+                         性能指标变化量
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:22: LaTeX Error: Unicode character 性 (U+6027)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.22 \item $\Delta J$ 是性
+                            能指标变化量
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:22: LaTeX Error: Unicode character 能 (U+80FD)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.22 \item $\Delta J$ 是性能
+                               指标变化量
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:22: LaTeX Error: Unicode character 指 (U+6307)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.22 \item $\Delta J$ 是性能指
+                                  标变化量
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:22: LaTeX Error: Unicode character 标 (U+6807)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.22 \item $\Delta J$ 是性能指标
+                                     变化量
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:22: LaTeX Error: Unicode character 变 (U+53D8)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.22 \item $\Delta J$ 是性能指标变
+                                        化量
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:22: LaTeX Error: Unicode character 化 (U+5316)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.22 \item $\Delta J$ 是性能指标变化
+                                           量
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:22: LaTeX Error: Unicode character 量 (U+91CF)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.22 \item $\Delta J$ 是性能指标变化量
+                                              
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:23: LaTeX Error: Unicode character 是 (U+662F)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.23 \item $\Delta\theta_n$ 是
+                               随机扰动向量
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:23: LaTeX Error: Unicode character 随 (U+968F)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.23 \item $\Delta\theta_n$ 是随
+                                  机扰动向量
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:23: LaTeX Error: Unicode character 机 (U+673A)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.23 \item $\Delta\theta_n$ 是随机
+                                     扰动向量
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:23: LaTeX Error: Unicode character 扰 (U+6270)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.23 \item $\Delta\theta_n$ 是随机扰
+                                        动向量
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:23: LaTeX Error: Unicode character 动 (U+52A8)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.23 \item $\Delta\theta_n$ 是随机扰动
+                                           向量
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:23: LaTeX Error: Unicode character 向 (U+5411)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.23 \item $\Delta\theta_n$ 是随机扰动向
+                                              量
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:23: LaTeX Error: Unicode character 量 (U+91CF)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.23 \item $\Delta\theta_n$ 是随机扰动向量
+                                                 
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:26: LaTeX Error: Unicode character 优 (U+4F18)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.26 \section{Adam 优化器}
+                             
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:26: LaTeX Error: Unicode character 化 (U+5316)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.26 \section{Adam 优化器}
+                             
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:26: LaTeX Error: Unicode character 器 (U+5668)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.26 \section{Adam 优化器}
+                             
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:28: LaTeX Error: Unicode character 优 (U+4F18)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.28 Adam 优
+             化器的一阶矩估计：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:28: LaTeX Error: Unicode character 化 (U+5316)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.28 Adam 优化
+                器的一阶矩估计：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:28: LaTeX Error: Unicode character 器 (U+5668)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.28 Adam 优化器
+                   的一阶矩估计：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:28: LaTeX Error: Unicode character 的 (U+7684)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.28 Adam 优化器的
+                      一阶矩估计：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:28: LaTeX Error: Unicode character 一 (U+4E00)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.28 Adam 优化器的一
+                         阶矩估计：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:28: LaTeX Error: Unicode character 阶 (U+9636)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.28 Adam 优化器的一阶
+                            矩估计：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:28: LaTeX Error: Unicode character 矩 (U+77E9)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.28 Adam 优化器的一阶矩
+                               估计：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:28: LaTeX Error: Unicode character 估 (U+4F30)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.28 Adam 优化器的一阶矩估
+                                  计：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:28: LaTeX Error: Unicode character 计 (U+8BA1)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.28 Adam 优化器的一阶矩估计
+                                     ：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:28: LaTeX Error: Unicode character ： (U+FF1A)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.28 Adam 优化器的一阶矩估计：
+                                        
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:33: LaTeX Error: Unicode character 二 (U+4E8C)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.33 二
+        阶矩估计：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:33: LaTeX Error: Unicode character 阶 (U+9636)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.33 二阶
+           矩估计：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:33: LaTeX Error: Unicode character 矩 (U+77E9)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.33 二阶矩
+              估计：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:33: LaTeX Error: Unicode character 估 (U+4F30)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.33 二阶矩估
+                 计：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:33: LaTeX Error: Unicode character 计 (U+8BA1)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.33 二阶矩估计
+                    ：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:33: LaTeX Error: Unicode character ： (U+FF1A)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.33 二阶矩估计：
+                       
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:38: LaTeX Error: Unicode character 偏 (U+504F)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.38 偏
+        差修正：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:38: LaTeX Error: Unicode character 差 (U+5DEE)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.38 偏差
+           修正：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:38: LaTeX Error: Unicode character 修 (U+4FEE)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.38 偏差修
+              正：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:38: LaTeX Error: Unicode character 正 (U+6B63)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.38 偏差修正
+                 ：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:38: LaTeX Error: Unicode character ： (U+FF1A)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.38 偏差修正：
+                    
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:43: LaTeX Error: Unicode character 参 (U+53C2)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.43 参
+        数更新：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:43: LaTeX Error: Unicode character 数 (U+6570)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.43 参数
+           更新：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:43: LaTeX Error: Unicode character 更 (U+66F4)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.43 参数更
+              新：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:43: LaTeX Error: Unicode character 新 (U+65B0)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.43 参数更新
+                 ：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:43: LaTeX Error: Unicode character ： (U+FF1A)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.43 参数更新：
+                    
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:48: LaTeX Error: Unicode character 向 (U+5411)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.48 \section{Jones 向量}
+                           
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:48: LaTeX Error: Unicode character 量 (U+91CF)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.48 \section{Jones 向量}
+                           
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:50: LaTeX Error: Unicode character 偏 (U+504F)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.50 偏
+        振态的 Jones 向量表示：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:50: LaTeX Error: Unicode character 振 (U+632F)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.50 偏振
+           态的 Jones 向量表示：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:50: LaTeX Error: Unicode character 态 (U+6001)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.50 偏振态
+              的 Jones 向量表示：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:50: LaTeX Error: Unicode character 的 (U+7684)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.50 偏振态的
+                  Jones 向量表示：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:50: LaTeX Error: Unicode character 向 (U+5411)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.50 偏振态的 Jones 向
+                           量表示：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:50: LaTeX Error: Unicode character 量 (U+91CF)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.50 偏振态的 Jones 向量
+                              表示：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:50: LaTeX Error: Unicode character 表 (U+8868)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.50 偏振态的 Jones 向量表
+                                 示：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:50: LaTeX Error: Unicode character 示 (U+793A)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.50 偏振态的 Jones 向量表示
+                                    ：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:50: LaTeX Error: Unicode character ： (U+FF1A)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.50 偏振态的 Jones 向量表示：
+                                       
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:55: LaTeX Error: Unicode character 矩 (U+77E9)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.55 \section{Mueller 矩阵}
+                             
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:55: LaTeX Error: Unicode character 阵 (U+9635)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.55 \section{Mueller 矩阵}
+                             
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:57: LaTeX Error: Unicode character 矩 (U+77E9)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.57 Mueller 矩
+                阵的完整形式：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:57: LaTeX Error: Unicode character 阵 (U+9635)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.57 Mueller 矩阵
+                   的完整形式：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:57: LaTeX Error: Unicode character 的 (U+7684)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.57 Mueller 矩阵的
+                      完整形式：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:57: LaTeX Error: Unicode character 完 (U+5B8C)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.57 Mueller 矩阵的完
+                         整形式：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:57: LaTeX Error: Unicode character 整 (U+6574)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.57 Mueller 矩阵的完整
+                            形式：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:57: LaTeX Error: Unicode character 形 (U+5F62)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.57 Mueller 矩阵的完整形
+                               式：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:57: LaTeX Error: Unicode character 式 (U+5F0F)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.57 Mueller 矩阵的完整形式
+                                  ：
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+d:/Download/wpscomate/daybydyworkplace/portfolio-next/content/blog/polarization-notes.tex:57: LaTeX Error: Unicode character ： (U+FF1A)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.57 Mueller 矩阵的完整形式：
+                                     
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+[1
+
+{d:/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map
+!pdfTeX error: pdflatex.exe (file d:/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map): fflush() failed (Invalid argument)
+ ==> Fatal error occurred, no output PDF file produced!

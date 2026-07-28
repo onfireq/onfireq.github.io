@@ -3,9 +3,9 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import remarkMath from "remark-math";
 import rehypeRaw from "rehype-raw";
-import rehypeKatex from "rehype-katex";
+// import remarkMath from "remark-math";
+// import rehypeKatex from "rehype-katex";
 
 export default function BlogContent({ content, format = "md" }: { content: string; format?: "md" | "tex" }) {
   // .tex 文件：将内容包裹在 LaTeX 渲染环境中
@@ -37,8 +37,8 @@ export default function BlogContent({ content, format = "md" }: { content: strin
     return (
       <div className="prose prose-invert prose-lg max-w-none">
         <ReactMarkdown
-          remarkPlugins={[remarkGfm, remarkMath]}
-          rehypePlugins={[rehypeRaw, rehypeKatex]}
+          remarkPlugins={[remarkGfm]}
+          rehypePlugins={[rehypeRaw]}
           components={{
             h1: ({ children }) => <h1 className="text-3xl font-bold mt-8 mb-4 text-gradient">{children}</h1>,
             h2: ({ children }) => <h2 className="text-2xl font-bold mt-8 mb-3 border-b border-white/10 pb-2">{children}</h2>,
@@ -67,8 +67,8 @@ export default function BlogContent({ content, format = "md" }: { content: strin
   return (
     <div className="prose prose-invert prose-lg max-w-none">
       <ReactMarkdown
-        remarkPlugins={[remarkGfm, remarkMath]}
-        rehypePlugins={[rehypeRaw, rehypeKatex]}
+        remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeRaw]}
         components={{
           h1: ({ children }) => (
             <h1 className="text-3xl font-bold mt-8 mb-4 text-gradient">{children}</h1>

@@ -4,3 +4,6 @@ out/
 .env
 .env.local
 *.tsbuildinfo
+.elog.env
+sync_wolai.py
+test_wolai.py
