@@ -1,7 +1,7 @@
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 
-export const metadata = { title: "联系我 | onfireq" };
+export const metadata = { title: "联系我 | OnfireQ" };
 
 export default function ContactPage() {
   return (

@@ -2,7 +2,7 @@ import ProjectsSection from "@/components/ProjectsSection";
 import GitHubRepos from "@/components/GitHubRepos";
 import Footer from "@/components/Footer";
 
-export const metadata = { title: "项目 | onfireq" };
+export const metadata = { title: "项目 | OnfireQ" };
 
 export default function ProjectsPage() {
   return (

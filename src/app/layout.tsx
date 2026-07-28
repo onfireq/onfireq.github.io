@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "onfireq | Portfolio",
+  title: "OnfireQ",
   description:
     "偏振控制算法研究者 & 全栈工程师。专注于偏振控制与扰偏算法的 FPGA 部署。",
 };
