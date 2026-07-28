@@ -9,7 +9,7 @@ export default function BlogListPage({
   posts,
   tags,
 }: {
-  posts: { slug: string; title: string; date: string; tags: string[]; description: string }[];
+  posts: { slug: string; title: string; date: string; tags: string[]; description: string; format?: "md" | "tex" }[];
   tags: string[];
 }) {
   return (

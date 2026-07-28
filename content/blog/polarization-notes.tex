@@ -1,0 +1,67 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\title{偏振控制算法笔记}
+\date{2026-07-29}
+
+\begin{document}
+\maketitle
+
+\section{SPGD 算法}
+
+随机并行梯度下降（SPGD）算法的核心更新公式：
+
+\[
+\theta_{n+1} = \theta_n + \mu \cdot \Delta J \cdot \Delta\theta_n
+\]
+
+其中：
+\begin{itemize}
+\item $\mu$ 是增益系数
+\item $\Delta J$ 是性能指标变化量
+\item $\Delta\theta_n$ 是随机扰动向量
+\end{itemize}
+
+\section{Adam 优化器}
+
+Adam 优化器的一阶矩估计：
+\[
+m_t = \beta_1 m_{t-1} + (1-\beta_1) g_t
+\]
+
+二阶矩估计：
+\[
+v_t = \beta_2 v_{t-1} + (1-\beta_2) g_t^2
+\]
+
+偏差修正：
+\[
+\hat{m}_t = \frac{m_t}{1-\beta_1^t}, \quad \hat{v}_t = \frac{v_t}{1-\beta_2^t}
+\]
+
+参数更新：
+\[
+\theta_t = \theta_{t-1} - \eta \frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \epsilon}
+\]
+
+\section{Jones 向量}
+
+偏振态的 Jones 向量表示：
+\[
+\mathbf{E} = \begin{pmatrix} E_x \\ E_y \end{pmatrix} = \begin{pmatrix} |E_x| e^{i\phi_x} \\ |E_y| e^{i\phi_y} \end{pmatrix}
+\]
+
+\section{Mueller 矩阵}
+
+Mueller 矩阵的完整形式：
+\[
+\mathbf{M} = \begin{pmatrix} 
+m_{00} & m_{01} & m_{02} & m_{03} \\ 
+m_{10} & m_{11} & m_{12} & m_{13} \\ 
+m_{20} & m_{21} & m_{22} & m_{23} \\ 
+m_{30} & m_{31} & m_{32} & m_{33} 
+\end{pmatrix}
+\]
+
+\end{document}

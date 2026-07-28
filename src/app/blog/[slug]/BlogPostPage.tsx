@@ -11,6 +11,7 @@ interface Post {
   tags: string[];
   description: string;
   content: string;
+  format?: "md" | "tex";
 }
 
 export default function BlogPostPage({ post }: { post: Post }) {
@@ -61,7 +62,7 @@ export default function BlogPostPage({ post }: { post: Post }) {
           transition={{ delay: 0.1 }}
           className="glass p-8 md:p-10"
         >
-          <BlogContent content={post.content} />
+          <BlogContent content={post.content} format={post.format} />
         </motion.div>
       </article>
     </div>

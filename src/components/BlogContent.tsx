@@ -7,7 +7,63 @@ import remarkMath from "remark-math";
 import rehypeRaw from "rehype-raw";
 import rehypeKatex from "rehype-katex";
 
-export default function BlogContent({ content }: { content: string }) {
+export default function BlogContent({ content, format = "md" }: { content: string; format?: "md" | "tex" }) {
+  // .tex 文件：将内容包裹在 LaTeX 渲染环境中
+  if (format === "tex") {
+    // 将 \( \) 转为 $ $，\[ \] 转为 $$ $$
+    let texContent = content
+      .replace(/\\\(/g, "$")
+      .replace(/\\\)/g, "$")
+      .replace(/\\\[/g, "$$")
+      .replace(/\\\]/g, "$$");
+    
+    // 将普通文本段落包裹在 Markdown 格式中以便渲染
+    texContent = texContent
+      .replace(/\\section\{([^}]+)\}/g, "\n## $1\n")
+      .replace(/\\subsection\{([^}]+)\}/g, "\n### $1\n")
+      .replace(/\\textbf\{([^}]+)\}/g, "**$1**")
+      .replace(/\\textit\{([^}]+)\}/g, "*$1*")
+      .replace(/\\emph\{([^}]+)\}/g, "*$1*")
+      .replace(/\\begin\{itemize\}/g, "")
+      .replace(/\\end\{itemize\}/g, "")
+      .replace(/\\begin\{enumerate\}/g, "")
+      .replace(/\\end\{enumerate\}/g, "")
+      .replace(/\\item\s*/g, "- ")
+      .replace(/\\\\/g, "\n")
+      .replace(/\\newline/g, "\n")
+      .replace(/\n{3,}/g, "\n\n")
+      .trim();
+    
+    return (
+      <div className="prose prose-invert prose-lg max-w-none">
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm, remarkMath]}
+          rehypePlugins={[rehypeRaw, rehypeKatex]}
+          components={{
+            h1: ({ children }) => <h1 className="text-3xl font-bold mt-8 mb-4 text-gradient">{children}</h1>,
+            h2: ({ children }) => <h2 className="text-2xl font-bold mt-8 mb-3 border-b border-white/10 pb-2">{children}</h2>,
+            h3: ({ children }) => <h3 className="text-xl font-semibold mt-6 mb-2">{children}</h3>,
+            p: ({ children }) => <p className="text-gray-300 leading-relaxed mb-4">{children}</p>,
+            li: ({ children }) => <li className="text-gray-300">{children}</li>,
+            code: ({ className, children, ...props }) => {
+              const isInline = !className;
+              if (isInline) {
+                return <code className="bg-white/10 px-1.5 py-0.5 rounded text-brand-cyan text-sm" {...props}>{children}</code>;
+              }
+              return <code className={className} {...props}>{children}</code>;
+            },
+            pre: ({ children }) => (
+              <pre className="bg-surface-950 border border-white/10 rounded-xl p-4 overflow-x-auto mb-4 text-sm">{children}</pre>
+            ),
+          }}
+        >
+          {texContent}
+        </ReactMarkdown>
+      </div>
+    );
+  }
+
+  // .md 文件：正常 Markdown 渲染
   return (
     <div className="prose prose-invert prose-lg max-w-none">
       <ReactMarkdown
