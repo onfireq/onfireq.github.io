@@ -45,7 +45,7 @@ export default function HeroSection() {
           className="text-gray-400 text-base md:text-lg max-w-xl mb-10 leading-relaxed"
         >
           硬件 & 软件 全栈工程师。
-          专注于偏振控制与扰偏算法的 FPGA 部署，同时热衷于用现代技术构建优雅的数字体验。
+          热衷于用现代技术构建优雅的数字体验。
         </motion.p>
 
 

@@ -57,12 +57,12 @@ export default function AboutSection() {
             <div>
               <h3 className="text-2xl font-bold mb-4">创意驱动的跨领域研究者</h3>
               <p className="text-gray-400 mb-4 leading-relaxed">
-                研究方向为偏振控制与扰偏算法及其 FPGA 硬件部署，服务于光纤通信与量子通信领域。
+                研究方向为偏振控制与扰偏算法及其 FPGA 硬件部署，服务于光信息与量子信息领域。
                 同时拥有扎实的 硬件 & 软件 全栈开发能力，擅长将复杂技术用优雅的交互呈现。
               </p>
               <p className="text-gray-400 mb-6 leading-relaxed">
-                核心技术栈涵盖偏振控制算法（AdamSPGD / 动量梯度下降 / 几何 / MPC）、FPGA 定点化实现、
-                前端开发（React / Next.js / Vue）及后端服务（Node.js / Python）。
+                核心技术栈涵盖偏振控制算法、FPGA 部署、
+                硬件开发、前端开发等等。
               </p>
               <div className="flex gap-8">
                 {stats.map((s, i) => (
