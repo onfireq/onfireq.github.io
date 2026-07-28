@@ -44,7 +44,7 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="text-gray-400 text-base md:text-lg max-w-xl mb-10 leading-relaxed"
         >
-          偏振控制算法研究者 & Web 全栈工程师。
+          硬件 & 软件 全栈工程师。
           专注于偏振控制与扰偏算法的 FPGA 部署，同时热衷于用现代技术构建优雅的数字体验。
         </motion.p>
 

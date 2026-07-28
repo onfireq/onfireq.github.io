@@ -13,7 +13,7 @@ export default function Home() {
           {[
             { href: "/projects", title: "项目经历", desc: "从算法到部署的完整链路", icon: "🚀" },
             { href: "/blog", title: "技术博客", desc: "深度思考与学习记录", icon: "✍️" },
-            { href: "/about", title: "关于我", desc: "偏振控制研究者 × 全栈工程师", icon: "👨‍💻" },
+            { href: "/about", title: "关于我", desc: "硬件 & 软件 全栈工程师", icon: "👨‍💻" },
           ].map((item) => (
             <a
               key={item.href}
