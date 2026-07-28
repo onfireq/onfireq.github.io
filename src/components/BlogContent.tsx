@@ -3,14 +3,16 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
 import rehypeRaw from "rehype-raw";
+import rehypeKatex from "rehype-katex";
 
 export default function BlogContent({ content }: { content: string }) {
   return (
     <div className="prose prose-invert prose-lg max-w-none">
       <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeRaw]}
+        remarkPlugins={[remarkGfm, remarkMath]}
+        rehypePlugins={[rehypeRaw, rehypeKatex]}
         components={{
           h1: ({ children }) => (
             <h1 className="text-3xl font-bold mt-8 mb-4 text-gradient">{children}</h1>
