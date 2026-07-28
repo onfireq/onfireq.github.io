@@ -1,29 +1,17 @@
 "use client";
 
 import { HiMail, HiGlobe } from "react-icons/hi";
-import { FaWeixin, FaGithub } from "react-icons/fa";
-import { useState } from "react";
 import ScrollReveal from "./ScrollReveal";
 import SectionHeading from "./SectionHeading";
 
 const contacts = [
-  { icon: HiMail, label: "邮箱", value: "2467708204@qq.com" },
-  { icon: FaWeixin, label: "微信", value: "onfireq" },
-  { icon: FaGithub, label: "GitHub", value: "github.com/onfireq" },
   { icon: HiGlobe, label: "所在地", value: "中国 · 广州" },
+  { icon: HiMail, label: "邮箱", value: "2467708204@qq.com" },
 ];
 
 export default function ContactSection() {
-  const [sent, setSent] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSent(true);
-    setTimeout(() => setSent(false), 3000);
-  };
-
   return (
-    <section id="contact" className="relative py-24 px-6 bg-surface-800/50">
+    <section id="contact" className="relative py-24 px-6">
       <div className="max-w-5xl mx-auto">
         <SectionHeading title="联系" accent="我" subtitle="有兴趣合作或交流？欢迎联系" />
 
@@ -47,7 +35,7 @@ export default function ContactSection() {
 
           {/* Form */}
           <ScrollReveal delay={0.15}>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
               <input
                 type="text"
                 placeholder="你的姓名"
@@ -73,14 +61,9 @@ export default function ContactSection() {
               />
               <button
                 type="submit"
-                disabled={sent}
-                className={`px-6 py-3 rounded-full font-semibold text-sm transition-all ${
-                  sent
-                    ? "bg-green-500 text-white"
-                    : "bg-gradient-to-r from-brand-purple to-brand-cyan text-white hover:shadow-lg hover:shadow-brand-purple/25"
-                }`}
+                className="px-6 py-3 rounded-full font-semibold text-sm bg-gradient-to-r from-brand-purple to-brand-cyan text-white hover:shadow-lg hover:shadow-brand-purple/25 transition-all"
               >
-                {sent ? "✓ 已发送" : "发送消息"}
+                发送消息
               </button>
             </form>
           </ScrollReveal>
