@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const post = getPostBySlug(slug);
   if (!post) return {};
   return {
-    title: `${post.title} | onfireq`,
+    title: `博客 | OnfireQ`,
     description: post.description,
   };
 }
