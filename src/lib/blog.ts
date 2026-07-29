@@ -18,6 +18,18 @@ const postsDir = path.join(process.cwd(), "content/blog");
 
 // 从 .tex 文件提取 frontmatter 信息
 function parseTexFile(raw: string, filename: string) {
+  // 提取 % tags: tag1, tag2
+  const tagsMatch = raw.match(/^%\s*tags?:\s*(.+)$/m);
+  const tags = tagsMatch ? tagsMatch[1].split(",").map(t => t.trim()) : ["LaTeX"];
+
+  // 提取 % description: xxx
+  const descMatch = raw.match(/^%\s*description?:\s*(.+)$/m);
+  const description = descMatch ? descMatch[1].trim() : `LaTeX 文档: ${filename}`;
+
+  // 提取 % published: true/false
+  const pubMatch = raw.match(/^%\s*published?:\s*(true|false)/m);
+  const published = pubMatch ? pubMatch[1] === "true" : true;
+
   // 尝试提取 \title{}
   const titleMatch = raw.match(/\\title\{([^}]+)\}/);
   const title = titleMatch ? titleMatch[1] : filename;
