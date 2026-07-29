@@ -18,7 +18,8 @@ export default function BlogContent({ content, format = "md" }: { content: strin
       .replace(/\\\]/g, "$$");
     
     // 将普通文本段落包裹在 Markdown 格式中以便渲染
-    // 注意：\begin{pmatrix} 等数学环境保持原样，让 KaTeX 渲染
+    // 注意：数学环境（pmatrix, cases 等）保持原样，让 KaTeX 渲染
+    // 只转换文本格式命令，不动数学内容
     texContent = texContent
       .replace(/\\section\{([^}]+)\}/g, "\n## $1\n")
       .replace(/\\subsection\{([^}]+)\}/g, "\n### $1\n")
@@ -30,7 +31,6 @@ export default function BlogContent({ content, format = "md" }: { content: strin
       .replace(/\\begin\{enumerate\}/g, "")
       .replace(/\\end\{enumerate\}/g, "")
       .replace(/\\item\s*/g, "- ")
-      .replace(/\\\\/g, "\n")
       .replace(/\\newline/g, "\n")
       .replace(/\n{3,}/g, "\n\n")
       .trim();

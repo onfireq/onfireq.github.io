@@ -38,11 +38,8 @@ function parseTexFile(raw: string, filename: string) {
     .replace(/\\maketitle/g, "")
     .trim();
 
-  // 保留数学公式环境
-  // 将 \( \) 转为 $ $
-  content = content.replace(/\\\(/g, "$").replace(/\\\)/g, "$");
-  // 将 \[ \] 转为 $$ $$
-  content = content.replace(/\\\[/g, "$$").replace(/\\\]/g, "$$");
+  // 保留数学公式环境原样，由 KaTeX 在渲染时处理
+  // 不在此处转换，避免破坏矩阵等复杂环境
 
   return { title, date, content, tags: ["LaTeX"], description: `LaTeX 文档: ${title}` };
 }
