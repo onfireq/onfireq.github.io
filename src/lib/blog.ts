@@ -30,6 +30,9 @@ function parseTexFile(raw: string, filename: string) {
   let content = raw
     .replace(/\\documentclass\{[^}]+\}/g, "")
     .replace(/\\usepackage\{[^}]+\}/g, "")
+    .replace(/\\title\{[^}]+\}/g, "")
+    .replace(/\\date\{[^}]+\}/g, "")
+    .replace(/\\author\{[^}]+\}/g, "")
     .replace(/\\begin\{document\}/g, "")
     .replace(/\\end\{document\}/g, "")
     .replace(/\\maketitle/g, "")

@@ -18,6 +18,7 @@ export default function BlogContent({ content, format = "md" }: { content: strin
       .replace(/\\\]/g, "$$");
     
     // 将普通文本段落包裹在 Markdown 格式中以便渲染
+    // 注意：\begin{pmatrix} 等数学环境保持原样，让 KaTeX 渲染
     texContent = texContent
       .replace(/\\section\{([^}]+)\}/g, "\n## $1\n")
       .replace(/\\subsection\{([^}]+)\}/g, "\n### $1\n")
