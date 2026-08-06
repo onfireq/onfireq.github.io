@@ -1,6 +1,9 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import { CATEGORIES, getCategoryName as gcn, type Category } from "./categories";
+
+export type { Category };
 
 export interface Post {
   slug: string;
@@ -12,33 +15,28 @@ export interface Post {
   cover?: string;
   content: string;
   format: "md" | "tex";
+  category: string;
 }
+
+export { CATEGORIES, gcn as getCategoryName };
 
 const postsDir = path.join(process.cwd(), "content/blog");
 
 // 从 .tex 文件提取 frontmatter 信息
 function parseTexFile(raw: string, filename: string) {
-  // 提取 % tags: tag1, tag2
   const tagsMatch = raw.match(/^%\s*tags?:\s*(.+)$/m);
   const tags = tagsMatch ? tagsMatch[1].split(",").map(t => t.trim()) : ["LaTeX"];
-
-  // 提取 % description: xxx
   const descMatch = raw.match(/^%\s*description?:\s*(.+)$/m);
   const description = descMatch ? descMatch[1].trim() : `LaTeX 文档: ${filename}`;
-
-  // 提取 % published: true/false
   const pubMatch = raw.match(/^%\s*published?:\s*(true|false)/m);
   const published = pubMatch ? pubMatch[1] === "true" : true;
 
-  // 尝试提取 \title{}
   const titleMatch = raw.match(/\\title\{([^}]+)\}/);
   const title = titleMatch ? titleMatch[1] : filename;
 
-  // 尝试提取 \date{}
   const dateMatch = raw.match(/\\date\{([^}]+)\}/);
   const date = dateMatch ? dateMatch[1] : "2026-01-01";
 
-  // 移除 LaTeX 文档结构命令，保留内容
   let content = raw
     .replace(/\\documentclass\{[^}]+\}/g, "")
     .replace(/\\usepackage\{[^}]+\}/g, "")
@@ -50,89 +48,130 @@ function parseTexFile(raw: string, filename: string) {
     .replace(/\\maketitle/g, "")
     .trim();
 
-  // 保留数学公式环境原样，由 KaTeX 在渲染时处理
-  // 不在此处转换，避免破坏矩阵等复杂环境
+  return { title, date, content, tags, description, published };
+}
 
-  return { title, date, content, tags: ["LaTeX"], description: `LaTeX 文档: ${title}` };
+// 递归获取所有 markdown 和 tex 文件
+function getAllFiles(dir: string, baseDir: string = dir): { filePath: string; relativePath: string }[] {
+  if (!fs.existsSync(dir)) return [];
+  const items = fs.readdirSync(dir, { withFileTypes: true });
+  const result: { filePath: string; relativePath: string }[] = [];
+
+  for (const item of items) {
+    const fullPath = path.join(dir, item.name);
+    if (item.isDirectory()) {
+      if (item.name.startsWith("_") || item.name === "node_modules") continue;
+      result.push(...getAllFiles(fullPath, baseDir));
+    } else if (item.name.endsWith(".md") || item.name.endsWith(".tex")) {
+      const rel = path.relative(baseDir, fullPath).replace(/\\/g, "/");
+      result.push({ filePath: fullPath, relativePath: rel });
+    }
+  }
+  return result;
+}
+
+// 从文件路径推断分类
+function getCategoryFromPath(filePath: string): string {
+  const rel = path.relative(postsDir, filePath);
+  const parts = rel.split(path.sep);
+  if (parts.length > 1) {
+    const cat = parts[0];
+    if (CATEGORIES.find(c => c.slug === cat)) return cat;
+  }
+  return "default";
+}
+
+function parsePostFile(filePath: string): Omit<Post, "content"> | null {
+  const fileName = path.basename(filePath);
+  const relativePath = path.relative(postsDir, filePath);
+  const category = getCategoryFromPath(filePath);
+
+  try {
+    const raw = fs.readFileSync(filePath, "utf-8");
+    const isTex = filePath.endsWith(".tex");
+
+    let data: any = {};
+    let content = "";
+    let format: "md" | "tex" = "md";
+
+    if (isTex) {
+      const parsed = parseTexFile(raw, filePath.replace(/\.tex$/, ""));
+      data = { title: parsed.title, date: parsed.date, tags: parsed.tags, description: parsed.description, published: parsed.published };
+      content = parsed.content;
+      format = "tex";
+    } else {
+      const parsed = matter(raw);
+      data = parsed.data;
+      content = parsed.content;
+      format = "md";
+    }
+
+    const slug = relativePath.replace(/\.(md|tex)$/, "").replace(/\//g, "-");
+
+    return {
+      slug,
+      title: data.title || fileName,
+      date: data.date || "2026-01-01",
+      tags: data.tags || [],
+      published: data.published !== false,
+      description: data.description || "",
+      cover: data.cover,
+      category,
+      format,
+    };
+  } catch (e) {
+    return null;
+  }
 }
 
 export function getAllPosts(showAll = false): Omit<Post, "content">[] {
   if (!fs.existsSync(postsDir)) return [];
 
-  const files = fs.readdirSync(postsDir).filter((f) => f.endsWith(".md") || f.endsWith(".tex"));
+  const files = getAllFiles(postsDir);
+  const posts: Omit<Post, "content">[] = [];
 
-  return files
-    .map((file) => {
-      const raw = fs.readFileSync(path.join(postsDir, file), "utf-8");
-      const isTex = file.endsWith(".tex");
-      
-      let data: any = {};
-      let content = "";
-      let format: "md" | "tex" = "md";
+  for (const { filePath } of files) {
+    const post = parsePostFile(filePath);
+    if (post && (showAll || post.published)) {
+      posts.push(post);
+    }
+  }
 
-      if (isTex) {
-        const parsed = parseTexFile(raw, file.replace(/\.tex$/, ""));
-        data = { title: parsed.title, date: parsed.date, tags: parsed.tags, description: parsed.description };
-        content = parsed.content;
-        format = "tex";
-      } else {
-        const parsed = matter(raw);
-        data = parsed.data;
-        content = parsed.content;
-        format = "md";
-      }
-
-      const slug = file.replace(/\.(md|tex)$/, "");
-      return {
-        slug,
-        title: data.title || slug,
-        date: data.date || "2026-01-01",
-        tags: data.tags || [],
-        published: data.published !== false,
-        description: data.description || "",
-        cover: data.cover,
-        content,
-        format,
-      };
-    })
-    .filter((post) => showAll || post.published)
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
 export function getPostBySlug(slug: string): Post | null {
-  // 尝试 .md 和 .tex
-  for (const ext of [".md", ".tex"]) {
-    const filePath = path.join(postsDir, `${slug}${ext}`);
-    if (fs.existsSync(filePath)) {
-      const raw = fs.readFileSync(filePath, "utf-8");
-      const isTex = ext === ".tex";
+  if (!fs.existsSync(postsDir)) return null;
 
+  const files = getAllFiles(postsDir);
+  for (const { filePath, relativePath } of files) {
+    const s = relativePath.replace(/\.(md|tex)$/, "").replace(/\//g, "-");
+    if (s === slug) {
+      const meta = parsePostFile(filePath);
+      if (!meta) continue;
+
+      const isTex = filePath.endsWith(".tex");
+      const raw = fs.readFileSync(filePath, "utf-8");
       let data: any = {};
       let content = "";
-      let format: "md" | "tex" = "md";
 
       if (isTex) {
         const parsed = parseTexFile(raw, slug);
-        data = { title: parsed.title, date: parsed.date, tags: parsed.tags, description: parsed.description };
+        data = { title: parsed.title, date: parsed.date, tags: parsed.tags, description: parsed.description, published: parsed.published };
         content = parsed.content;
-        format = "tex";
       } else {
         const parsed = matter(raw);
         data = parsed.data;
         content = parsed.content;
-        format = "md";
       }
 
       return {
-        slug,
-        title: data.title || slug,
-        date: data.date || "2026-01-01",
-        tags: data.tags || [],
-        published: data.published !== false,
-        description: data.description || "",
-        cover: data.cover,
+        ...meta,
+        title: data.title || meta.title,
+        date: data.date || meta.date,
+        tags: data.tags || meta.tags,
+        description: data.description || meta.description,
         content,
-        format,
       };
     }
   }
@@ -144,4 +183,8 @@ export function getAllTags(): string[] {
   const tagSet = new Set<string>();
   posts.forEach((p) => p.tags.forEach((t) => tagSet.add(t)));
   return Array.from(tagSet).sort();
+}
+
+export function getPostsByCategory(category: string): Omit<Post, "content">[] {
+  return getAllPosts().filter(p => p.category === category);
 }

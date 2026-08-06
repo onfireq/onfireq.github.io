@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { HiCalendar, HiTag } from "react-icons/hi";
+import { HiCalendar, HiTag, HiFolder } from "react-icons/hi";
+import { getCategoryName } from "@/lib/categories";
 
 interface BlogCardProps {
   slug: string;
@@ -10,9 +11,10 @@ interface BlogCardProps {
   tags: string[];
   description: string;
   index: number;
+  category?: string;
 }
 
-export default function BlogCard({ slug, title, date, tags, description, index }: BlogCardProps) {
+export default function BlogCard({ slug, title, date, tags, description, index, category }: BlogCardProps) {
   return (
     <motion.a
       href={`/blog/${slug}`}
@@ -24,10 +26,18 @@ export default function BlogCard({ slug, title, date, tags, description, index }
     >
       <h3 className="text-lg font-semibold mb-2 text-gradient">{title}</h3>
       <p className="text-sm text-gray-400 mb-4 line-clamp-2">{description}</p>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1.5 text-xs text-gray-500">
-          <HiCalendar size={14} />
-          {date}
+      <div className="flex items-center justify-between flex-wrap gap-2">
+        <div className="flex items-center gap-3 text-xs text-gray-500">
+          <div className="flex items-center gap-1.5">
+            <HiCalendar size={14} />
+            {date}
+          </div>
+          {category && category !== "default" && (
+            <div className="flex items-center gap-1 text-brand-purple">
+              <HiFolder size={14} />
+              {getCategoryName(category)}
+            </div>
+          )}
         </div>
         <div className="flex gap-1.5">
           {tags.slice(0, 2).map((tag) => (

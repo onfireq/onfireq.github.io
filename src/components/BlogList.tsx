@@ -13,7 +13,7 @@ interface Post {
   description: string;
 }
 
-export default function BlogList({ posts, tags }: { posts: Post[]; tags: string[] }) {
+export default function BlogList({ posts, tags }: { posts: any[]; tags: string[] }) {
   const [search, setSearch] = useState("");
   const [activeTag, setActiveTag] = useState<string | null>(null);
 
