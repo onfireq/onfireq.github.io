@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { HiHeart } from "react-icons/hi";
-import { zhihuContents, type ZhihuContent } from "@/data/zhihu";
+import { zhihuContents, zhihuStats, type ZhihuContent } from "@/data/zhihu";
 
 interface ZhihuSidebarProps {
   activeFilter: "all" | ZhihuContent["type"];
@@ -49,11 +49,14 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
     pin: zhihuContents.filter((c) => c.type === "pin").length,
   }), []);
 
+  // 显示统计：优先用 zhihuStats（包含命令行的赞同/喜欢/收藏），否则用本地计数
   const stats = {
-    answer: counts.answer,
-    article: counts.article,
-    pin: counts.pin,
-    likes: 18, // 关注者数（硬编码）
+    answer: zhihuStats?.answerCount ?? counts.answer,
+    article: zhihuStats?.articleCount ?? counts.article,
+    pin: zhihuStats?.pinCount ?? counts.pin,
+    likes: zhihuStats?.likes ?? 0,
+    thanks: zhihuStats?.thanks ?? 0,
+    favorites: zhihuStats?.favorites ?? 0,
   };
 
   const allItems = useMemo(() => {
@@ -129,6 +132,30 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
             <div className="text-[9px] text-gray-500">关注者</div>
           </a>
         </div>
+
+        {/* 汇总信息（无链接，显示互动数据） */}
+        {(stats.likes > 0 || stats.thanks > 0 || stats.favorites > 0) && (
+          <div className="mb-3 pb-3 border-b border-white/10 text-xs text-gray-400 space-y-1.5">
+            {stats.likes > 0 && (
+              <div className="flex items-center gap-1.5">
+                <span className="text-gray-500">▲</span>
+                <span>获得 <span className="text-blue-400 font-semibold">{stats.likes}</span> 次赞同</span>
+              </div>
+            )}
+            {stats.thanks > 0 && (
+              <div className="flex items-center gap-1.5">
+                <span className="text-gray-500">♥</span>
+                <span>获得 <span className="text-pink-400 font-semibold">{stats.thanks}</span> 次喜欢</span>
+              </div>
+            )}
+            {stats.favorites > 0 && (
+              <div className="flex items-center gap-1.5">
+                <span className="text-gray-500">★</span>
+                <span>获得 <span className="text-yellow-400 font-semibold">{stats.favorites}</span> 次收藏</span>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* 分类筛选 → 联动下方作品列表 */}
         <div className="space-y-0.5 mb-3">
