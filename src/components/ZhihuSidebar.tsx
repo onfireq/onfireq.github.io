@@ -259,7 +259,7 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
             {/* 分类筛选（知乎风格，胶囊形） */}
             <div className="flex flex-wrap gap-1.5 mb-3">
               {filters.map((f) => {
-                const count = f.key === "answer" ? counts.answer : f.key === "article" ? counts.article : f.key === "pin" ? counts.pin : counts.answer + counts.article + counts.pin;
+                const count = f.key === "answer" ? counts.answer : f.key === "article" ? counts.article : f.key === "pin" ? counts.pin : f.key === "video" ? counts.video : f.key === "question" ? counts.question : counts.answer + counts.article + counts.pin + counts.video + counts.question;
                 if (count === 0) return null;
                 return (
                   <button
