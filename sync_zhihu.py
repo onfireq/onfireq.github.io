@@ -193,13 +193,15 @@ def main():
     if not os.path.exists(RAW_FILE):
         print(f"❌ 未找到 {RAW_FILE}")
         print()
-        print("请在 PowerShell 中运行:")
+        print("=" * 50)
+        print("PowerShell 中运行（注意末尾重定向）:")
+        print("=" * 50)
+        print('  cd D:\\Download\\wpscomate\\daybydyworkplace\\portfolio-next')
         print('  & "$env:LOCALAPPDATA\\ZhihuCLI\\current\\zhihu-cli.exe" me contents --type all --limit 50 > zhihu_raw.json')
         print()
-        print("或者运行 me stats:")
-        print('  & "$env:LOCALAPPDATA\\ZhihuCLI\\current\\zhihu-cli.exe" me stats > zhihu_stats.json')
-        print()
-        print("然后重新运行本脚本")
+        print("然后回到 Git Bash，运行:")
+        print("  cd D:/Download/wpscomate/daybydyworkplace/portfolio-next")
+        print("  python sync_zhihu.py")
         sys.exit(1)
 
     with open(RAW_FILE, "r", encoding="utf-8") as f:

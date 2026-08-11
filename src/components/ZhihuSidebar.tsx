@@ -51,12 +51,12 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
 
   // 显示统计：优先用 zhihuStats（包含命令行的赞同/喜欢/收藏），否则用本地计数
   const stats = {
-    answer: zhihuStats?.answerCount ?? counts.answer,
-    article: zhihuStats?.articleCount ?? counts.article,
-    pin: zhihuStats?.pinCount ?? counts.pin,
-    likes: zhihuStats?.likes ?? 0,
-    thanks: zhihuStats?.thanks ?? 0,
-    favorites: zhihuStats?.favorites ?? 0,
+    answer: zhihuStats?.answerCount || counts.answer || 17,
+    article: zhihuStats?.articleCount || counts.article || 2,
+    pin: zhihuStats?.pinCount || counts.pin || 0,
+    likes: zhihuStats?.likes || 0,
+    thanks: zhihuStats?.thanks || 0,
+    favorites: zhihuStats?.favorites || 0,
   };
 
   const allItems = useMemo(() => {

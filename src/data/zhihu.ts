@@ -24,17 +24,16 @@ export interface ZhihuStats {
   favorites: number;
 }
 
-// 当前为空，请运行 python3 sync_zhihu.py 同步你的真实知乎数据
+// 数据来自你提供的截图 (91 次赞同 / 45 次喜欢 / 60 次收藏)
 export const zhihuContents: ZhihuContent[] = [];
 
-// 默认为空，同步后会自动填充
 export const zhihuStats: ZhihuStats = {
-  answerCount: 0,
-  articleCount: 0,
+  answerCount: 17,
+  articleCount: 2,
   pinCount: 0,
-  totalLikes: 0,
+  totalLikes: 91,
   totalComments: 0,
-  likes: 0,
-  thanks: 0,
-  favorites: 0,
+  likes: 91,
+  thanks: 45,
+  favorites: 60,
 };
