@@ -37,9 +37,9 @@ jobs:
       
       - name: Fetch Zhihu data
         run: |
-          zhihu-cli me contents --type all --limit 50 > zhihu_raw.json
-          zhihu-cli me favorites recent --limit 50 > zhihu_favorites.json
-          zhihu-cli me followees --limit 50 > zhihu_followees.json
+          zhihu-cli me contents --type all --limit 50 > zhihu_raw.json 2> zhihu_raw.err || (echo "Error: $?" && cat zhihu_raw.err && exit 1)
+          zhihu-cli me favorites recent --limit 50 > zhihu_favorites.json 2> zhihu_favorites.err || (echo "Error: $?" && cat zhihu_favorites.err && exit 1)
+          zhihu-cli me followees --limit 50 > zhihu_followees.json 2> zhihu_followees.err || (echo "Error: $?" && cat zhihu_followees.err && exit 1)
       
       - name: Sync to zhihu.ts
         run: |
