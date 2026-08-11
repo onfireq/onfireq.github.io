@@ -5,10 +5,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { HiX, HiExternalLink, HiHeart, HiChatAlt2 } from "react-icons/hi";
 import { zhihuContents, type ZhihuContent } from "@/data/zhihu";
 
-const typeConfig = {
+const typeConfig: Record<string, { label: string; color: string; icon: string }> = {
   answer: { label: "回答", color: "from-blue-500 to-cyan-500", icon: "💬" },
   article: { label: "文章", color: "from-purple-500 to-pink-500", icon: "📄" },
   pin: { label: "想法", color: "from-yellow-500 to-orange-500", icon: "💡" },
+  video: { label: "视频", color: "from-red-500 to-pink-500", icon: "🎬" },
+  question: { label: "提问", color: "from-purple-500 to-indigo-500", icon: "❓" },
 };
 
 function formatDate(timestamp: number): string {
@@ -111,7 +113,7 @@ export default function ZhihuFloating() {
 
               {/* 筛选 */}
               <div className="flex gap-2 px-4 py-3 border-b border-white/10">
-                {(["all", "answer", "article", "pin"] as const).map((t) => (
+                {(["all", "answer", "article", "pin", "video", "question"] as const).map((t) => (
                   <button
                     key={t}
                     onClick={() => setFilter(t)}
@@ -176,7 +178,7 @@ export default function ZhihuFloating() {
                   </div>
                 ) : (
                   filtered.map((item) => {
-                    const config = typeConfig[item.type];
+                    const config = typeConfig[item.type] || typeConfig.answer;
                     return (
                       <a
                         key={item.url}
