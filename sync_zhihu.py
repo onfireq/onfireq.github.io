@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 同步知乎数据到 zhihu.ts
 从 zhihu-cli 导出的 JSON 文件读取数据，生成 TypeScript 文件
@@ -6,8 +7,12 @@
 
 import json
 import os
+import sys
 from datetime import datetime
 from typing import List, Dict, Any
+
+# 设置 stdout 编码为 utf-8
+sys.stdout.reconfigure(encoding='utf-8')
 
 def load_json(filename: str) -> Dict[str, Any]:
     """加载 JSON 文件"""
