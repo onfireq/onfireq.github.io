@@ -42,7 +42,8 @@ export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
 
         {/* 主内容：只显示本地博客 */}
         <div className="flex-1 min-w-0 max-w-3xl mx-auto">
-          <div className="flex items-center justify-between mb-2 gap-3 flex-wrap">
+          {/* 搜索框（暂隐藏，逻辑保留以便未来使用）*/}
+          {false && (
             <div className="relative flex-1 max-w-sm">
               <HiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
               <input
@@ -53,6 +54,8 @@ export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
                 className="w-full pl-9 pr-3 py-2 rounded-xl bg-white/5 border border-white/10 text-sm focus:border-brand-purple outline-none"
               />
             </div>
+          )}
+          <div className="flex items-center justify-end mb-2 gap-3 flex-wrap">
             <a
               href="/blog/editor"
               className="flex items-center gap-1.5 px-4 py-2 text-sm rounded-xl bg-brand-purple/10 text-brand-purple hover:bg-brand-purple/20 transition border border-brand-purple/20"
