@@ -20,6 +20,7 @@ export interface ZhihuStats {
   videoCount: number;
   questionCount: number;
   totalLikes: number;
+  totalLoves: number;
   totalComments: number;
   totalFavorites: number;
   totals: number;          // 知乎 API 返回的总数
@@ -405,6 +406,7 @@ export const zhihuStats: ZhihuStats = {
   videoCount: 0,
   questionCount: 5,
   totalLikes: 91,
+  totalLoves: 45,
   totalComments: 9,
   totalFavorites: 60,
   totals: 37,

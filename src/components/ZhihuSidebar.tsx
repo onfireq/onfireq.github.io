@@ -78,6 +78,7 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
     video: zhihuStats?.videoCount || counts.video,
     question: zhihuStats?.questionCount || counts.question,
     totalLikes: zhihuStats?.totalLikes ?? 0,
+    totalLoves: zhihuStats?.totalLoves ?? 0,
     totalFavorites: zhihuStats?.totalFavorites ?? 0,
     totals: zhihuStats?.totals ?? 0,
     followers: liveStats?.followers ?? 18,
@@ -164,31 +165,10 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
               </div>
             </a>
 
-            {/* 三个统计卡片（带渐变和悬停） */}
-            <div className="grid grid-cols-3 gap-1.5 mb-3">
-              <a
-                href={`${profileUrl}/answers`}
-                target="_blank"
-                rel="noopener"
-                className="relative overflow-hidden rounded-lg p-2 text-center bg-gradient-to-br from-blue-500/10 to-blue-500/5 ring-1 ring-blue-500/20 hover:ring-blue-400/50 transition-all"
-              >
-                <div className="text-lg font-bold text-blue-400">{stats.answer}</div>
-                <div className="text-[10px] text-gray-400 mt-0.5">回答</div>
-              </a>
-              <a
-                href={`${profileUrl}/posts`}
-                target="_blank"
-                rel="noopener"
-                className="relative overflow-hidden rounded-lg p-2 text-center bg-gradient-to-br from-pink-500/10 to-pink-500/5 ring-1 ring-pink-500/20 hover:ring-pink-400/50 transition-all"
-              >
-                <div className="text-lg font-bold text-pink-400">{stats.article}</div>
-                <div className="text-[10px] text-gray-400 mt-0.5">文章</div>
-              </a>
-              <a
-                href={profileUrl}
-                target="_blank"
-                rel="noopener"
-                className="relative overflow-hidden rounded-lg p-2 text-center bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 ring-1 ring-cyan-500/20 hover:ring-cyan-400/50 transition-all"
+            {/* 四个统计卡片：关注者、赞同、喜欢、收藏 */}
+            <div className="grid grid-cols-4 gap-1.5 mb-3">
+              <div
+                className="relative overflow-hidden rounded-lg p-2 text-center bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 ring-1 ring-cyan-500/20"
                 title={liveStats?.updated ? `自动更新: ${liveStats.updated}` : "暂无自动数据"}
               >
                 <div className="text-lg font-bold text-cyan-400 flex items-center justify-center gap-0.5">
@@ -196,11 +176,38 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
                   {stats.followers}
                 </div>
                 <div className="text-[10px] text-gray-400 mt-0.5">关注者</div>
-              </a>
+              </div>
+              <div
+                className="relative overflow-hidden rounded-lg p-2 text-center bg-gradient-to-br from-blue-500/10 to-blue-500/5 ring-1 ring-blue-500/20"
+              >
+                <div className="text-lg font-bold text-blue-400 flex items-center justify-center gap-0.5">
+                  <HiArrowUp size={11} className="opacity-70" />
+                  {stats.totalLikes}
+                </div>
+                <div className="text-[10px] text-gray-400 mt-0.5">赞同</div>
+              </div>
+              <div
+                className="relative overflow-hidden rounded-lg p-2 text-center bg-gradient-to-br from-pink-500/10 to-pink-500/5 ring-1 ring-pink-500/20"
+              >
+                <div className="text-lg font-bold text-pink-400 flex items-center justify-center gap-0.5">
+                  <HiHeart size={11} className="opacity-70" />
+                  {stats.totalLoves}
+                </div>
+                <div className="text-[10px] text-gray-400 mt-0.5">喜欢</div>
+              </div>
+              <div
+                className="relative overflow-hidden rounded-lg p-2 text-center bg-gradient-to-br from-yellow-500/10 to-yellow-500/5 ring-1 ring-yellow-500/20"
+              >
+                <div className="text-lg font-bold text-yellow-400 flex items-center justify-center gap-0.5">
+                  <HiStar size={11} className="opacity-70" />
+                  {stats.totalFavorites}
+                </div>
+                <div className="text-[10px] text-gray-400 mt-0.5">收藏</div>
+              </div>
             </div>
 
-            {/* 扩展统计：想法/视频/提问 */}
-            {(stats.pin > 0 || stats.video > 0 || stats.question > 0) && (
+            {/* 扩展统计：想法/视频/提问 （已隐藏，避免与主卡片重复）*/}
+            {false && (stats.pin > 0 || stats.video > 0 || stats.question > 0) && (
               <div className="grid grid-cols-3 gap-1.5 mb-3 text-xs">
                 {stats.pin > 0 && (
                   <a
@@ -238,8 +245,8 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
               </div>
             )}
 
-            {/* 互动统计（无链接，从抓取内容聚合） */}
-            {(stats.totalLikes > 0 || stats.totalFavorites > 0) && (
+            {/* 互动统计（无链接，从抓取内容聚合） 已隐藏，避免与主卡片重复 */}
+            {false && (stats.totalLikes > 0 || stats.totalFavorites > 0) && (
               <div className="mb-3 pb-3 border-b border-white/10 text-xs space-y-1.5">
                 {stats.totalLikes > 0 && (
                   <div className="flex items-center gap-2 px-1">

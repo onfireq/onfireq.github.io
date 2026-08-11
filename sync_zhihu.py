@@ -45,10 +45,11 @@ def calculate_stats(contents: List[Dict[str, Any]]) -> Dict[str, int]:
         "videoCount": 0,
         "questionCount": 0,
         "totalLikes": 0,
+        "totalLoves": 0,
         "totalComments": 0,
         "totalFavorites": 0,
     }
-    
+
     for item in contents:
         content_type = item.get("ContentType", "").lower()
         if content_type == "answer":
@@ -61,11 +62,12 @@ def calculate_stats(contents: List[Dict[str, Any]]) -> Dict[str, int]:
             stats["videoCount"] += 1
         elif content_type == "question":
             stats["questionCount"] += 1
-        
+
         stats["totalLikes"] += item.get("LikeCount", 0)
+        stats["totalLoves"] += item.get("LoveCount", 0) or item.get("LikeCount", 0)  # 后备：如果没有 LoveCount，用 LikeCount
         stats["totalComments"] += item.get("CommentCount", 0)
         stats["totalFavorites"] += item.get("FavoriteCount", 0)
-    
+
     stats["totals"] = len(contents)
     return stats
 
@@ -98,6 +100,7 @@ export interface ZhihuStats {{
   videoCount: number;
   questionCount: number;
   totalLikes: number;
+  totalLoves: number;
   totalComments: number;
   totalFavorites: number;
   totals: number;
