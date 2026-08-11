@@ -120,3 +120,14 @@
 @utility glow {
   box-shadow: 0 0 40px rgba(108, 99, 255, 0.15), 0 0 80px rgba(0, 217, 255, 0.08);
 }
+
+/* 隐藏知乎侧边栏滚动条 */
+.zhihu-sidebar-scroll {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.zhihu-sidebar-scroll::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
+  width: 0;
+  height: 0;
+}

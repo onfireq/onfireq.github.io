@@ -103,7 +103,7 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5 }}
-      className="hidden lg:block w-64 flex-shrink-0 sticky top-24 self-start max-h-[calc(100vh-7rem)] overflow-y-auto pr-1"
+      className="zhihu-sidebar-scroll hidden lg:block w-64 flex-shrink-0 sticky top-24 self-start max-h-[calc(100vh-7rem)] overflow-y-auto pr-1"
     >
       {/* 装饰渐变卡片 */}
       <div className="relative group">
@@ -296,7 +296,7 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
                 暂无内容
               </div>
             ) : (
-              <div className="space-y-2 max-h-96 overflow-y-auto pr-1 -mr-1">
+              <div className="zhihu-sidebar-scroll space-y-2 max-h-96 overflow-y-auto pr-1 -mr-1">
                 {filteredItems.map((item, i) => (
                   <motion.a
                     key={item.url}
