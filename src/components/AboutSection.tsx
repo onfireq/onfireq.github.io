@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeading from "@/components/SectionHeading";
-import Footer from "@/components/Footer";
 import { HiMail, HiGlobe } from "react-icons/hi";
 import { FaGithub, FaWeixin } from "react-icons/fa";
 import { SiZhihu } from "react-icons/si";
@@ -22,10 +21,11 @@ const stats = [
   { num: "15+", label: "技术文章" },
 ];
 
-const contactItems = [
-  { icon: HiGlobe, label: "所在地", value: "中国 · 广州" },
-  { icon: HiMail, label: "邮箱", value: "2467708204@qq.com" },
-];
+// contactItems 已移除（与 layout 中的 footer 重复，避免重复显示）
+// const contactItems = [
+//   { icon: HiGlobe, label: "所在地", value: "中国 · 广州" },
+//   { icon: HiMail, label: "邮箱", value: "2467708204@qq.com" },
+// ];
 
 export default function AboutSection() {
   return (
@@ -83,32 +83,7 @@ export default function AboutSection() {
           </ScrollReveal>
         </div>
 
-        {/* Contact section */}
-        <ScrollReveal>
-          <h2 className="text-2xl font-bold mb-2 text-center">
-            联系<span className="text-gradient">我</span>
-          </h2>
-          <p className="text-gray-400 text-sm text-center mb-10">有兴趣合作或交流？欢迎联系</p>
-        </ScrollReveal>
-
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {contactItems.map((c, i) => (
-            <ScrollReveal key={c.label} delay={i * 0.06}>
-              <div className="glass p-5 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-brand-purple/15 flex items-center justify-center text-brand-purple flex-shrink-0">
-                  <c.icon size={18} />
-                </div>
-                <div className="min-w-0">
-                  <div className="text-xs text-gray-500">{c.label}</div>
-                  <div className="text-sm truncate">{c.value}</div>
-                </div>
-              </div>
-            </ScrollReveal>
-          ))}
-        </div>
       </div>
-
-      <Footer />
     </section>
   );
 }
