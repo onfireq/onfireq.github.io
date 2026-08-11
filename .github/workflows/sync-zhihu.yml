@@ -1,69 +1,54 @@
-name: Sync Zhihu Stats
+name: Sync Zhihu Data
 
 on:
   schedule:
-    # 每周一北京时间 4:00（UTC 20:00 每周日）
-    - cron: "0 20 * * 0"
-  workflow_dispatch:
-
-permissions:
-  contents: write
+    # 每周一 04:00 UTC（北京时间 12:00）
+    - cron: '0 20 * * 0'
+  workflow_dispatch:  # 允许手动触发
 
 jobs:
   sync:
-    runs-on: windows-latest  # 用 Windows 因为 zhihu-cli 是 Windows 版本
+    runs-on: windows-latest  # 用 Windows runner 跑 zhihu-cli
+    
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Setup Go (for zhihu-cli)
-        uses: actions/setup-go@v5
-        with:
-          go-version: "1.22"
-
-      - name: Install zhihu-cli
+          python-version: '3.12'
+      
+      - name: Download zhihu-cli
         run: |
-          mkdir -p "$env:LOCALAPPDATA\ZhihuCLI\current"
-          # 尝试从 GitHub Release 下载（如果有的话）
-          # 这里我们直接调用已有的 exe
-          $env:ZHIPU_CLI = "$env:LOCALAPPDATA\ZhihuCLI\current\zhihu-cli.exe"
-          if (-not (Test-Path $env:ZHIPU_CLI)) {
-            echo "::warning::zhihu-cli.exe not found, skipping"
-            exit 0
-          }
-
-      - name: Fetch Zhihu stats
-        shell: pwsh
+          $url = "https://developer-cdn.zhihu.com/zhihu-cli/releases/stable/cli/0.2.0/zhihu-cli-0.2.0-windows-amd64.zip"
+          $output = "zhihu-cli.zip"
+          Invoke-WebRequest -Uri $url -OutFile $output
+          Expand-Archive -Path $output -DestinationPath "zhihu-cli"
+          $env:PATH += ";$PWD\zhihu-cli"
+          echo "PATH=$env:PATH" >> $env:GITHUB_ENV
+      
+      - name: Set Access Secret
         run: |
-          $exe = "$env:LOCALAPPDATA\ZhihuCLI\current\zhihu-cli.exe"
-          if (-not (Test-Path $exe)) { exit 0 }
-
-          $out = & $exe me contents --type all --limit 1 --pretty 2>&1 | Out-String
-          $data = $out | ConvertFrom-Json
-          $followers = $data.Data.Items[0].Author.FollowerCount
-          if (-not $followers) { $followers = 18 }
-
-          $updated = Get-Date -Format "yyyy-MM-dd HH:mm"
-          $json = @{
-            followers = $followers
-            updated = $updated
-          } | ConvertTo-Json
-          $json | Out-File -FilePath "public/zhihu.json" -Encoding utf8
-
-          echo "Followers: $followers"
-
+          $env:ZHIHU_ACCESS_SECRET = "${{ secrets.ZHIHU_ACCESS_SECRET }}"
+          echo "ZHIHU_ACCESS_SECRET=$env:ZHIHU_ACCESS_SECRET" >> $env:GITHUB_ENV
+      
+      - name: Fetch Zhihu data
+        run: |
+          zhihu-cli me contents --type all --limit 50 > zhihu_raw.json
+          zhihu-cli me favorites recent --limit 50 > zhihu_favorites.json
+          zhihu-cli me followees --limit 50 > zhihu_followees.json
+      
+      - name: Sync to zhihu.ts
+        run: |
+          python sync_zhihu.py
+      
       - name: Commit and push
-        shell: pwsh
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/zhihu.json
-          $diff = git diff --cached --quiet
-          if (-not $diff) {
-            git commit -m "🔄 自动同步知乎关注者数"
-            git push
-          } else {
-            echo "无变化"
-          }
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add src/data/zhihu.ts public/zhihu.json
+          git diff --staged --quiet || git commit -m "🤖 自动同步知乎数据 $(date +'%Y-%m-%d %H:%M:%S')"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
