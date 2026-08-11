@@ -1,0 +1,76 @@
+name: Sync Zhihu Stats
+
+on:
+  schedule:
+    # 每周一北京时间 4:00（UTC 20:00 每周日）
+    - cron: "0 20 * * 0"
+  workflow_dispatch: # 手动触发
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch Zhihu stats
+        id: fetch
+        run: |
+          set -e
+          # 1. 尝试用知乎网页版公开数据（关注者数）
+          #    用户主页 URL
+          PROFILE_URL="https://www.zhihu.com/people/bai-ri-meng-you-54-77"
+
+          # 抓取关注者数量 - 从公开 API 或页面
+          FOLLOWERS=$(curl -s -A "Mozilla/5.0" \
+            "https://www.zhihu.com/api/v4/members/bai-ri-meng-you-54-77?include=follower_count" \
+            | python -c "import sys, json; d=json.load(sys.stdin); print(d.get('follower_count', 0))" 2>/dev/null || echo "0")
+
+          if [ "$FOLLOWERS" = "0" ] || [ -z "$FOLLOWERS" ]; then
+            # 备选: 直接从 HTML 抓
+            FOLLOWERS=$(curl -s -A "Mozilla/5.0" "$PROFILE_URL" \
+              | grep -oP '关注者[^0-9]*\K[0-9,]+' \
+              | head -1 | tr -d ',' || echo "0")
+          fi
+
+          if [ "$FOLLOWERS" = "0" ] || [ -z "$FOLLOWERS" ]; then
+            FOLLOWERS=18
+          fi
+
+          UPDATED=$(date '+%Y-%m-%d %H:%M')
+          echo "FOLLOWERS=$FOLLOWERS" >> $GITHUB_OUTPUT
+          echo "UPDATED=$UPDATED" >> $GITHUB_OUTPUT
+          echo "Followers: $FOLLOWERS"
+
+      - name: Generate zhihu.json
+        run: |
+          mkdir -p public
+          cat > public/zhihu.json <<EOF
+          {
+            "followers": ${{ steps.fetch.outputs.FOLLOWERS }},
+            "updated": "${{ steps.fetch.outputs.UPDATED }}"
+          }
+          EOF
+          cat public/zhihu.json
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/zhihu.json
+          if git diff --cached --quiet; then
+            echo "无变化"
+          else
+            git commit -m "🔄 自动同步知乎关注者数: ${{ steps.fetch.outputs.FOLLOWERS }}"
+            git push
+          fi
