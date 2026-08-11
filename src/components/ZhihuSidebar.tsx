@@ -106,15 +106,11 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
       className="zhihu-sidebar-scroll hidden lg:block w-64 flex-shrink-0 sticky top-24 self-start max-h-[calc(100vh-7rem)] overflow-y-auto pr-1"
     >
       {/* 装饰渐变卡片 */}
-      <div className="relative group">
-        {/* 背景光晕 */}
-        <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/20 via-cyan-500/20 to-pink-500/20 rounded-2xl blur opacity-50 group-hover:opacity-70 transition-opacity" />
+      <div className="glass rounded-2xl overflow-hidden">
+        {/* 顶部装饰条 */}
+        <div className="h-1 bg-gradient-to-r from-blue-500 via-cyan-400 to-pink-500" />
 
-        <div className="relative glass rounded-2xl overflow-hidden">
-          {/* 顶部装饰条 */}
-          <div className="h-1 bg-gradient-to-r from-blue-500 via-cyan-400 to-pink-500" />
-
-          <div className="p-4">
+        <div className="p-4">
             {/* 知乎标题（跳首页） */}
             <a
               href={zhihuHome}
@@ -335,7 +331,6 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
               </div>
             )}
           </div>
-        </div>
       </div>
     </motion.aside>
   );
