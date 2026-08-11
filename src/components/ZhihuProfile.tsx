@@ -25,6 +25,8 @@ export default function ZhihuProfile({ activeFilter, onFilterChange }: ZhihuProf
     answer: zhihuContents.filter((c) => c.type === "answer").length,
     article: zhihuContents.filter((c) => c.type === "article").length,
     pin: zhihuContents.filter((c) => c.type === "pin").length,
+    video: zhihuContents.filter((c) => c.type === "video").length,
+    question: zhihuContents.filter((c) => c.type === "question").length,
     likes: zhihuContents.reduce((s, c) => s + c.likeCount, 0),
   };
 
@@ -34,6 +36,8 @@ export default function ZhihuProfile({ activeFilter, onFilterChange }: ZhihuProf
       answer: `${profileUrl}/answers`,
       article: `${profileUrl}/posts`,
       pin: `${profileUrl}/pins`,
+      video: `${profileUrl}/zvideo`,
+      question: `${profileUrl}/asks`,
     };
     return map[type];
   };
