@@ -296,7 +296,7 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
                 暂无内容
               </div>
             ) : (
-              <div className="zhihu-sidebar-scroll space-y-2 max-h-96 overflow-y-auto pr-1 -mr-1">
+              <div className="space-y-2 max-h-96 overflow-y-auto pr-1 -mr-1">
                 {filteredItems.map((item, i) => (
                   <motion.a
                     key={item.url}
