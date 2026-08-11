@@ -1,4 +1,4 @@
-import { getAllPosts, getAllTags, CATEGORIES } from "@/lib/blog";
+import { getAllPosts } from "@/lib/blog";
 import BlogListPage from "./BlogListPage";
 
 export const metadata = {
@@ -7,8 +7,6 @@ export const metadata = {
 };
 
 export default function Page() {
-  const posts = getAllPosts();
-  const tags = getAllTags();
-
-  return <BlogListPage posts={posts} tags={tags} categories={CATEGORIES} />;
+  const localPosts = getAllPosts();
+  return <BlogListPage localPosts={localPosts} />;
 }
