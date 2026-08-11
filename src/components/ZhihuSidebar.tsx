@@ -67,7 +67,7 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
       className="hidden lg:block w-60 flex-shrink-0 sticky top-24 self-start max-h-[calc(100vh-7rem)] overflow-y-auto pr-2"
     >
       <div className="glass p-4">
-        {/* 知乎图标 → 跳转到 zhihu.com */}
+        {/* 知乎图标 → 跳转到 zhihu.com 知乎首页 */}
         <a
           href={zhihuHome}
           target="_blank"
@@ -79,6 +79,50 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
           </svg>
           <h3 className="text-sm font-semibold group-hover:text-blue-400 transition-colors">知乎</h3>
         </a>
+
+        {/* 作者信息（可点击 → 知乎个人主页） */}
+        <a
+          href={profileUrl}
+          target="_blank"
+          rel="noopener"
+          className="flex items-center gap-2.5 mb-3 -m-1 p-1 rounded-lg hover:bg-white/5 transition-colors"
+        >
+          <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-gradient-to-br from-blue-500 to-cyan-500">
+            <img
+              src="/images/avatar.jpg"
+              alt="onfireq"
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                const t = e.target as HTMLImageElement;
+                t.style.display = "none";
+                t.parentElement!.innerHTML = '<div class="w-full h-full flex items-center justify-center text-base">👨‍💻</div>';
+              }}
+            />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-1">
+              <span className="font-medium text-sm">白日梦游</span>
+              <span className="text-blue-400 text-xs">✓</span>
+            </div>
+            <div className="text-[10px] text-gray-500">光学工程硕士在读</div>
+          </div>
+        </a>
+
+        {/* 统计（可点击） */}
+        <div className="grid grid-cols-3 gap-1 text-center mb-3 pb-3 border-b border-white/10">
+          <a href={`${profileUrl}/answers`} target="_blank" rel="noopener" className="block py-1 rounded hover:bg-white/5 transition-colors">
+            <div className="text-sm font-bold text-blue-400">{stats.answer}</div>
+            <div className="text-[9px] text-gray-500">回答</div>
+          </a>
+          <a href={`${profileUrl}/posts`} target="_blank" rel="noopener" className="block py-1 rounded hover:bg-white/5 transition-colors">
+            <div className="text-sm font-bold text-pink-400">{stats.article}</div>
+            <div className="text-[9px] text-gray-500">文章</div>
+          </a>
+          <a href={profileUrl} target="_blank" rel="noopener" className="block py-1 rounded hover:bg-white/5 transition-colors">
+            <div className="text-sm font-bold text-cyan-400">{stats.likes}</div>
+            <div className="text-[9px] text-gray-500">获赞</div>
+          </a>
+        </div>
 
         {/* 分类筛选 → 联动下方作品列表 */}
         <div className="space-y-0.5 mb-3">
