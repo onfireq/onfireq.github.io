@@ -9,6 +9,8 @@ on:
 jobs:
   sync:
     runs-on: windows-latest  # 用 Windows runner 跑 zhihu-cli
+    permissions:
+      contents: write  # 给 GITHUB_TOKEN 写权限
     
     steps:
       - name: Checkout code
