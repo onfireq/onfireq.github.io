@@ -52,11 +52,12 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
     return allItems.filter((c) => c.type === activeFilter);
   }, [allItems, activeFilter]);
 
+  // 知乎账号真实数据（手动维护）
   const stats = {
-    answer: zhihuContents.filter((c) => c.type === "answer").length,
-    article: zhihuContents.filter((c) => c.type === "article").length,
-    pin: zhihuContents.filter((c) => c.type === "pin").length,
-    likes: zhihuContents.reduce((s, c) => s + c.likeCount, 0),
+    answer: 17,      // 回答数
+    article: 2,      // 文章数
+    pin: 0,          // 想法数（按截图无显示）
+    likes: 18,       // 关注者数
   };
 
   return (
@@ -120,33 +121,32 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
           </a>
           <a href={profileUrl} target="_blank" rel="noopener" className="block py-1 rounded hover:bg-white/5 transition-colors">
             <div className="text-sm font-bold text-cyan-400">{stats.likes}</div>
-            <div className="text-[9px] text-gray-500">获赞</div>
+            <div className="text-[9px] text-gray-500">关注者</div>
           </a>
         </div>
 
-        {/* 分类筛选 → 联动下方作品列表 */}
+        {/* 分类筛选 → 联动下方作品列表（隐藏数量为 0 的） */}
         <div className="space-y-0.5 mb-3">
-          {filters.map((f) => (
-            <button
-              key={f.key}
-              onClick={() => onFilterChange(f.key)}
-              className={`w-full text-left px-2.5 py-1.5 rounded text-xs transition-all ${
-                activeFilter === f.key
-                  ? "bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-400"
-                  : "hover:bg-white/5 text-gray-400 hover:text-white"
-              }`}
-            >
-              <span className="flex items-center justify-between">
-                <span>{f.label}</span>
-                <span className="text-[10px] opacity-60">
-                  {f.key === "answer" && stats.answer}
-                  {f.key === "article" && stats.article}
-                  {f.key === "pin" && stats.pin}
-                  {f.key === "all" && stats.answer + stats.article + stats.pin}
+          {filters.map((f) => {
+            const count = f.key === "answer" ? stats.answer : f.key === "article" ? stats.article : f.key === "pin" ? stats.pin : stats.answer + stats.article + stats.pin;
+            if (count === 0) return null;  // 隐藏 0 数量的分类
+            return (
+              <button
+                key={f.key}
+                onClick={() => onFilterChange(f.key)}
+                className={`w-full text-left px-2.5 py-1.5 rounded text-xs transition-all ${
+                  activeFilter === f.key
+                    ? "bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-400"
+                    : "hover:bg-white/5 text-gray-400 hover:text-white"
+                }`}
+              >
+                <span className="flex items-center justify-between">
+                  <span>{f.label}</span>
+                  <span className="text-[10px] opacity-60">{count}</span>
                 </span>
-              </span>
-            </button>
-          ))}
+              </button>
+            );
+          })}
         </div>
 
         {/* 作品列表（跟着筛选走） */}
