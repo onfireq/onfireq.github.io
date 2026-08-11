@@ -13,6 +13,28 @@ export interface ZhihuContent {
   createdAt: number;
 }
 
+export interface ZhihuStats {
+  answerCount: number;
+  articleCount: number;
+  pinCount: number;
+  totalLikes: number;
+  totalComments: number;
+  likes: number;
+  thanks: number;
+  favorites: number;
+}
+
 // 当前为空，请运行 python3 sync_zhihu.py 同步你的真实知乎数据
-// 或手动添加你知乎上实际的内容
 export const zhihuContents: ZhihuContent[] = [];
+
+// 默认为空，同步后会自动填充
+export const zhihuStats: ZhihuStats = {
+  answerCount: 0,
+  articleCount: 0,
+  pinCount: 0,
+  totalLikes: 0,
+  totalComments: 0,
+  likes: 0,
+  thanks: 0,
+  favorites: 0,
+};
