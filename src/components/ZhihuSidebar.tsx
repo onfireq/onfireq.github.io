@@ -42,7 +42,20 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
   const profileUrl = "https://www.zhihu.com/people/bai-ri-meng-you-54-77";
   const zhihuHome = "https://www.zhihu.com/";
 
-  // 侧边栏内联动的知乎作品
+  // 从数据中统计
+  const counts = useMemo(() => ({
+    answer: zhihuContents.filter((c) => c.type === "answer").length,
+    article: zhihuContents.filter((c) => c.type === "article").length,
+    pin: zhihuContents.filter((c) => c.type === "pin").length,
+  }), []);
+
+  const stats = {
+    answer: counts.answer,
+    article: counts.article,
+    pin: counts.pin,
+    likes: 18, // 关注者数（硬编码）
+  };
+
   const allItems = useMemo(() => {
     return [...zhihuContents].sort((a, b) => b.createdAt - a.createdAt);
   }, []);
@@ -51,14 +64,6 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
     if (activeFilter === "all") return allItems;
     return allItems.filter((c) => c.type === activeFilter);
   }, [allItems, activeFilter]);
-
-  // 知乎账号真实数据（手动维护）
-  const stats = {
-    answer: 17,      // 回答数
-    article: 2,      // 文章数
-    pin: 0,          // 想法数（按截图无显示）
-    likes: 18,       // 关注者数
-  };
 
   return (
     <motion.aside
@@ -125,11 +130,11 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
           </a>
         </div>
 
-        {/* 分类筛选 → 联动下方作品列表（隐藏数量为 0 的） */}
+        {/* 分类筛选 → 联动下方作品列表 */}
         <div className="space-y-0.5 mb-3">
           {filters.map((f) => {
-            const count = f.key === "answer" ? stats.answer : f.key === "article" ? stats.article : f.key === "pin" ? stats.pin : stats.answer + stats.article + stats.pin;
-            if (count === 0) return null;  // 隐藏 0 数量的分类
+            const count = f.key === "answer" ? counts.answer : f.key === "article" ? counts.article : f.key === "pin" ? counts.pin : counts.answer + counts.article + counts.pin;
+            if (count === 0) return null;
             return (
               <button
                 key={f.key}
@@ -150,11 +155,11 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
         </div>
 
         {/* 作品列表（跟着筛选走） */}
-        <div className="space-y-2">
-          {filteredItems.length === 0 ? (
-            <div className="text-center text-gray-500 text-xs py-4">暂无内容</div>
-          ) : (
-            filteredItems.map((item) => (
+        {filteredItems.length === 0 ? (
+          <div className="text-center text-gray-500 text-xs py-4">暂无内容</div>
+        ) : (
+          <div className="space-y-2">
+            {filteredItems.map((item) => (
               <a
                 key={item.url}
                 href={item.url}
@@ -177,9 +182,9 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
                   </div>
                 )}
               </a>
-            ))
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </motion.aside>
   );
