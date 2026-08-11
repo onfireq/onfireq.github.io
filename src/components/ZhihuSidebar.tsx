@@ -15,18 +15,24 @@ const filters: Array<{ key: "all" | ZhihuContent["type"]; label: string }> = [
   { key: "answer", label: "回答" },
   { key: "article", label: "文章" },
   { key: "pin", label: "想法" },
+  { key: "video", label: "视频" },
+  { key: "question", label: "提问" },
 ];
 
 const typeColors: Record<ZhihuContent["type"], { bg: string; text: string }> = {
   answer: { bg: "bg-blue-500/15", text: "text-blue-400" },
   article: { bg: "bg-pink-500/15", text: "text-pink-400" },
   pin: { bg: "bg-yellow-500/15", text: "text-yellow-400" },
+  video: { bg: "bg-red-500/15", text: "text-red-400" },
+  question: { bg: "bg-purple-500/15", text: "text-purple-400" },
 };
 
 const typeLabels: Record<ZhihuContent["type"], string> = {
   answer: "回答",
   article: "文章",
   pin: "想法",
+  video: "视频",
+  question: "提问",
 };
 
 function timeAgo(timestamp: number): string {
@@ -60,17 +66,21 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
     answer: zhihuContents.filter((c) => c.type === "answer").length,
     article: zhihuContents.filter((c) => c.type === "article").length,
     pin: zhihuContents.filter((c) => c.type === "pin").length,
+    video: zhihuContents.filter((c) => c.type === "video").length,
+    question: zhihuContents.filter((c) => c.type === "question").length,
   }), []);
 
   // 显示统计
   const stats = {
-    answer: zhihuStats?.answerCount || counts.answer || 17,
-    article: zhihuStats?.articleCount || counts.article || 2,
-    pin: zhihuStats?.pinCount || counts.pin || 0,
-    likes: zhihuStats?.likes || 0,
-    thanks: zhihuStats?.thanks || 0,
-    favorites: zhihuStats?.favorites || 0,
-    followers: liveStats?.followers ?? 18, // 默认 18
+    answer: zhihuStats?.answerCount || counts.answer,
+    article: zhihuStats?.articleCount || counts.article,
+    pin: zhihuStats?.pinCount || counts.pin,
+    video: zhihuStats?.videoCount || counts.video,
+    question: zhihuStats?.questionCount || counts.question,
+    totalLikes: zhihuStats?.totalLikes ?? 0,
+    totalFavorites: zhihuStats?.totalFavorites ?? 0,
+    totals: zhihuStats?.totals ?? 0,
+    followers: liveStats?.followers ?? 18,
   };
 
   const allItems = useMemo(() => {
@@ -189,25 +199,58 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
               </a>
             </div>
 
-            {/* 互动统计（无链接，知乎风格） */}
-            {(stats.likes > 0 || stats.thanks > 0 || stats.favorites > 0) && (
+            {/* 扩展统计：想法/视频/提问 */}
+            {(stats.pin > 0 || stats.video > 0 || stats.question > 0) && (
+              <div className="grid grid-cols-3 gap-1.5 mb-3 text-xs">
+                {stats.pin > 0 && (
+                  <a
+                    href={`${profileUrl}/pins`}
+                    target="_blank"
+                    rel="noopener"
+                    className="text-center py-1.5 rounded bg-yellow-500/5 ring-1 ring-yellow-500/20 hover:ring-yellow-400/40 transition-all"
+                  >
+                    <span className="text-yellow-400 font-semibold">{stats.pin}</span>
+                    <span className="text-gray-500 ml-1">想法</span>
+                  </a>
+                )}
+                {stats.video > 0 && (
+                  <a
+                    href={`${profileUrl}/zvideo`}
+                    target="_blank"
+                    rel="noopener"
+                    className="text-center py-1.5 rounded bg-red-500/5 ring-1 ring-red-500/20 hover:ring-red-400/40 transition-all"
+                  >
+                    <span className="text-red-400 font-semibold">{stats.video}</span>
+                    <span className="text-gray-500 ml-1">视频</span>
+                  </a>
+                )}
+                {stats.question > 0 && (
+                  <a
+                    href={`${profileUrl}/asks`}
+                    target="_blank"
+                    rel="noopener"
+                    className="text-center py-1.5 rounded bg-purple-500/5 ring-1 ring-purple-500/20 hover:ring-purple-400/40 transition-all"
+                  >
+                    <span className="text-purple-400 font-semibold">{stats.question}</span>
+                    <span className="text-gray-500 ml-1">提问</span>
+                  </a>
+                )}
+              </div>
+            )}
+
+            {/* 互动统计（无链接，从抓取内容聚合） */}
+            {(stats.totalLikes > 0 || stats.totalFavorites > 0) && (
               <div className="mb-3 pb-3 border-b border-white/10 text-xs space-y-1.5">
-                {stats.likes > 0 && (
+                {stats.totalLikes > 0 && (
                   <div className="flex items-center gap-2 px-1">
                     <HiArrowUp className="text-blue-400 flex-shrink-0" size={12} />
-                    <span className="text-gray-400">获得 <span className="text-blue-300 font-semibold">{stats.likes}</span> 次赞同</span>
+                    <span className="text-gray-400">获得 <span className="text-blue-300 font-semibold">{stats.totalLikes}</span> 次赞同</span>
                   </div>
                 )}
-                {stats.thanks > 0 && (
-                  <div className="flex items-center gap-2 px-1">
-                    <HiHeart className="text-pink-400 flex-shrink-0" size={12} />
-                    <span className="text-gray-400">获得 <span className="text-pink-300 font-semibold">{stats.thanks}</span> 次喜欢</span>
-                  </div>
-                )}
-                {stats.favorites > 0 && (
+                {stats.totalFavorites > 0 && (
                   <div className="flex items-center gap-2 px-1">
                     <HiStar className="text-yellow-400 flex-shrink-0" size={12} />
-                    <span className="text-gray-400">获得 <span className="text-yellow-300 font-semibold">{stats.favorites}</span> 次收藏</span>
+                    <span className="text-gray-400">获得 <span className="text-yellow-300 font-semibold">{stats.totalFavorites}</span> 次收藏</span>
                   </div>
                 )}
               </div>

@@ -1,163 +1,245 @@
 #!/usr/bin/env python3
 """
-知乎创作同步脚本 - 从 zhihu-cli 输出自动解析
+知乎创作同步脚本 v2 - 全面同步创作/收藏/关注
 
 用法:
-1. 在 PowerShell 中运行并保存到文件:
-   & "$env:LOCALAPPDATA\ZhihuCLI\current\zhihu-cli.exe" me contents --type all --limit 50 > zhihu_raw.json
+  # 1. PowerShell - 导出多个 JSON
+  cd D:\Download\wpscomate\daybydyworkplace\portfolio-next
 
-2. 运行本脚本:
-   python3 sync_zhihu.py
+  & "$env:LOCALAPPDATA\ZhihuCLI\current\zhihu-cli.exe" me contents --type all --limit 50 > zhihu_raw.json
+  & "$env:LOCALAPPDATA\ZhihuCLI\current\zhihu-cli.exe" me favorites recent --limit 50 > zhihu_favorites.json
+  & "$env:LOCALAPPDATA\ZhihuCLI\current\zhihu-cli.exe" me followees --limit 50 > zhihu_followees.json
 
-脚本会解析 JSON 并写入 src/data/zhihu.ts
+  # 2. Git Bash
+  python sync_zhihu.py
 """
 import re
 import json
 import os
 import sys
 from datetime import datetime
+from collections import Counter
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-RAW_FILE = os.path.join(ROOT, "zhihu_raw.json")
-OUT_FILE = os.path.join(ROOT, "src", "data", "zhihu.ts")
+DATA_DIR = ROOT
+TS_FILE = os.path.join(ROOT, "src", "data", "zhihu.ts")
 
 TYPE_MAP = {
     "answer": "answer",
     "article": "article",
     "pin": "pin",
+    "zvideo": "video",
+    "question": "question",
+}
+
+# 中文标签
+TYPE_LABELS = {
+    "answer": "回答",
+    "article": "文章",
+    "pin": "想法",
+    "video": "视频",
+    "question": "提问",
 }
 
 
-def extract_stats(text: str) -> dict:
-    """从 zhihu-cli 输出中提取汇总信息（赞同、喜欢、收藏等）"""
-    stats = {}
-    # 匹配 "获得 XX 次赞同" 等
-    patterns = {
-        "like": r"获得\s*(\d+)\s*次赞同",
-        "thanks": r"获得\s*(\d+)\s*次喜欢",
-        "favorite": r"获得\s*(\d+)\s*次收藏",
-        "comment": r"获得\s*(\d+)\s*条评论",
-    }
-    for key, pattern in patterns.items():
-        m = re.search(pattern, text)
-        if m:
-            stats[key] = int(m.group(1))
-    return stats
-
-
-def find_json_array(text: str):
-    """在文本中找到 JSON 数组"""
-    start = text.find('[')
-    if start == -1:
+def try_load(path):
+    """尝试加载 JSON 文件"""
+    if not os.path.exists(path):
         return None
-
-    depth = 0
-    in_string = False
-    escape = False
-    for i in range(start, len(text)):
-        c = text[i]
-        if escape:
+    with open(path, "r", encoding="utf-8") as f:
+        text = f.read()
+    try:
+        return json.loads(text)
+    except:
+        # 尝试提取 "Data" 部分
+        m = re.search(r'\{[^{}]*"Data"\s*:', text)
+        if m:
+            start = m.start()
+            depth = 0
+            in_string = False
             escape = False
-            continue
-        if c == '\\':
-            escape = True
-            continue
-        if c == '"' and not escape:
-            in_string = not in_string
-            continue
-        if in_string:
-            continue
-        if c == '[':
-            depth += 1
-        elif c == ']':
-            depth -= 1
-            if depth == 0:
-                return text[start:i+1]
+            for i in range(start, len(text)):
+                c = text[i]
+                if escape:
+                    escape = False
+                    continue
+                if c == '\\':
+                    escape = True
+                    continue
+                if c == '"' and not escape:
+                    in_string = not in_string
+                    continue
+                if in_string:
+                    continue
+                if c == '{':
+                    depth += 1
+                elif c == '}':
+                    depth -= 1
+                    if depth == 0:
+                        try:
+                            return json.loads(text[start:i+1])
+                        except:
+                            pass
+                        break
     return None
 
 
-def parse_items(text: str):
-    """从文本中解析 Item 数组"""
-    m = re.search(r'"Items"\s*:\s*(\[)', text)
-    if m:
-        start = m.end() - 1
-        depth = 0
-        in_string = False
-        escape = False
-        for i in range(start, len(text)):
-            c = text[i]
-            if escape:
-                escape = False
-                continue
-            if c == '\\':
-                escape = True
-                continue
-            if c == '"' and not escape:
-                in_string = not in_string
-                continue
-            if in_string:
-                continue
-            if c == '[':
-                depth += 1
-            elif c == ']':
-                depth -= 1
-                if depth == 0:
-                    json_str = text[start:i+1]
-                    try:
-                        return json.loads(json_str)
-                    except:
-                        break
-
-    arr = find_json_array(text)
-    if arr:
-        try:
-            data = json.loads(arr)
-            if isinstance(data, list):
-                return data
-        except:
-            pass
-
-    return []
+def extract_items(response):
+    """从响应中提取 Items 列表"""
+    if not response:
+        return []
+    data = response.get("Data", response)
+    items = data.get("Items", [])
+    return items
 
 
-def to_ts(items: list, stats: dict) -> str:
+def extract_totals(response):
+    """从响应中提取总数"""
+    if not response:
+        return 0
+    data = response.get("Data", response)
+    paging = data.get("Paging", {})
+    return paging.get("Totals", len(data.get("Items", [])))
+
+
+def parse_contents(contents_resp):
+    """解析创作内容（带类型分组）"""
+    items = extract_items(contents_resp)
+    grouped = {t: [] for t in TYPE_MAP.values()}
+
+    for it in items:
+        ct = it.get("ContentType", "")
+        type_key = TYPE_MAP.get(ct, "other")
+        if type_key == "other":
+            continue
+        grouped[type_key].append({
+            "type": type_key,
+            "title": re.sub(r"\[图片\]|\[视频\]", "", it.get("Title", "")).replace("\r", "").replace("\n", " ").strip(),
+            "url": it.get("Url", ""),
+            "summary": re.sub(r"\[图片\]|\[视频\]", "", it.get("Summary", "")).replace("\r", "").replace("\n", " ").strip()[:200],
+            "likeCount": it.get("LikeCount", 0),
+            "commentCount": it.get("CommentCount", 0),
+            "favoriteCount": it.get("FavoriteCount", 0),
+            "createdAt": it.get("CreatedAt", 0),
+        })
+
+    # 按时间倒序
+    for t in grouped:
+        grouped[t].sort(key=lambda x: x["createdAt"], reverse=True)
+    return grouped, items
+
+
+def parse_followees(followees_resp):
+    """解析关注列表"""
+    items = extract_items(followees_resp)
+    followees = []
+    for it in items:
+        followees.append({
+            "name": it.get("Name", it.get("UserName", "")),
+            "url": it.get("Url", it.get("UserUrl", "")),
+            "headline": it.get("Headline", it.get("Bio", "")),
+            "followerCount": it.get("FollowerCount", 0),
+            "answerCount": it.get("AnswerCount", 0),
+            "avatarUrl": it.get("AvatarUrl", ""),
+        })
+    return followees
+
+
+def parse_favorites(favorites_resp):
+    """解析最近收藏"""
+    items = extract_items(favorites_resp)
+    favorites = []
+    for it in items:
+        favorites.append({
+            "title": it.get("Title", ""),
+            "url": it.get("Url", ""),
+            "contentType": TYPE_MAP.get(it.get("ContentType", ""), "other"),
+            "createdAt": it.get("CreatedAt", 0),
+        })
+    return favorites
+
+
+def to_ts(contents_by_type, totals_by_type, totals, followees, favorites, source_updated):
     """生成 TypeScript 文件"""
+    # 合并所有内容到一个列表
+    all_contents = []
+    for items in contents_by_type.values():
+        all_contents.extend(items)
+    all_contents.sort(key=lambda x: x["createdAt"], reverse=True)
+
     items_ts = ",\n  ".join([
         f"""  {{
-    type: "{TYPE_MAP.get(item.get('ContentType', ''), 'pin')}",
-    title: {json.dumps(item.get('Title', '').replace('[图片]', '').replace('\\r', '').replace('\\n', ' ').strip(), ensure_ascii=False)},
-    url: "{item.get('Url', '')}",
-    summary: {json.dumps(item.get('Summary', '').replace('[图片]', '').replace('\\r', '').replace('\\n', ' ').strip()[:200], ensure_ascii=False)},
-    likeCount: {item.get('LikeCount', 0)},
-    commentCount: {item.get('CommentCount', 0)},
-    createdAt: {item.get('CreatedAt', 0)},
+    type: "{item['type']}",
+    title: {json.dumps(item['title'], ensure_ascii=False)},
+    url: "{item['url']}",
+    summary: {json.dumps(item['summary'], ensure_ascii=False)},
+    likeCount: {item['likeCount']},
+    commentCount: {item['commentCount']},
+    favoriteCount: {item['favoriteCount']},
+    createdAt: {item['createdAt']},
   }}"""
-        for item in items
-        if item.get("Url")
+        for item in all_contents
+        if item["url"]
     ])
 
-    # 统计从数据 + 命令行输出汇总
-    answer_count = sum(1 for i in items if i.get("ContentType") == "answer")
-    article_count = sum(1 for i in items if i.get("ContentType") == "article")
-    pin_count = sum(1 for i in items if i.get("ContentType") == "pin")
-    total_likes = sum(i.get("LikeCount", 0) for i in items)
-    total_comments = sum(i.get("CommentCount", 0) for i in items)
+    # 按类型的列表（每个类型单独导出）
+    by_type_ts = ""
+    for t, label in TYPE_LABELS.items():
+        items = contents_by_type.get(t, [])
+        if not items:
+            continue
+        items_str = ", ".join([f'"{i["url"]}"' for i in items])
+        by_type_ts += f"export const zhihu{label}Urls: string[] = [{items_str}];\n"
 
-    # 命令行汇总的数字
-    likes = stats.get("like", total_likes)
-    thanks = stats.get("thanks", 0)
-    favorites = stats.get("favorite", 0)
+    # 关注列表
+    followees_ts = ""
+    if followees:
+        followees_items = ",\n  ".join([
+            f"""  {{
+    name: {json.dumps(f['name'], ensure_ascii=False)},
+    url: "{f['url']}",
+    headline: {json.dumps(f['headline'], ensure_ascii=False)},
+    followerCount: {f['followerCount']},
+    answerCount: {f['answerCount']},
+    avatarUrl: "{f['avatarUrl']}",
+  }}"""
+            for f in followees
+            if f.get("url")
+        ])
+        followees_ts = f"\nexport const zhihuFollowees = [\n{followees_items}\n];\n"
+
+    # 收藏
+    favorites_ts = ""
+    if favorites:
+        fav_items = ",\n  ".join([
+            f"""  {{
+    title: {json.dumps(f['title'], ensure_ascii=False)},
+    url: "{f['url']}",
+    contentType: "{f['contentType']}",
+    createdAt: {f['createdAt']},
+  }}"""
+            for f in favorites
+            if f.get("url")
+        ])
+        favorites_ts = f"\nexport const zhihuFavorites = [\n{fav_items}\n];\n"
+
+    # 汇总统计
+    total_likes = sum(i["likeCount"] for i in all_contents)
+    total_comments = sum(i["commentCount"] for i in all_contents)
+    total_favorites = sum(i["favoriteCount"] for i in all_contents)
 
     return f"""// 知乎个人数据 - 自动生成
-// 最后同步: {datetime.now().strftime('%Y-%m-%d %H:%M')}
+// 最后同步: {source_updated}
+// 数据来源: zhihu-cli
 
 export interface ZhihuContent {{
-  type: "answer" | "article" | "pin";
+  type: "answer" | "article" | "pin" | "video" | "question";
   title: string;
   url: string;
   summary: string;
   likeCount: number;
   commentCount: number;
+  favoriteCount: number;
   createdAt: number;
 }}
 
@@ -165,11 +247,12 @@ export interface ZhihuStats {{
   answerCount: number;
   articleCount: number;
   pinCount: number;
-  totalLikes: number;     // 数据中所有内容的点赞数
+  videoCount: number;
+  questionCount: number;
+  totalLikes: number;
   totalComments: number;
-  likes: number;          // 获得的赞同
-  thanks: number;         // 获得的喜欢
-  favorites: number;      // 获得的收藏
+  totalFavorites: number;
+  totals: number;          // 知乎 API 返回的总数
 }}
 
 export const zhihuContents: ZhihuContent[] = [
@@ -177,64 +260,67 @@ export const zhihuContents: ZhihuContent[] = [
 ];
 
 export const zhihuStats: ZhihuStats = {{
-  answerCount: {answer_count},
-  articleCount: {article_count},
-  pinCount: {pin_count},
+  answerCount: {totals_by_type.get('answer', 0)},
+  articleCount: {totals_by_type.get('article', 0)},
+  pinCount: {totals_by_type.get('pin', 0)},
+  videoCount: {totals_by_type.get('video', 0)},
+  questionCount: {totals_by_type.get('question', 0)},
   totalLikes: {total_likes},
   totalComments: {total_comments},
-  likes: {likes},
-  thanks: {thanks},
-  favorites: {favorites},
+  totalFavorites: {total_favorites},
+  totals: {totals},
 }};
+
+{by_type_ts}{followees_ts}{favorites_ts}
 """
 
 
 def main():
-    if not os.path.exists(RAW_FILE):
-        print(f"❌ 未找到 {RAW_FILE}")
-        print()
-        print("=" * 50)
-        print("PowerShell 中运行（注意末尾重定向）:")
-        print("=" * 50)
+    print("=" * 60)
+    print("知乎数据同步 v2")
+    print("=" * 60)
+
+    # 1. 加载创作内容
+    contents_resp = try_load(os.path.join(DATA_DIR, "zhihu_raw.json"))
+    if not contents_resp:
+        print("\n❌ 未找到 zhihu_raw.json")
+        print("\n请先在 PowerShell 中运行:")
         print('  cd D:\\Download\\wpscomate\\daybydyworkplace\\portfolio-next')
         print('  & "$env:LOCALAPPDATA\\ZhihuCLI\\current\\zhihu-cli.exe" me contents --type all --limit 50 > zhihu_raw.json')
-        print()
-        print("然后回到 Git Bash，运行:")
-        print("  cd D:/Download/wpscomate/daybydyworkplace/portfolio-next")
-        print("  python sync_zhihu.py")
+        print('  & "$env:LOCALAPPDATA\\ZhihuCLI\\current\\zhihu-cli.exe" me favorites recent --limit 50 > zhihu_favorites.json')
+        print('  & "$env:LOCALAPPDATA\\ZhihuCLI\\current\\zhihu-cli.exe" me followees --limit 50 > zhihu_followees.json')
         sys.exit(1)
 
-    with open(RAW_FILE, "r", encoding="utf-8") as f:
-        text = f.read()
+    contents_by_type, raw_items = parse_contents(contents_resp)
+    totals = extract_totals(contents_resp)
+    totals_by_type = {t: sum(1 for i in raw_items if TYPE_MAP.get(i.get("ContentType")) == t) for t in TYPE_MAP.values()}
 
-    print(f"读取 {RAW_FILE} ({len(text)} 字符)")
+    # 2. 加载关注列表
+    followees_resp = try_load(os.path.join(DATA_DIR, "zhihu_followees.json"))
+    followees = parse_followees(followees_resp) if followees_resp else []
 
-    # 提取汇总信息
-    stats = extract_stats(text)
-    if stats:
-        print(f"\n提取到汇总信息:")
-        for k, v in stats.items():
-            print(f"  {k}: {v}")
+    # 3. 加载收藏
+    favorites_resp = try_load(os.path.join(DATA_DIR, "zhihu_favorites.json"))
+    favorites = parse_favorites(favorites_resp) if favorites_resp else []
 
-    items = parse_items(text)
-    print(f"\n解析到 {len(items)} 条内容")
+    # 4. 输出统计
+    print(f"\n📊 创作内容统计:")
+    type_names = {"answer": "回答", "article": "文章", "pin": "想法", "video": "视频", "question": "提问"}
+    for t, c in totals_by_type.items():
+        if c > 0:
+            print(f"  {type_names.get(t, t)}: {c} 条")
+    print(f"  API 总数: {totals}")
 
-    if not items and not stats:
-        print("❌ 未找到任何内容")
-        sys.exit(1)
+    print(f"\n👥 关注: {len(followees)} 人")
+    print(f"🔖 收藏: {len(favorites)} 条")
 
-    from collections import Counter
-    type_counter = Counter(TYPE_MAP.get(item.get("ContentType", ""), "other") for item in items)
-    print("\n类型分布:")
-    type_names = {"answer": "回答", "article": "文章", "pin": "想法"}
-    for t, c in type_counter.most_common():
-        print(f"  {type_names.get(t, t)}: {c}")
+    # 5. 写文件
+    updated = datetime.now().strftime("%Y-%m-%d %H:%M")
+    os.makedirs(os.path.dirname(TS_FILE), exist_ok=True)
+    with open(TS_FILE, "w", encoding="utf-8") as f:
+        f.write(to_ts(contents_by_type, totals_by_type, totals, followees, favorites, updated))
 
-    os.makedirs(os.path.dirname(OUT_FILE), exist_ok=True)
-    with open(OUT_FILE, "w", encoding="utf-8") as f:
-        f.write(to_ts(items, stats))
-
-    print(f"\n✅ 已写入 {OUT_FILE}")
+    print(f"\n✅ 已写入 {TS_FILE}")
     print()
     print("下一步: git add . && git commit -m '更新知乎内容' && git push")
 
