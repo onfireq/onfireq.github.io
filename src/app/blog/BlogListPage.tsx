@@ -15,6 +15,31 @@ export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
   const [search, setSearch] = useState("");
 
+  // 知乎作品
+  const zhihuPosts = useMemo(() => {
+    return [...zhihuContents]
+      .sort((a, b) => b.createdAt - a.createdAt)
+      .map((c) => ({
+        slug: `zhihu-${c.createdAt}`,
+        title: c.title,
+        date: new Date(c.createdAt * 1000).toISOString().slice(0, 10),
+        tags: [c.type === "answer" ? "回答" : c.type === "article" ? "文章" : "想法"],
+        description: c.summary,
+        category: "知乎",
+        url: c.url,
+        type: c.type,
+        likeCount: c.likeCount,
+        createdAt: c.createdAt,
+      }));
+  }, []);
+
+  // 根据筛选显示知乎作品
+  const filteredZhihu = useMemo(() => {
+    if (activeFilter === "all") return zhihuPosts;
+    return zhihuPosts.filter((p) => p.type === activeFilter);
+  }, [zhihuPosts, activeFilter]);
+
+  // 本地文章
   const localFormatted = useMemo(() => {
     return localPosts.map((p: any) => ({
       slug: p.slug,
@@ -26,21 +51,17 @@ export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
     }));
   }, [localPosts]);
 
-  const filtered = useMemo(() => {
-    let list = localFormatted;
-    if (search) {
-      list = list.filter((p) => p.title.includes(search) || p.description.includes(search));
-    }
-    return list;
-  }, [localFormatted, search]);
+  // 搜索过滤
+  const matchSearch = (p: { title: string; description: string }) =>
+    !search || p.title.includes(search) || p.description.includes(search);
 
   return (
     <div className="min-h-screen pt-24 pb-16 px-6">
       <div className="max-w-6xl mx-auto flex gap-8">
-        {/* 左侧：知乎作品摘要 */}
+        {/* 左侧：知乎作品摘要（联动主区） */}
         <ZhihuSidebar activeFilter={activeFilter} onFilterChange={setActiveFilter} />
 
-        {/* 主内容：本地文章 */}
+        {/* 主内容 */}
         <div className="flex-1 min-w-0 max-w-3xl mx-auto">
           <div className="flex items-center justify-between mb-2 gap-3 flex-wrap">
             <div className="relative flex-1 max-w-sm">
@@ -62,17 +83,51 @@ export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
           </div>
           <SectionHeading title="技术" accent="博客" subtitle="偏振控制 · FPGA · 全栈开发 · 学习记录" />
 
-          {filtered.length === 0 ? (
-            <div className="glass p-12 text-center text-gray-500">
-              {search ? "没有匹配的文章" : "暂无文章"}
+          {/* 知乎作品区域 - 跟着侧边栏筛选变化 */}
+          <h3 className="text-sm font-semibold text-gray-400 mb-3 flex items-center gap-2">
+            <span>📘 知乎作品</span>
+            <span className="text-xs text-gray-600">({filteredZhihu.length})</span>
+          </h3>
+          {filteredZhihu.length === 0 ? (
+            <div className="glass p-8 text-center text-gray-500 text-sm mb-8">
+              该分类下暂无内容
             </div>
           ) : (
-            <div className="space-y-4">
-              {filtered.map((post, i) => (
-                <Link key={post.slug} href={`/blog/${post.slug}`} className="block">
-                  <BlogCard {...post} index={i} category={post.category} />
-                </Link>
+            <div className="space-y-3 mb-8">
+              {filteredZhihu.filter(matchSearch).map((post, i) => (
+                <a
+                  key={post.slug}
+                  href={post.url}
+                  target="_blank"
+                  rel="noopener"
+                  className="block"
+                >
+                  <BlogCard {...post} index={i} category="知乎" />
+                </a>
               ))}
+            </div>
+          )}
+
+          {/* 本地博客区域 */}
+          {localFormatted.length > 0 && (
+            <>
+              <h3 className="text-sm font-semibold text-gray-400 mb-3 flex items-center gap-2">
+                <span>📚 技术博客</span>
+                <span className="text-xs text-gray-600">({localFormatted.length})</span>
+              </h3>
+              <div className="space-y-3">
+                {localFormatted.filter(matchSearch).map((post, i) => (
+                  <Link key={post.slug} href={`/blog/${post.slug}`} className="block">
+                    <BlogCard {...post} index={i} category={post.category} />
+                  </Link>
+                ))}
+              </div>
+            </>
+          )}
+
+          {filteredZhihu.length === 0 && localFormatted.length === 0 && (
+            <div className="glass p-12 text-center text-gray-500">
+              没有匹配的内容
             </div>
           )}
         </div>
