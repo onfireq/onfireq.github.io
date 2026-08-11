@@ -4,7 +4,6 @@ import { useState, useMemo } from "react";
 import SectionHeading from "@/components/SectionHeading";
 import BlogCard from "@/components/BlogCard";
 import ZhihuSidebar from "@/components/ZhihuSidebar";
-import Footer from "@/components/Footer";
 import { HiPencil, HiSearch } from "react-icons/hi";
 import { zhihuContents, type ZhihuContent } from "@/data/zhihu";
 import Link from "next/link";
@@ -78,7 +77,6 @@ export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
           )}
         </div>
       </div>
-      <Footer />
     </div>
   );
 }
