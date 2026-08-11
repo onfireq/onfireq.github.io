@@ -127,6 +127,47 @@ export default function ZhihuFloating() {
                 ))}
               </div>
 
+              {/* 关于作者 */}
+              <div className="px-4 py-4 border-b border-white/10 bg-white/[0.02]">
+                <h4 className="text-xs text-gray-500 mb-2.5">关于作者</h4>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 bg-gradient-to-br from-blue-500 to-cyan-500">
+                    <img
+                      src="/images/avatar.jpg"
+                      alt="onfireq"
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        const t = e.target as HTMLImageElement;
+                        t.style.display = "none";
+                        t.parentElement!.innerHTML = '<div class="w-full h-full flex items-center justify-center text-xl">👨‍💻</div>';
+                      }}
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-semibold text-sm">白日梦游</div>
+                    <div className="text-xs text-gray-500">名不显时心不朽</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-3">
+                  <span className="px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400">✓</span>
+                  <span>中山大学 · 光学工程硕士在读</span>
+                </div>
+                <div className="grid grid-cols-3 gap-2 text-center">
+                  <div>
+                    <div className="text-base font-bold text-blue-400">{stats.typeCount.answer || 0}</div>
+                    <div className="text-[10px] text-gray-500 mt-0.5">回答</div>
+                  </div>
+                  <div>
+                    <div className="text-base font-bold text-pink-400">{stats.typeCount.article || 0}</div>
+                    <div className="text-[10px] text-gray-500 mt-0.5">文章</div>
+                  </div>
+                  <div>
+                    <div className="text-base font-bold text-cyan-400">{stats.totalLikes}</div>
+                    <div className="text-[10px] text-gray-500 mt-0.5">关注者</div>
+                  </div>
+                </div>
+              </div>
+
               {/* 列表 */}
               <div className="flex-1 overflow-y-auto p-3 space-y-2">
                 {filtered.length === 0 ? (
