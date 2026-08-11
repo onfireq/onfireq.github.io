@@ -35,9 +35,10 @@ const typeLabels: Record<ZhihuContent["type"], string> = {
   question: "提问",
 };
 
-function timeAgo(timestamp: number): string {
+function timeAgo(timestamp: number | string): string {
   if (!timestamp) return "";
-  const diff = (Date.now() / 1000) - timestamp;
+  const time = typeof timestamp === 'string' ? new Date(timestamp).getTime() / 1000 : timestamp;
+  const diff = (Date.now() / 1000) - time;
   if (diff < 60) return "刚刚";
   if (diff < 3600) return `${Math.floor(diff / 60)}分钟前`;
   if (diff < 86400) return `${Math.floor(diff / 3600)}小时前`;
@@ -85,7 +86,11 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
   };
 
   const allItems = useMemo(() => {
-    return [...zhihuContents].sort((a, b) => b.createdAt - a.createdAt);
+    return [...zhihuContents].sort((a, b) => {
+      const aTime = typeof a.createdAt === 'string' ? new Date(a.createdAt).getTime() : a.createdAt;
+      const bTime = typeof b.createdAt === 'string' ? new Date(b.createdAt).getTime() : b.createdAt;
+      return bTime - aTime;
+    });
   }, []);
 
   const filteredItems = useMemo(() => {

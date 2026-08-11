@@ -13,9 +13,10 @@ const typeConfig: Record<string, { label: string; color: string; icon: string }>
   question: { label: "提问", color: "from-purple-500 to-indigo-500", icon: "❓" },
 };
 
-function formatDate(timestamp: number): string {
+function formatDate(timestamp: number | string): string {
   if (!timestamp) return "";
-  const date = new Date(timestamp * 1000);
+  const time = typeof timestamp === 'string' ? new Date(timestamp).getTime() / 1000 : timestamp;
+  const date = new Date(time * 1000);
   const now = new Date();
   const diff = (now.getTime() - date.getTime()) / 1000;
   if (diff < 60) return "刚刚";
@@ -45,7 +46,12 @@ export default function ZhihuFloating() {
   }, []);
 
   const filtered = useMemo(() => {
-    let list = [...zhihuContents].sort((a, b) => b.createdAt - a.createdAt);
+    let list = [...zhihuContents].sort((a, b) => {
+      // 处理两种可能的 createdAt 类型：string（ISO 格式）或 number（时间戳）
+      const aTime = typeof a.createdAt === 'string' ? new Date(a.createdAt).getTime() : a.createdAt;
+      const bTime = typeof b.createdAt === 'string' ? new Date(b.createdAt).getTime() : b.createdAt;
+      return bTime - aTime;
+    });
     if (filter !== "all") {
       list = list.filter((c) => c.type === filter);
     }
