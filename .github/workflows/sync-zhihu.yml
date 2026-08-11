@@ -1,0 +1,54 @@
+name: Sync Zhihu Data
+
+on:
+  schedule:
+    # 每周一 04:00 UTC（北京时间 12:00）
+    - cron: '0 20 * * 0'
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  sync:
+    runs-on: windows-latest  # 用 Windows runner 跑 zhihu-cli
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      
+      - name: Download zhihu-cli
+        run: |
+          $url = "https://developer-cdn.zhihu.com/zhihu-cli/releases/stable/cli/0.2.0/zhihu-cli-0.2.0-windows-amd64.zip"
+          $output = "zhihu-cli.zip"
+          Invoke-WebRequest -Uri $url -OutFile $output
+          Expand-Archive -Path $output -DestinationPath "zhihu-cli"
+          $env:PATH += ";$PWD\zhihu-cli"
+          echo "PATH=$env:PATH" >> $env:GITHUB_ENV
+      
+      - name: Set Access Secret
+        run: |
+          $env:ZHIHU_ACCESS_SECRET = "${{ secrets.ZHIHU_ACCESS_SECRET }}"
+          echo "ZHIHU_ACCESS_SECRET=$env:ZHIHU_ACCESS_SECRET" >> $env:GITHUB_ENV
+      
+      - name: Fetch Zhihu data
+        run: |
+          zhihu-cli me contents --type all --limit 50 > zhihu_raw.json
+          zhihu-cli me favorites recent --limit 50 > zhihu_favorites.json
+          zhihu-cli me followees --limit 50 > zhihu_followees.json
+      
+      - name: Sync to zhihu.ts
+        run: |
+          python sync_zhihu.py
+      
+      - name: Commit and push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add src/data/zhihu.ts public/zhihu.json
+          git diff --staged --quiet || git commit -m "🤖 自动同步知乎数据 $(date +'%Y-%m-%d %H:%M:%S')"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,126 +1,181 @@
 #!/usr/bin/env python3
 """
-知乎创作同步脚本
-用法:
-1. 在 PowerShell 中运行: & "$env:LOCALAPPDATA\ZhihuCLI\current\zhihu-cli.exe" me contents --type all --limit 50
-2. 把输出保存到 zhihu_raw.json
-3. 运行本脚本: python3 sync_zhihu.py
+同步知乎数据到 zhihu.ts
+从 zhihu-cli 导出的 JSON 文件读取数据，生成 TypeScript 文件
 """
-import urllib.request
+
 import json
 import os
-import re
+from datetime import datetime
+from typing import List, Dict, Any
 
-RAW_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "zhihu_raw.json")
-OUTPUT_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "src", "data", "zhihu.ts")
+def load_json(filename: str) -> Dict[str, Any]:
+    """加载 JSON 文件"""
+    if not os.path.exists(filename):
+        print(f"⚠️  文件不存在: {filename}")
+        return {"Data": {"Items": []}}
+    
+    with open(filename, 'r', encoding='utf-8') as f:
+        return json.load(f)
 
-TYPE_MAP = {
-    "answer": "answer",
-    "article": "article",
-    "pin": "pin",
-}
+def format_content_item(item: Dict[str, Any]) -> Dict[str, Any]:
+    """格式化内容项"""
+    return {
+        "type": item.get("ContentType", "answer").lower(),
+        "title": item.get("Title", ""),
+        "url": item.get("Url", ""),
+        "summary": item.get("Summary", ""),
+        "likeCount": item.get("LikeCount", 0),
+        "commentCount": item.get("CommentCount", 0),
+        "favoriteCount": item.get("FavoriteCount", 0),
+        "createdAt": item.get("CreatedAt", ""),
+    }
 
-def parse_zhihu_data(raw: str) -> list:
-    """从 zhihu-cli 输出解析数据"""
-    # 找到 JSON 数组
-    match = re.search(r'\[\s*\{.*\}\s*\]', raw, re.DOTALL)
-    if not match:
-        print("未找到 JSON 数组")
-        return []
+def calculate_stats(contents: List[Dict[str, Any]]) -> Dict[str, int]:
+    """计算统计数据"""
+    stats = {
+        "answerCount": 0,
+        "articleCount": 0,
+        "pinCount": 0,
+        "videoCount": 0,
+        "questionCount": 0,
+        "totalLikes": 0,
+        "totalComments": 0,
+        "totalFavorites": 0,
+    }
+    
+    for item in contents:
+        content_type = item.get("ContentType", "").lower()
+        if content_type == "answer":
+            stats["answerCount"] += 1
+        elif content_type == "article":
+            stats["articleCount"] += 1
+        elif content_type == "pin":
+            stats["pinCount"] += 1
+        elif content_type == "zvideo":
+            stats["videoCount"] += 1
+        elif content_type == "question":
+            stats["questionCount"] += 1
+        
+        stats["totalLikes"] += item.get("LikeCount", 0)
+        stats["totalComments"] += item.get("CommentCount", 0)
+        stats["totalFavorites"] += item.get("FavoriteCount", 0)
+    
+    stats["totals"] = len(contents)
+    return stats
 
-    json_str = match.group(0)
-    try:
-        data = json.loads(json_str)
-    except json.JSONDecodeError as e:
-        print(f"JSON 解析失败: {e}")
-        return []
-
-    items = []
-    for item in data:
-        items.append({
-            "type": TYPE_MAP.get(item.get("ContentType", ""), "pin"),
-            "title": item.get("Title", "").replace("[图片]", "").strip(),
-            "url": item.get("Url", ""),
-            "summary": item.get("Summary", "").replace("[图片]", "").strip()[:200],
-            "likeCount": item.get("LikeCount", 0),
-            "commentCount": item.get("CommentCount", 0),
-            "createdAt": int(item.get("CreatedAt", 0)),
-        })
-
-    return items
-
-
-def format_ts_file(items: list) -> str:
-    """生成 TypeScript 文件内容"""
-    items_ts = ",\n  ".join([
-        f'''  {{
-    type: "{item['type']}",
-    title: {json.dumps(item['title'], ensure_ascii=False)},
-    url: "{item['url']}",
-    summary: {json.dumps(item['summary'], ensure_ascii=False)},
-    likeCount: {item['likeCount']},
-    commentCount: {item['commentCount']},
-    createdAt: {item['createdAt']},
-  }}'''
-        for item in items
-    ])
-
-    return f"""// 知乎个人数据 - 从知乎开放平台手动导出
-// 导出方法:
-// 1. 访问 https://developer.zhihu.com/hotlist
-// 2. 切换到"用户的创作"，点击"查看接口返回格式"
-// 3. 或用 zhihu-cli: & "$env:LOCALAPPDATA\\ZhihuCLI\\current\\zhihu-cli.exe" me contents --type all --limit 50
-// 4. 复制 JSON 到 zhihu_raw.json，运行 python3 sync_zhihu.py
+def generate_ts_file(contents: List[Dict[str, Any]], stats: Dict[str, int], 
+                     followees: List[Dict[str, Any]], favorites: List[Dict[str, Any]]) -> str:
+    """生成 TypeScript 文件"""
+    
+    # 格式化内容
+    formatted_contents = [format_content_item(item) for item in contents]
+    
+    # 生成 TS 代码
+    ts_code = f'''// 知乎数据（自动生成，请勿手动编辑）
+// 最后更新: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 
 export interface ZhihuContent {{
-  type: "answer" | "article" | "pin";
+  type: 'answer' | 'article' | 'pin' | 'video' | 'question';
   title: string;
   url: string;
   summary: string;
   likeCount: number;
   commentCount: number;
-  createdAt: number;
+  favoriteCount: number;
+  createdAt: string;
 }}
 
-export const zhihuContents: ZhihuContent[] = [
-{items_ts}
-];
-"""
+export interface ZhihuStats {{
+  answerCount: number;
+  articleCount: number;
+  pinCount: number;
+  videoCount: number;
+  questionCount: number;
+  totalLikes: number;
+  totalComments: number;
+  totalFavorites: number;
+  totals: number;
+}}
 
+export interface ZhihuFollowee {{
+  name: string;
+  url: string;
+  avatar: string;
+  bio: string;
+}}
+
+export interface ZhihuFavorite {{
+  title: string;
+  url: string;
+  summary: string;
+  createdAt: string;
+}}
+
+export const zhihuContents: ZhihuContent[] = {json.dumps(formatted_contents, ensure_ascii=False, indent=2)};
+
+export const zhihuStats: ZhihuStats = {json.dumps(stats, ensure_ascii=False, indent=2)};
+
+export const zhihuFollowees: ZhihuFollowee[] = {json.dumps(followees, ensure_ascii=False, indent=2)};
+
+export const zhihuFavorites: ZhihuFavorite[] = {json.dumps(favorites, ensure_ascii=False, indent=2)};
+'''
+    
+    return ts_code
 
 def main():
-    if not os.path.exists(RAW_FILE):
-        print(f"未找到 {RAW_FILE}")
-        print()
-        print("请先在 PowerShell 中运行:")
-        print('  & "$env:LOCALAPPDATA\\ZhihuCLI\\current\\zhihu-cli.exe" me contents --type all --limit 50')
-        print()
-        print("把输出保存到 zhihu_raw.json，然后再运行本脚本")
-        return
-
-    with open(RAW_FILE, "r", encoding="utf-8") as f:
-        raw = f.read()
-
-    print(f"读取 {RAW_FILE} ({len(raw)} 字符)")
-    items = parse_zhihu_data(raw)
-    print(f"解析到 {len(items)} 条数据")
-
-    if not items:
-        return
-
-    # 写入 TS 文件
-    os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
-    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
-        f.write(format_ts_file(items))
-
-    print(f"已生成 {OUTPUT_FILE}")
-    print()
-    print("类型分布:")
-    from collections import Counter
-    counter = Counter(item["type"] for item in items)
-    for t, c in counter.items():
-        print(f"  {t}: {c}")
-
+    print("=== 同步知乎数据 ===\n")
+    
+    # 加载数据
+    print("1. 加载知乎内容...")
+    contents_data = load_json("zhihu_raw.json")
+    contents = contents_data.get("Data", {}).get("Items", [])
+    print(f"   加载了 {len(contents)} 条内容")
+    
+    print("2. 加载收藏...")
+    favorites_data = load_json("zhihu_favorites.json")
+    favorites = favorites_data.get("Data", {}).get("Items", [])
+    print(f"   加载了 {len(favorites)} 条收藏")
+    
+    print("3. 加载关注...")
+    followees_data = load_json("zhihu_followees.json")
+    followees = followees_data.get("Data", {}).get("Items", [])
+    print(f"   加载了 {len(followees)} 个关注")
+    
+    # 计算统计
+    print("4. 计算统计...")
+    stats = calculate_stats(contents)
+    print(f"   回答: {stats['answerCount']}")
+    print(f"   文章: {stats['articleCount']}")
+    print(f"   想法: {stats['pinCount']}")
+    print(f"   视频: {stats['videoCount']}")
+    print(f"   提问: {stats['questionCount']}")
+    print(f"   总赞同: {stats['totalLikes']}")
+    print(f"   总评论: {stats['totalComments']}")
+    print(f"   总收藏: {stats['totalFavorites']}")
+    
+    # 生成 TS 文件
+    print("5. 生成 zhihu.ts...")
+    ts_code = generate_ts_file(contents, stats, followees, favorites)
+    
+    with open("src/data/zhihu.ts", "w", encoding="utf-8") as f:
+        f.write(ts_code)
+    
+    print("   ✅ 生成成功")
+    
+    # 生成 public/zhihu.json（用于前端展示）
+    print("6. 生成 public/zhihu.json...")
+    zhihu_json = {
+        "followers": 18,  # 这个需要手动更新或从其他地方获取
+        "lastSync": datetime.now().isoformat(),
+    }
+    
+    with open("public/zhihu.json", "w", encoding="utf-8") as f:
+        json.dump(zhihu_json, f, ensure_ascii=False, indent=2)
+    
+    print("   ✅ 生成成功")
+    
+    print("\n=== 同步完成 ===")
 
 if __name__ == "__main__":
     main()
