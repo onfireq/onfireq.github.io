@@ -7,6 +7,7 @@ import BlogList from "@/components/BlogList";
 import ZhihuProfile from "@/components/ZhihuProfile";
 import Footer from "@/components/Footer";
 import { HiPencil } from "react-icons/hi";
+import { zhihuContents } from "@/data/zhihu";
 
 interface Post {
   slug: string;
@@ -45,11 +46,11 @@ export default function BlogListPage({
     return acc;
   }, {} as Record<string, number>);
 
-  // 模拟知乎数据（实际应从 API 拉取）
+  // 从实际知乎数据计算统计
   const stats = {
-    answerCount: 17,
-    articleCount: 2,
-    followerCount: 18,
+    answerCount: zhihuContents.filter((c) => c.type === "answer").length,
+    articleCount: zhihuContents.filter((c) => c.type === "article").length,
+    followerCount: zhihuContents.reduce((sum, c) => sum + c.likeCount, 0) || 18,
   };
 
   return (
