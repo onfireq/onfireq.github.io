@@ -1,42 +1,126 @@
 #!/usr/bin/env python3
-import urllib.request, xml.etree.ElementTree as ET, os, re, html
-from datetime import datetime
+"""
+知乎创作同步脚本
+用法:
+1. 在 PowerShell 中运行: & "$env:LOCALAPPDATA\ZhihuCLI\current\zhihu-cli.exe" me contents --type all --limit 50
+2. 把输出保存到 zhihu_raw.json
+3. 运行本脚本: python3 sync_zhihu.py
+"""
+import urllib.request
+import json
+import os
+import re
 
-UID = "bai-ri-meng-you-54-77"
-OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "content", "blog")
-URL = f"https://rsshub.app/zhihu/people/articles/{UID}"
+RAW_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "zhihu_raw.json")
+OUTPUT_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "src", "data", "zhihu.ts")
 
-os.makedirs(OUT, exist_ok=True)
-print("=== Zhihu Sync ===\n")
+TYPE_MAP = {
+    "answer": "answer",
+    "article": "article",
+    "pin": "pin",
+}
 
-try:
-    req = urllib.request.Request(URL, headers={"User-Agent": "Mozilla/5.0"})
-    xml = urllib.request.urlopen(req, timeout=30).read().decode()
-    root = ET.fromstring(xml)
-    items = root.findall(".//item")
-    print(f"Found {len(items)} articles\n")
-except Exception as e:
-    print(f"Error: {e}")
-    exit(1)
+def parse_zhihu_data(raw: str) -> list:
+    """从 zhihu-cli 输出解析数据"""
+    # 找到 JSON 数组
+    match = re.search(r'\[\s*\{.*\}\s*\]', raw, re.DOTALL)
+    if not match:
+        print("未找到 JSON 数组")
+        return []
 
-n = 0
-for item in items:
-    t = item.findtext("title", "")
-    l = item.findtext("link", "")
-    d = html.unescape(item.findtext("description", ""))
-    d = re.sub(r"<[^>]+>", "", d).strip()[:200]
-    p = item.findtext("pubDate", "")
+    json_str = match.group(0)
     try:
-        dt = datetime.strptime(p.split("+")[0].strip(), "%a, %d %b %Y %H:%M:%S")
-        dt = dt.strftime("%Y-%m-%d")
-    except: dt = "2026-01-01"
-    if not t: continue
-    s = re.sub(r'[^\w\u4e00-\u9fff-]', '-', t).strip('-')
-    fp = os.path.join(OUT, f"{s}.md")
-    if os.path.exists(fp): continue
-    with open(fp, "w", encoding="utf-8") as f:
-        f.write(f'---\ntitle: "{t}"\ndate: "{dt}"\ntags: ["知乎"]\ndescription: "{d}"\npublished: true\nsource: "{l}"\n---\n\n{d}\n\n> [原文]({l})\n')
-    n += 1
-    print(f"  + {t}")
+        data = json.loads(json_str)
+    except json.JSONDecodeError as e:
+        print(f"JSON 解析失败: {e}")
+        return []
 
-print(f"\nDone! {n} new articles")
+    items = []
+    for item in data:
+        items.append({
+            "type": TYPE_MAP.get(item.get("ContentType", ""), "pin"),
+            "title": item.get("Title", "").replace("[图片]", "").strip(),
+            "url": item.get("Url", ""),
+            "summary": item.get("Summary", "").replace("[图片]", "").strip()[:200],
+            "likeCount": item.get("LikeCount", 0),
+            "commentCount": item.get("CommentCount", 0),
+            "createdAt": int(item.get("CreatedAt", 0)),
+        })
+
+    return items
+
+
+def format_ts_file(items: list) -> str:
+    """生成 TypeScript 文件内容"""
+    items_ts = ",\n  ".join([
+        f'''  {{
+    type: "{item['type']}",
+    title: {json.dumps(item['title'], ensure_ascii=False)},
+    url: "{item['url']}",
+    summary: {json.dumps(item['summary'], ensure_ascii=False)},
+    likeCount: {item['likeCount']},
+    commentCount: {item['commentCount']},
+    createdAt: {item['createdAt']},
+  }}'''
+        for item in items
+    ])
+
+    return f"""// 知乎个人数据 - 从知乎开放平台手动导出
+// 导出方法:
+// 1. 访问 https://developer.zhihu.com/hotlist
+// 2. 切换到"用户的创作"，点击"查看接口返回格式"
+// 3. 或用 zhihu-cli: & "$env:LOCALAPPDATA\\ZhihuCLI\\current\\zhihu-cli.exe" me contents --type all --limit 50
+// 4. 复制 JSON 到 zhihu_raw.json，运行 python3 sync_zhihu.py
+
+export interface ZhihuContent {{
+  type: "answer" | "article" | "pin";
+  title: string;
+  url: string;
+  summary: string;
+  likeCount: number;
+  commentCount: number;
+  createdAt: number;
+}}
+
+export const zhihuContents: ZhihuContent[] = [
+{items_ts}
+];
+"""
+
+
+def main():
+    if not os.path.exists(RAW_FILE):
+        print(f"未找到 {RAW_FILE}")
+        print()
+        print("请先在 PowerShell 中运行:")
+        print('  & "$env:LOCALAPPDATA\\ZhihuCLI\\current\\zhihu-cli.exe" me contents --type all --limit 50')
+        print()
+        print("把输出保存到 zhihu_raw.json，然后再运行本脚本")
+        return
+
+    with open(RAW_FILE, "r", encoding="utf-8") as f:
+        raw = f.read()
+
+    print(f"读取 {RAW_FILE} ({len(raw)} 字符)")
+    items = parse_zhihu_data(raw)
+    print(f"解析到 {len(items)} 条数据")
+
+    if not items:
+        return
+
+    # 写入 TS 文件
+    os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
+    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+        f.write(format_ts_file(items))
+
+    print(f"已生成 {OUTPUT_FILE}")
+    print()
+    print("类型分布:")
+    from collections import Counter
+    counter = Counter(item["type"] for item in items)
+    for t, c in counter.items():
+        print(f"  {t}: {c}")
+
+
+if __name__ == "__main__":
+    main()

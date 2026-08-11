@@ -7,3 +7,4 @@ out/
 .elog.env
 sync_wolai.py
 test_wolai.py
+sync_zhihu.py
