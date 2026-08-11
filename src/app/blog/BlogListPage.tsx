@@ -4,6 +4,7 @@ import { useState } from "react";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeading from "@/components/SectionHeading";
 import BlogList from "@/components/BlogList";
+import Footer from "@/components/Footer";
 import { HiPencil } from "react-icons/hi";
 
 interface Post {
@@ -98,6 +99,7 @@ export default function BlogListPage({
 
         <BlogList posts={filtered} tags={tags} />
       </div>
+      <Footer />
     </div>
   );
 }
