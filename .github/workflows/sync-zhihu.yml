@@ -2,8 +2,8 @@ name: Sync Zhihu Data
 
 on:
   schedule:
-    # 每周一 04:00 UTC（北京时间 12:00）
-    - cron: '0 20 * * 0'
+    # 每天 04:00 UTC（北京时间 12:00）
+    - cron: '0 20 * * *'
   workflow_dispatch:  # 允许手动触发
 
 jobs:
