@@ -90,7 +90,8 @@ export interface ZhihuContent {{
   likeCount: number;
   commentCount: number;
   favoriteCount: number;
-  createdAt: string;
+  createdAt: number | string;  // 支持时间戳或 ISO 字符串
+  [key: string]: any;  // 允许其他任意字段
 }}
 
 export interface ZhihuStats {{
@@ -107,17 +108,19 @@ export interface ZhihuStats {{
 }}
 
 export interface ZhihuFollowee {{
-  name: string;
-  url: string;
-  avatar: string;
-  bio: string;
+  name?: string;
+  url?: string;
+  avatar?: string;
+  bio?: string;
+  [key: string]: any;  // 允许其他任意字段
 }}
 
 export interface ZhihuFavorite {{
-  title: string;
-  url: string;
-  summary: string;
-  createdAt: string;
+  title?: string;
+  url?: string;
+  summary?: string;
+  createdAt?: number | string;
+  [key: string]: any;  // 允许其他任意字段
 }}
 
 export const zhihuContents: ZhihuContent[] = {json.dumps(formatted_contents, ensure_ascii=False, indent=2)};
