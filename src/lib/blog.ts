@@ -7,6 +7,7 @@ export type { Category };
 
 export interface Post {
   slug: string;
+  originalSlug?: string;
   title: string;
   date: string;
   tags: string[];
@@ -106,10 +107,22 @@ function parsePostFile(filePath: string): Omit<Post, "content"> | null {
       format = "md";
     }
 
-    const slug = relativePath.replace(/\.(md|tex)$/, "").replace(/\//g, "-");
+    // 优先使用 frontmatter 的 slug，没有就用文件名（不含中文则直接用，含中文则用 hex）
+    const fileNameSlug = path.basename(filePath).replace(/\.(md|tex)$/, "");
+    let slug = data.slug || fileNameSlug;
+    // 如果 slug 包含中文，使用 hex 编码（Next.js 静态导出不支持中文文件名）
+    if (/[^\x00-\x7F]/.test(slug)) {
+      slug = Buffer.from(slug).toString('hex');
+    }
+    // 加上分类前缀
+    if (category !== "default" && !slug.startsWith(category)) {
+      slug = `${category}-${slug}`;
+    }
+    const originalSlug = data.slug || fileNameSlug;
 
     return {
       slug,
+      originalSlug,
       title: data.title || fileName,
       date: data.date || "2026-01-01",
       tags: data.tags || [],

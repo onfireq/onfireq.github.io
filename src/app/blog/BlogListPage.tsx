@@ -13,6 +13,7 @@ type FilterType = "all" | ZhihuContent["type"];
 export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
   const [search, setSearch] = useState("");
+  const [activeCategory, setActiveCategory] = useState<string>("all");
 
   // 本地博客（主区只显示这些）
   const localFormatted = useMemo(() => {
@@ -22,17 +23,30 @@ export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
       date: p.date,
       tags: p.tags,
       description: p.description,
-      category: p.category === "tech" ? "技术" : p.category === "timing" ? "时序" : p.category === "guide" ? "攻略" : "其他",
+      category: p.category,
+      categoryName: p.category === "tech" ? "技术" : p.category === "timing" ? "时序" : p.category === "guide" ? "攻略" : p.category === "libo" ? "李博笔记" : "其他",
     }));
   }, [localPosts]);
 
+  // 获取所有分类及文章数
+  const categoryStats = useMemo(() => {
+    const stats: Record<string, number> = { all: localFormatted.length };
+    localFormatted.forEach((p) => {
+      stats[p.category] = (stats[p.category] || 0) + 1;
+    });
+    return stats;
+  }, [localFormatted]);
+
   const filtered = useMemo(() => {
     let list = localFormatted;
+    if (activeCategory !== "all") {
+      list = list.filter((p) => p.category === activeCategory);
+    }
     if (search) {
       list = list.filter((p) => p.title.includes(search) || p.description.includes(search));
     }
     return list;
-  }, [localFormatted, search]);
+  }, [localFormatted, search, activeCategory]);
 
   return (
     <div className="min-h-screen pt-24 pb-16 px-6">
@@ -63,6 +77,38 @@ export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
               <HiPencil size={16} /> 写文章
             </a>
           </div>
+
+          {/* 分类筛选 */}
+          <div className="flex flex-wrap gap-2 mb-6">
+            <button
+              onClick={() => setActiveCategory("all")}
+              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                activeCategory === "all"
+                  ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/30"
+                  : "bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white"
+              }`}
+            >
+              全部 <span className="opacity-70">{categoryStats.all || 0}</span>
+            </button>
+            {Object.entries(categoryStats).map(([cat, count]) => {
+              if (cat === "all") return null;
+              if (count === 0) return null;
+              const name = cat === "tech" ? "技术" : cat === "timing" ? "时序" : cat === "guide" ? "攻略" : cat === "libo" ? "李博笔记" : cat;
+              return (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                    activeCategory === cat
+                      ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/30"
+                      : "bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white"
+                  }`}
+                >
+                  {name} <span className="opacity-70">{count}</span>
+                </button>
+              );
+            })}
+          </div>
           <SectionHeading title="技术" accent="博客" subtitle="偏振控制 · FPGA · 全栈开发 · 学习记录" />
 
           {filtered.length === 0 ? (
@@ -73,7 +119,7 @@ export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
             <div className="space-y-4">
               {filtered.map((post, i) => (
                 <Link key={post.slug} href={`/blog/${post.slug}`} className="block">
-                  <BlogCard {...post} index={i} category={post.category} />
+                  <BlogCard {...post} index={i} category={post.categoryName} />
                 </Link>
               ))}
             </div>
