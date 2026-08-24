@@ -132,13 +132,13 @@ export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
             {activeCategory ? (
               // 显示当前分类的文章列表
               <div>
-                <button
-                  onClick={() => setCategory("")}
+                <Link
+                  href="/blog"
                   className="flex items-center gap-2 text-sm text-gray-400 hover:text-white mb-4 transition-colors"
                 >
                   <HiArrowLeft size={16} />
                   返回
-                </button>
+                </Link>
                 <SectionHeading
                   title={FOLDER_CONFIG[activeCategory]?.name || activeCategory}
                   accent=""
@@ -158,13 +158,16 @@ export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
                 <SectionHeading title="" accent="博客" subtitle="" />
                 <div className="grid md:grid-cols-2 gap-5 mt-6">
                   {folders.map((folder, i) => (
-                    <motion.button
+                    <Link
                       key={folder.slug}
+                      href={`/blog?category=${folder.slug}`}
+                      className="block"
+                    >
+                    <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.1 }}
-                      onClick={() => setCategory(folder.slug)}
-                      className="glass overflow-hidden group cursor-pointer transition-all hover:border-brand-purple/30 text-left"
+                      className="glass overflow-hidden group cursor-pointer transition-all hover:border-brand-purple/30"
                     >
                       {/* 顶部图标区 */}
                       <div
@@ -194,7 +197,8 @@ export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
                           {folder.description}
                         </p>
                       </div>
-                    </motion.button>
+                    </motion.div>
+                    </Link>
                   ))}
                 </div>
               </div>
