@@ -26,25 +26,10 @@ export default function BlogPostPage({ post }: { post: Post }) {
           animate={{ opacity: 1, x: 0 }}
           className="flex items-center gap-2 text-sm text-gray-500 mb-6"
         >
-          <a href="/blog" className="hover:text-brand-purple transition-colors flex items-center gap-1.5">
+          <a href={`/blog?category=${post.category || 'all'}`} className="hover:text-brand-purple transition-colors flex items-center gap-1.5">
             <HiArrowLeft size={16} />
-            博客
+            {post.category && post.category !== "default" ? getCategoryName(post.category) : "博客"}
           </a>
-          {post.category && post.category !== "default" && (
-            <>
-              <span>/</span>
-              <a
-                href={`/blog?category=${post.category}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.location.href = `/blog`;
-                }}
-                className="hover:text-brand-purple transition-colors"
-              >
-                {getCategoryName(post.category)}
-              </a>
-            </>
-          )}
         </motion.nav>
 
         {/* Header */}

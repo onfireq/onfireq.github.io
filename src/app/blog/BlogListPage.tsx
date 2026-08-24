@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import SectionHeading from "@/components/SectionHeading";
 import BlogCard from "@/components/BlogCard";
 import ZhihuSidebar from "@/components/ZhihuSidebar";
@@ -13,7 +14,26 @@ type FilterType = "all" | ZhihuContent["type"];
 export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
   const [search, setSearch] = useState("");
-  const [activeCategory, setActiveCategory] = useState<string>("all");
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  
+  // 从 URL 读取分类（这样返回时不会丢）
+  const activeCategory = searchParams.get("category") || "all";
+  
+  // 同步客户端水合（避免 hydration mismatch）
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+  
+  const setCategory = (cat: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (cat === "all") {
+      params.delete("category");
+    } else {
+      params.set("category", cat);
+    }
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  };
 
   // 本地博客（主区只显示这些）
   const localFormatted = useMemo(() => {
@@ -79,9 +99,10 @@ export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
           </div>
 
           {/* 分类筛选 */}
+          {mounted && (
           <div className="flex flex-wrap gap-2 mb-6">
             <button
-              onClick={() => setActiveCategory("all")}
+              onClick={() => setCategory("all")}
               className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
                 activeCategory === "all"
                   ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/30"
@@ -97,7 +118,7 @@ export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
               return (
                 <button
                   key={cat}
-                  onClick={() => setActiveCategory(cat)}
+                  onClick={() => setCategory(cat)}
                   className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
                     activeCategory === cat
                       ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/30"
@@ -109,6 +130,7 @@ export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
               );
             })}
           </div>
+          )}
           <SectionHeading title="技术" accent="博客" subtitle="偏振控制 · FPGA · 全栈开发 · 学习记录" />
 
           {filtered.length === 0 ? (
