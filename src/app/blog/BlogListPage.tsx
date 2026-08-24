@@ -155,7 +155,7 @@ export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
             ) : (
               // 显示文件夹卡片
               <div>
-                <SectionHeading title="博客" accent="" subtitle="" />
+                <SectionHeading title="" accent="博客" subtitle="" />
                 <div className="grid md:grid-cols-2 gap-5 mt-6">
                   {folders.map((folder, i) => (
                     <motion.button
