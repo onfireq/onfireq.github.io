@@ -82,6 +82,20 @@ function getCategoryFromPath(filePath: string): string {
   return "default";
 }
 
+// 从文件名和 frontmatter 生成安全的 slug
+function computeSlug(fileName: string, data: any, category: string): string {
+  let slug = data.slug || fileName;
+  // 如果 slug 包含中文，使用 hex 编码（Next.js 静态导出不支持中文文件名）
+  if (/[^\x00-\x7F]/.test(slug)) {
+    slug = Buffer.from(slug).toString('hex');
+  }
+  // 加上分类前缀
+  if (category !== "default" && !slug.startsWith(category)) {
+    slug = `${category}-${slug}`;
+  }
+  return slug;
+}
+
 function parsePostFile(filePath: string): Omit<Post, "content"> | null {
   const fileName = path.basename(filePath);
   const relativePath = path.relative(postsDir, filePath);
@@ -109,15 +123,7 @@ function parsePostFile(filePath: string): Omit<Post, "content"> | null {
 
     // 优先使用 frontmatter 的 slug，没有就用文件名（不含中文则直接用，含中文则用 hex）
     const fileNameSlug = path.basename(filePath).replace(/\.(md|tex)$/, "");
-    let slug = data.slug || fileNameSlug;
-    // 如果 slug 包含中文，使用 hex 编码（Next.js 静态导出不支持中文文件名）
-    if (/[^\x00-\x7F]/.test(slug)) {
-      slug = Buffer.from(slug).toString('hex');
-    }
-    // 加上分类前缀
-    if (category !== "default" && !slug.startsWith(category)) {
-      slug = `${category}-${slug}`;
-    }
+    const slug = computeSlug(fileNameSlug, data, category);
     const originalSlug = data.slug || fileNameSlug;
 
     return {
@@ -157,8 +163,21 @@ export function getPostBySlug(slug: string): Post | null {
   if (!fs.existsSync(postsDir)) return null;
 
   const files = getAllFiles(postsDir);
-  for (const { filePath, relativePath } of files) {
-    const s = relativePath.replace(/\.(md|tex)$/, "").replace(/\//g, "-");
+  for (const { filePath } of files) {
+    // 使用与 parsePostFile 一致的 slug 生成逻辑
+    const fileName = path.basename(filePath).replace(/\.(md|tex)$/, "");
+    const raw = fs.readFileSync(filePath, "utf-8");
+    const isTexForSlug = filePath.endsWith(".tex");
+    let dataForSlug: any = {};
+    if (isTexForSlug) {
+      const parsed = parseTexFile(raw, fileName);
+      dataForSlug = parsed;
+    } else {
+      const parsed = matter(raw);
+      dataForSlug = parsed.data;
+    }
+    const categoryFromPath = getCategoryFromPath(filePath);
+    const s = computeSlug(fileName, dataForSlug, categoryFromPath);
     if (s === slug) {
       const meta = parsePostFile(filePath);
       if (!meta) continue;
