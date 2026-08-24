@@ -132,13 +132,13 @@ export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
             {activeCategory ? (
               // 显示当前分类的文章列表
               <div>
-                <Link
-                  href="/blog"
+                <button
+                  onClick={() => window.location.href = '/blog'}
                   className="flex items-center gap-2 text-sm text-gray-400 hover:text-white mb-4 transition-colors"
                 >
                   <HiArrowLeft size={16} />
                   返回
-                </Link>
+                </button>
                 <SectionHeading
                   title={FOLDER_CONFIG[activeCategory]?.name || activeCategory}
                   accent=""
@@ -158,10 +158,10 @@ export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
                 <SectionHeading title="" accent="博客" subtitle="" />
                 <div className="grid md:grid-cols-2 gap-5 mt-6">
                   {folders.map((folder, i) => (
-                    <Link
+                    <button
                       key={folder.slug}
-                      href={`/blog?category=${folder.slug}`}
-                      className="block"
+                      onClick={() => window.location.href = `/blog?category=${folder.slug}`}
+                      className="w-full text-left"
                     >
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
@@ -198,7 +198,7 @@ export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
                         </p>
                       </div>
                     </motion.div>
-                    </Link>
+                    </button>
                   ))}
                 </div>
               </div>
