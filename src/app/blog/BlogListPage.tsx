@@ -137,12 +137,12 @@ export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
                   className="flex items-center gap-2 text-sm text-gray-400 hover:text-white mb-4 transition-colors"
                 >
                   <HiArrowLeft size={16} />
-                  返回文件夹
+                  返回
                 </button>
                 <SectionHeading
                   title={FOLDER_CONFIG[activeCategory]?.name || activeCategory}
                   accent=""
-                  subtitle={FOLDER_CONFIG[activeCategory]?.description || ""}
+                  subtitle=""
                 />
                 <div className="space-y-4 mt-6">
                   {filtered.map((post, i) => (
@@ -155,7 +155,7 @@ export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
             ) : (
               // 显示文件夹卡片
               <div>
-                <SectionHeading title="博客" accent="分类" subtitle="按文件夹浏览文章" />
+                <SectionHeading title="博客" accent="" subtitle="" />
                 <div className="grid md:grid-cols-2 gap-5 mt-6">
                   {folders.map((folder, i) => (
                     <motion.button
