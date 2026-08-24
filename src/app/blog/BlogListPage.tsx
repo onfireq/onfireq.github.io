@@ -5,11 +5,29 @@ import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import SectionHeading from "@/components/SectionHeading";
 import BlogCard from "@/components/BlogCard";
 import ZhihuSidebar from "@/components/ZhihuSidebar";
-import { HiPencil, HiSearch } from "react-icons/hi";
+import { HiPencil, HiSearch, HiFolder, HiArrowLeft } from "react-icons/hi";
 import { zhihuContents, type ZhihuContent } from "@/data/zhihu";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 type FilterType = "all" | ZhihuContent["type"];
+
+interface FolderInfo {
+  slug: string;
+  name: string;
+  description: string;
+  count: number;
+  color: string;
+  icon: string;
+}
+
+const FOLDER_CONFIG: Record<string, { name: string; description: string; color: string; icon: string }> = {
+  tech: { name: "技术", description: "偏振控制、FPGA、全栈开发等技术笔记", color: "blue", icon: "💻" },
+  timing: { name: "时序", description: "FPGA 时序约束、CDC、DAC/ADC 调试", color: "cyan", icon: "⏱️" },
+  guide: { name: "攻略", description: "工具使用、教程、生活经验", color: "pink", icon: "📚" },
+  libo: { name: "李博笔记", description: "李博的学习笔记", color: "purple", icon: "📝" },
+  default: { name: "其他", description: "未分类", color: "gray", icon: "📁" },
+};
 
 export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
@@ -19,7 +37,7 @@ export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
   const searchParams = useSearchParams();
   
   // 从 URL 读取分类（这样返回时不会丢）
-  const activeCategory = searchParams.get("category") || "all";
+  const activeCategory = searchParams.get("category") || "";
   
   // 同步客户端水合（避免 hydration mismatch）
   const [mounted, setMounted] = useState(false);
@@ -27,7 +45,7 @@ export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
   
   const setCategory = (cat: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    if (cat === "all") {
+    if (cat === "") {
       params.delete("category");
     } else {
       params.set("category", cat);
@@ -44,22 +62,32 @@ export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
       tags: p.tags,
       description: p.description,
       category: p.category,
-      categoryName: p.category === "tech" ? "技术" : p.category === "timing" ? "时序" : p.category === "guide" ? "攻略" : p.category === "libo" ? "李博笔记" : "其他",
+      categoryName: FOLDER_CONFIG[p.category]?.name || "其他",
     }));
   }, [localPosts]);
 
-  // 获取所有分类及文章数
-  const categoryStats = useMemo(() => {
-    const stats: Record<string, number> = { all: localFormatted.length };
+  // 按分类分组，只保留有文章的分类
+  const folders = useMemo(() => {
+    const stats: Record<string, number> = {};
     localFormatted.forEach((p) => {
       stats[p.category] = (stats[p.category] || 0) + 1;
     });
-    return stats;
+    
+    return Object.entries(stats)
+      .filter(([cat, count]) => count > 0)
+      .map(([cat, count]) => ({
+        slug: cat,
+        name: FOLDER_CONFIG[cat]?.name || cat,
+        description: FOLDER_CONFIG[cat]?.description || "",
+        count,
+        color: FOLDER_CONFIG[cat]?.color || "gray",
+        icon: FOLDER_CONFIG[cat]?.icon || "📁",
+      }));
   }, [localFormatted]);
 
   const filtered = useMemo(() => {
     let list = localFormatted;
-    if (activeCategory !== "all") {
+    if (activeCategory) {
       list = list.filter((p) => p.category === activeCategory);
     }
     if (search) {
@@ -100,51 +128,78 @@ export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
 
           {/* 分类筛选 */}
           {mounted && (
-          <div className="flex flex-wrap gap-2 mb-6">
-            <button
-              onClick={() => setCategory("all")}
-              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-                activeCategory === "all"
-                  ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/30"
-                  : "bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white"
-              }`}
-            >
-              全部 <span className="opacity-70">{categoryStats.all || 0}</span>
-            </button>
-            {Object.entries(categoryStats).map(([cat, count]) => {
-              if (cat === "all") return null;
-              if (count === 0) return null;
-              const name = cat === "tech" ? "技术" : cat === "timing" ? "时序" : cat === "guide" ? "攻略" : cat === "libo" ? "李博笔记" : cat;
-              return (
+          <div className="mb-6">
+            {activeCategory ? (
+              // 显示当前分类的文章列表
+              <div>
                 <button
-                  key={cat}
-                  onClick={() => setCategory(cat)}
-                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-                    activeCategory === cat
-                      ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/30"
-                      : "bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white"
-                  }`}
+                  onClick={() => setCategory("")}
+                  className="flex items-center gap-2 text-sm text-gray-400 hover:text-white mb-4 transition-colors"
                 >
-                  {name} <span className="opacity-70">{count}</span>
+                  <HiArrowLeft size={16} />
+                  返回文件夹
                 </button>
-              );
-            })}
-          </div>
-          )}
-          <SectionHeading title="技术" accent="博客" subtitle="偏振控制 · FPGA · 全栈开发 · 学习记录" />
+                <SectionHeading
+                  title={FOLDER_CONFIG[activeCategory]?.name || activeCategory}
+                  accent=""
+                  subtitle={FOLDER_CONFIG[activeCategory]?.description || ""}
+                />
+                <div className="space-y-4 mt-6">
+                  {filtered.map((post, i) => (
+                    <Link key={post.slug} href={`/blog/${post.slug}`} className="block">
+                      <BlogCard {...post} index={i} category={post.categoryName} />
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              // 显示文件夹卡片
+              <div>
+                <SectionHeading title="博客" accent="分类" subtitle="按文件夹浏览文章" />
+                <div className="grid md:grid-cols-2 gap-5 mt-6">
+                  {folders.map((folder, i) => (
+                    <motion.button
+                      key={folder.slug}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.1 }}
+                      onClick={() => setCategory(folder.slug)}
+                      className="glass overflow-hidden group cursor-pointer transition-all hover:border-brand-purple/30 text-left"
+                    >
+                      {/* 顶部图标区 */}
+                      <div
+                        className="h-32 flex items-center justify-center text-6xl relative overflow-hidden"
+                        style={{
+                          background: `linear-gradient(135deg, var(--color-${folder.color}-500)33 0%, var(--color-${folder.color}-500)11 100%)`,
+                        }}
+                      >
+                        <motion.span
+                          whileHover={{ scale: 1.15 }}
+                          transition={{ type: "spring" }}
+                        >
+                          {folder.icon}
+                        </motion.span>
+                        <div className="absolute inset-0 bg-gradient-to-t from-surface-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                          <span className="text-sm text-brand-cyan">查看 {folder.count} 篇文章 →</span>
+                        </div>
+                      </div>
 
-          {filtered.length === 0 ? (
-            <div className="glass p-12 text-center text-gray-500">
-              {search ? "没有匹配的文章" : "暂无文章"}
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {filtered.map((post, i) => (
-                <Link key={post.slug} href={`/blog/${post.slug}`} className="block">
-                  <BlogCard {...post} index={i} category={post.categoryName} />
-                </Link>
-              ))}
-            </div>
+                      {/* 内容区 */}
+                      <div className="p-5">
+                        <div className="flex items-center justify-between mb-2">
+                          <h4 className="font-semibold text-lg">{folder.name}</h4>
+                          <span className="text-xs text-gray-500">{folder.count} 篇</span>
+                        </div>
+                        <p className="text-sm text-gray-400 leading-relaxed">
+                          {folder.description}
+                        </p>
+                      </div>
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
           )}
         </div>
       </div>
