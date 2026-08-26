@@ -1,5 +1,5 @@
 // 知乎数据（自动生成，请勿手动编辑）
-// 最后更新: 2026-08-25 04:47:27
+// 最后更新: 2026-08-26 04:48:53
 
 export interface ZhihuContent {
   type: 'answer' | 'article' | 'pin' | 'video' | 'question';
@@ -433,10 +433,10 @@ export const zhihuFollowees: ZhihuFollowee[] = [
     "Fullname": "香农大学堂",
     "UrlToken": "shanontech",
     "Url": "https://www.zhihu.com/people/shanontech",
-    "AvatarUrl": "https://pic2.zhimg.com/50/v2-ea064938f9dc3396958a66764cc46271_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic1.zhimg.com/50/v2-ea064938f9dc3396958a66764cc46271_l.jpg?source=f36c2686",
     "Headline": "公号：Optical Fiber Communication",
     "Gender": 2,
-    "FollowerCount": 11770
+    "FollowerCount": 11771
   },
   {
     "Fullname": "学习有了方法",
@@ -460,10 +460,10 @@ export const zhihuFollowees: ZhihuFollowee[] = [
     "Fullname": "思维有了模型",
     "UrlToken": "lan-chuan-dong-41",
     "Url": "https://www.zhihu.com/people/lan-chuan-dong-41",
-    "AvatarUrl": "https://pic4.zhimg.com/50/v2-c7b0b2d6d8258bfb6433b7eeb361ab8b_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic2.zhimg.com/50/v2-c7b0b2d6d8258bfb6433b7eeb361ab8b_l.jpg?source=f36c2686",
     "Headline": "所有文章首发于公众号「思维有了模型」。",
     "Gender": 2,
-    "FollowerCount": 267847
+    "FollowerCount": 267849
   },
   {
     "Fullname": "铁匠",
@@ -472,13 +472,13 @@ export const zhihuFollowees: ZhihuFollowee[] = [
     "AvatarUrl": "https://pic2.zhimg.com/50/v2-4482dae6c0848b21799af82acbb6cf35_l.jpg?source=f36c2686",
     "Headline": "纳米新材料从业者&amp;化学科普爱好者",
     "Gender": 2,
-    "FollowerCount": 10140
+    "FollowerCount": 10142
   },
   {
     "Fullname": "三脚猫Frank",
     "UrlToken": "noobFrank",
     "Url": "https://www.zhihu.com/people/noobFrank",
-    "AvatarUrl": "https://pic2.zhimg.com/50/v2-63efd41b3ea1168b7415242a66b6c435_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic4.zhimg.com/50/v2-63efd41b3ea1168b7415242a66b6c435_l.jpg?source=f36c2686",
     "Headline": "我是一只无知的三脚猫",
     "Gender": 2,
     "FollowerCount": 24718
@@ -496,25 +496,25 @@ export const zhihuFollowees: ZhihuFollowee[] = [
     "Fullname": "任杰",
     "UrlToken": "ren-51-7",
     "Url": "https://www.zhihu.com/people/ren-51-7",
-    "AvatarUrl": "https://pic1.zhimg.com/50/v2-69ccbb0197f1e03f53ca964caee78daf_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic4.zhimg.com/50/v2-69ccbb0197f1e03f53ca964caee78daf_l.jpg?source=f36c2686",
     "Headline": "量子多体物理",
     "Gender": 2,
-    "FollowerCount": 10852
+    "FollowerCount": 10851
   },
   {
     "Fullname": "momo",
     "UrlToken": "ni-ming-qun-zhong-97",
     "Url": "https://www.zhihu.com/people/ni-ming-qun-zhong-97",
-    "AvatarUrl": "https://pic3.zhimg.com/50/v2-2725466f8fa7a318167ee2a74ccbfe86_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic2.zhimg.com/50/v2-2725466f8fa7a318167ee2a74ccbfe86_l.jpg?source=f36c2686",
     "Headline": "github.com/momostudy",
     "Gender": 1,
-    "FollowerCount": 35006
+    "FollowerCount": 35007
   },
   {
     "Fullname": "落叶红不扫",
     "UrlToken": "qi-xing-deng-87",
     "Url": "https://www.zhihu.com/people/qi-xing-deng-87",
-    "AvatarUrl": "https://pic3.zhimg.com/50/v2-b49623e26e68db9da40ba104ab61f4d2_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic2.zhimg.com/50/v2-b49623e26e68db9da40ba104ab61f4d2_l.jpg?source=f36c2686",
     "Headline": "|落叶红不扫&gt; ",
     "Gender": 1,
     "FollowerCount": 630
@@ -523,10 +523,10 @@ export const zhihuFollowees: ZhihuFollowee[] = [
     "Fullname": "小枣君",
     "UrlToken": "xzclass",
     "Url": "https://www.zhihu.com/people/xzclass",
-    "AvatarUrl": "https://pic4.zhimg.com/50/v2-7ac7e6b620ff93998cc4e0363745fd2b_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic3.zhimg.com/50/v2-7ac7e6b620ff93998cc4e0363745fd2b_l.jpg?source=f36c2686",
     "Headline": "公号：鲜枣课堂。擅长领域：通信知识科普，通信职涯劝退。",
     "Gender": 2,
-    "FollowerCount": 162437
+    "FollowerCount": 162443
   },
   {
     "Fullname": "小样Oak",
@@ -535,16 +535,16 @@ export const zhihuFollowees: ZhihuFollowee[] = [
     "AvatarUrl": "https://pic4.zhimg.com/50/v2-60f22952c3647c9a7ef9d557c321bd69_l.jpg?source=f36c2686",
     "Headline": "有些人能感受雨，而其他人只是被淋湿。",
     "Gender": 1,
-    "FollowerCount": 734078
+    "FollowerCount": 734075
   },
   {
     "Fullname": "她整夜在写信",
     "UrlToken": "tazhengyezaixin",
     "Url": "https://www.zhihu.com/people/tazhengyezaixin",
-    "AvatarUrl": "https://pic1.zhimg.com/50/v2-e1fa32691dab45c07b66d28bf63e59ce_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic3.zhimg.com/50/v2-e1fa32691dab45c07b66d28bf63e59ce_l.jpg?source=f36c2686",
     "Headline": "",
     "Gender": 1,
-    "FollowerCount": 238885
+    "FollowerCount": 238882
   },
   {
     "Fullname": "茶花路莫里亚蒂",
@@ -553,13 +553,13 @@ export const zhihuFollowees: ZhihuFollowee[] = [
     "AvatarUrl": "https://pic1.zhimg.com/50/040224afb1d45eb0004b8791b481621b_l.jpg?source=f36c2686",
     "Headline": "雪山千古冷，独照峨眉峰",
     "Gender": 2,
-    "FollowerCount": 63925
+    "FollowerCount": 63955
   },
   {
     "Fullname": "俞min家",
     "UrlToken": "yu-minjia",
     "Url": "https://www.zhihu.com/people/yu-minjia",
-    "AvatarUrl": "https://pic3.zhimg.com/50/v2-354147e3d8aa7643b9ec2741b348f319_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic4.zhimg.com/50/v2-354147e3d8aa7643b9ec2741b348f319_l.jpg?source=f36c2686",
     "Headline": "情感咨询  和分析解答 (pn8083)",
     "Gender": 1,
     "FollowerCount": 6768
@@ -568,7 +568,7 @@ export const zhihuFollowees: ZhihuFollowee[] = [
     "Fullname": "二土电子",
     "UrlToken": "40-19-56-55-78",
     "Url": "https://www.zhihu.com/people/40-19-56-55-78",
-    "AvatarUrl": "https://pic2.zhimg.com/50/v2-5d956f44a5ce6348fa466feb74958f76_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic4.zhimg.com/50/v2-5d956f44a5ce6348fa466feb74958f76_l.jpg?source=f36c2686",
     "Headline": "CSDN嵌入式领域新星创作者，阿里云专家博主。",
     "Gender": 1,
     "FollowerCount": 139
@@ -577,7 +577,7 @@ export const zhihuFollowees: ZhihuFollowee[] = [
     "Fullname": "路过",
     "UrlToken": "lu-guo-23-51",
     "Url": "https://www.zhihu.com/people/lu-guo-23-51",
-    "AvatarUrl": "https://pic1.zhimg.com/50/v2-d0525c55ad4664a004de3850146adbb4_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic3.zhimg.com/50/v2-d0525c55ad4664a004de3850146adbb4_l.jpg?source=f36c2686",
     "Headline": "我只是一只声学攻城狮",
     "Gender": 2,
     "FollowerCount": 1992
@@ -586,7 +586,7 @@ export const zhihuFollowees: ZhihuFollowee[] = [
     "Fullname": "PeiLingX",
     "UrlToken": "peiling0222",
     "Url": "https://www.zhihu.com/people/peiling0222",
-    "AvatarUrl": "https://pic1.zhimg.com/50/v2-c07ef32c3a7d50dd2cb3a004c6d5020d_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic3.zhimg.com/50/v2-c07ef32c3a7d50dd2cb3a004c6d5020d_l.jpg?source=f36c2686",
     "Headline": "野生科普工作者兼乐子人",
     "Gender": 2,
     "FollowerCount": 94980
@@ -613,10 +613,10 @@ export const zhihuFollowees: ZhihuFollowee[] = [
     "Fullname": "中科院物理所",
     "UrlToken": "zhong-ke-yuan-wu-li-suo",
     "Url": "https://www.zhihu.com/people/zhong-ke-yuan-wu-li-suo",
-    "AvatarUrl": "https://pic4.zhimg.com/50/v2-87e5dec00e3714fae3696992ed465d52_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic1.zhimg.com/50/v2-87e5dec00e3714fae3696992ed465d52_l.jpg?source=f36c2686",
     "Headline": "没错，我就是那个物理所。",
     "Gender": 1,
-    "FollowerCount": 972666
+    "FollowerCount": 972673
   },
   {
     "Fullname": "大族激光",
@@ -625,13 +625,13 @@ export const zhihuFollowees: ZhihuFollowee[] = [
     "AvatarUrl": "https://pic2.zhimg.com/50/v2-d527b80b9565f49ec56f32dd9a13c4d1_l.jpg?source=f36c2686",
     "Headline": "",
     "Gender": 1,
-    "FollowerCount": 835
+    "FollowerCount": 836
   },
   {
     "Fullname": "老木匠",
     "UrlToken": "oldcarpenter",
     "Url": "https://www.zhihu.com/people/oldcarpenter",
-    "AvatarUrl": "https://pic4.zhimg.com/50/v2-2eddaebc6b226dc7c460b22630e2ccb2_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic3.zhimg.com/50/v2-2eddaebc6b226dc7c460b22630e2ccb2_l.jpg?source=f36c2686",
     "Headline": "有人说科普文章公式越少越好，窃以为，公式才是最容易理解的语言",
     "Gender": 2,
     "FollowerCount": 2149
@@ -640,19 +640,19 @@ export const zhihuFollowees: ZhihuFollowee[] = [
     "Fullname": "Studytips",
     "UrlToken": "my-lucky-54",
     "Url": "https://www.zhihu.com/people/my-lucky-54",
-    "AvatarUrl": "https://pic2.zhimg.com/50/v2-fb76fcc0cb42982d9376d8bff4da387b_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic4.zhimg.com/50/v2-fb76fcc0cb42982d9376d8bff4da387b_l.jpg?source=f36c2686",
     "Headline": "世界TOP10大学学霸学习经验/方法.成为A PLAYER",
     "Gender": 1,
-    "FollowerCount": 56218
+    "FollowerCount": 56217
   },
   {
     "Fullname": "YouTube精选字幕",
     "UrlToken": "sky001-57",
     "Url": "https://www.zhihu.com/people/sky001-57",
-    "AvatarUrl": "https://pic2.zhimg.com/50/v2-63a5cf1feef1a9c8925d7f5914dea9ae_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic4.zhimg.com/50/v2-63a5cf1feef1a9c8925d7f5914dea9ae_l.jpg?source=f36c2686",
     "Headline": "译制外文精品视频，每日分享英语视频",
     "Gender": 2,
-    "FollowerCount": 609574
+    "FollowerCount": 609567
   }
 ];
 
@@ -687,7 +687,7 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://www.zhihu.com/answer/2045245004566853103",
     "CreatedAt": 1780404407,
     "FavTime": 1781593099,
-    "LikeCount": 4907,
+    "LikeCount": 4911,
     "CommentCount": 208,
     "FavoriteCount": 2279,
     "Title": "为什么有人读博士会抑郁？",
@@ -739,7 +739,7 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "FavTime": 1778652299,
     "LikeCount": 1417,
     "CommentCount": 71,
-    "FavoriteCount": 1261,
+    "FavoriteCount": 1262,
     "Title": "目前博士高年级在读，科研没成果，我要不要退学？",
     "Summary": "在学校里待久了的人，容易把自己看得过于珍贵。 三年读博没有成果，我逝去的时光完蛋了。可能要延期毕业，我的人生计划完蛋了。日复一日调着无意义的参数，我几年的精力完蛋了。够不到导师的期待，我的推荐信完蛋了。不敢选择性优化数据，我的科研理想完蛋了。回应不了父母和老师的目光，我在他们心中的样子完蛋了。看着身边的人论文一篇接一篇，我的自尊完蛋了。可是，你为什么不这么想呢？ 如果你不曾坐在这三年的冷板凳上，你…",
     "Favlists": [
@@ -764,7 +764,7 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "FavTime": 1775652328,
     "LikeCount": 254,
     "CommentCount": 5,
-    "FavoriteCount": 871,
+    "FavoriteCount": 873,
     "Title": "具身智能（运动控制方向）如何学习？",
     "Summary": "运动控制方向和操作任务有所不同，它更偏 RL 和动力学仿真，整条学习路径也比较线性： 先把仿真跑通，再搞懂 sim-to-real，最后上真机。 分三部分：入门仿真、算法实战、学术路线。 入门仿真先把仿真环境跑起来。 1、Isaac Lab NVIDIA 官方的具身智能 RL 训练平台，基于 Isaac Sim，GPU 并行训练速度快，内置了大量运动控制任务模板。运动控制方向的首选仿真环境。 链接： https://github.com/isaac-sim/IsaacLab [图片] 2、legged_gym ETH RSL 实验室的经…",
     "Favlists": [
@@ -814,7 +814,7 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "FavTime": 1774893819,
     "LikeCount": 870,
     "CommentCount": 26,
-    "FavoriteCount": 1293,
+    "FavoriteCount": 1294,
     "Title": "对 PhD 一年级新生有什么建议？",
     "Summary": "以下建议来自导师（加拿大皇家学会院士、工程院院士，IEEE Fellow，人品性格能力等各方面都是人生楷模） （ 帮咱们波波哥翻译一波哈，经过适当整理，老板原句见参考）： 关于人生：永无极限，与天比高。 [1] 清晨属于早起者，人生亦然。 [2] 你应当引领，而不是随波逐流。[3] 心怀善意，积极向上；人生中不必有敌人。 [4] 做真实而踏实的研究，终将赢得属于你的荣耀。 [5] 自我满足最重要，只要你快乐，就做到最好。无需成为别人…",
     "Favlists": [
@@ -838,7 +838,7 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "CreatedAt": 1774427171,
     "FavTime": 1774548614,
     "LikeCount": 179,
-    "CommentCount": 19,
+    "CommentCount": 20,
     "FavoriteCount": 234,
     "Title": "Fast-WAM 给 World Model 领域研究的几点思考",
     "Summary": "论文：Fast-WAM: Do World Action Models Need Test-time Future Imagination? 作者：Tianyuan Yuan, Zibin Dong, Yicheng Liu, Hang Zhao 机构：清华大学IIIS, Galaxea AI 链接：论文 | 项目主页 Fast-WAM 提出了一个尖锐的问题：World Action Model（WAM）在推理时真的需要\"想象未来\"吗？论文的答案是\"不需要\"——去掉推理时的视频生成，性能几乎无损，速度快4倍以上。 这个结论乍看非常有冲击力。但仔细审视之后，我认为论文的…",
@@ -879,7 +879,7 @@ export const zhihuFavorites: ZhihuFavorite[] = [
       "UrlToken": "yi-zhi-lu-lu-zhu-59",
       "Url": "https://www.zhihu.com/people/yi-zhi-lu-lu-zhu-59",
       "Gender": 2,
-      "Headline": "EmbodiedAI TJURLLab 硕士在读"
+      "Headline": "EmbodiedAI"
     }
   },
   {
@@ -987,9 +987,9 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://zhuanlan.zhihu.com/p/2015050462794122357",
     "CreatedAt": 1773211613,
     "FavTime": 1774373419,
-    "LikeCount": 197,
+    "LikeCount": 200,
     "CommentCount": 2,
-    "FavoriteCount": 384,
+    "FavoriteCount": 386,
     "Title": "最优控制视角下的flow matching （不推公式版本，理解物理图像）",
     "Summary": "从更新的视角理解 Flow Matching：一些意识流思考最近在了解 Information-Geometric Optimization（IGO）之后，我再回头看 Flow Matching（FM），忽然觉得这个连续空间里的强大生成算法，也许可以从“更新”的角度重新理解。这里记录一些比较意识流的思考，希望能帮助初学者和相关研究者建立对 FM 更直观的物理图像。 最朴素的 Flow Matching 理解坦白说，我一直不算擅长 FM 的那套理论推导。每次看到连续性方程、概率路径、条件…",
     "Favlists": [
@@ -1237,9 +1237,9 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://www.zhihu.com/answer/2002067273612035869",
     "CreatedAt": 1770110034,
     "FavTime": 1774348881,
-    "LikeCount": 501,
+    "LikeCount": 505,
     "CommentCount": 18,
-    "FavoriteCount": 848,
+    "FavoriteCount": 856,
     "Title": "怎么样才能想出一个work的idea？",
     "Summary": "很高兴我的一项工作中稿ICLR26（现在arxiv版本写得有点垃圾，后面会做一些大修改）： [图片] 这是我近几年非常非常满意的一个工作，可以说从各个角度都有许多典型的、在科研领域里有复盘价值的因素，包括怎么想到的这个idea、idea的缺陷、“故事”的重要性与是否需要SOTA、审稿人的喜好、研究领域等等，所以把这个工作和大家分享出来，希望能给大家带来一点有用的经验。 贝叶斯优化算法（BO）是一个相对小众的传统人工智能研究领域，不…",
     "Favlists": [
@@ -1362,9 +1362,9 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://www.zhihu.com/answer/2001439677928998208",
     "CreatedAt": 1769960404,
     "FavTime": 1774115820,
-    "LikeCount": 143,
+    "LikeCount": 144,
     "CommentCount": 0,
-    "FavoriteCount": 287,
+    "FavoriteCount": 289,
     "Title": "把高飞老师组的路径规划相关论文都看完，能跟上领域前沿水平吗？",
     "Summary": "目前小型多旋翼无人机研究做的比较好的组，国内绝对是高飞教授。大部分文章我都看过了，目前除了做经典优化的路径规划，也开始侧重AI了。 还有中山大学的HI LAB，这个组我关注的不多。 国外的话就是eth uzh和epfl的几个相关实验室，他们组以前做mpc，现在的话，主要是弄基于学习的方法。他们开发的无人机系统甚至超越了人类冠军飞手。比如RPG实验室。 然后就是TU Delft的MAVLAB。他们也做固定翼无人机。他们也几乎都是AI的研究了…",
     "Favlists": [
@@ -1462,9 +1462,9 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://www.zhihu.com/answer/2012640698172732092",
     "CreatedAt": 1772630935,
     "FavTime": 1773812753,
-    "LikeCount": 1412,
+    "LikeCount": 1413,
     "CommentCount": 144,
-    "FavoriteCount": 2759,
+    "FavoriteCount": 2760,
     "Title": "从哪里可以看出一个人能成大事？",
     "Summary": "能成大事的人，早期几乎看不出来。 不是因为他们藏得深，而是因为大多数人看人的维度，从一开始就错了。 大家习惯看颜值、看学历、看家境，看他说话是否自信，或者看他身上有没有那种所谓的“气场”。 其实这些外在的东西，和一个人最终能不能成事，关系远没你想的那么大。 真正决定一个人能走多远的，是几个藏在日常细节里、极容易被忽视的底层特质。 看懂了这几点，你看人的眼光，将会发生质的飞跃。 第一个特征：看他如何对待…",
     "Favlists": [
@@ -1789,7 +1789,7 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "FavTime": 1773469509,
     "LikeCount": 151,
     "CommentCount": 6,
-    "FavoriteCount": 344,
+    "FavoriteCount": 345,
     "Title": "2026年RL（强化学习）在Robotics（具身智能）中的新范式分析",
     "Summary": "前言2026年的具身智能 RL 正在从“单点算法突破”转向“可扩展、可验证、可对齐”的系统范式：云端世界模型、生成式策略后训练、真实机器人三段式闭环、以及 GPU 物理仿真规模化共同构成新主线。 总体趋势是：RL 从“从零学控制”逐步变成“面向大策略/大模型的后训练（post-training）与稳健性/对齐工具”，并与世界模型、扩散策略、真实机器人数据闭环、安全约束强耦合。下面结合相关趋势，简要分析其中相关议题，便于忙碌的“…",
     "Favlists": [
@@ -1812,9 +1812,9 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://www.zhihu.com/answer/1993478691863413655",
     "CreatedAt": 1768062357,
     "FavTime": 1773341507,
-    "LikeCount": 381,
+    "LikeCount": 383,
     "CommentCount": 22,
-    "FavoriteCount": 716,
+    "FavoriteCount": 718,
     "Title": "是否有介于预测控制（MPC）和强化学习（RL）之间的模型？",
     "Summary": "就题目这个话题，HJB朴素求解 - MPC - RL这三个节点之间，谱系其实是连续的，这里有的是东西可以做，要踏踏实实扩充思维、深入进去，发展真正有用的工具和思想，别被资本故事忽悠瘸了。 站在现在这个年代，我们必须重新审视YuChi Ho 99年说的“ 任何控制与决策问题本质上均可归结为优化问题 ”——这个前算力时代野心勃勃的宣言。不论是什么任务，Control终究还是Control。受限于篇幅，我尝试用稍微抽象一点方式把这个故事描述完…",
     "Favlists": [
@@ -1889,7 +1889,7 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "FavTime": 1772893221,
     "LikeCount": 208,
     "CommentCount": 2,
-    "FavoriteCount": 990,
+    "FavoriteCount": 991,
     "Title": "GitHub上一些控制算法合集",
     "Summary": "很多时候，我们在网络上，可以看到很多关于控制理论的学习资源，主要是集中在书籍、教学网站、博客、视频资源、课件等等。但是很少有看到能够集中、系统地讲解一些常见的控制算法的代码实现。 有时候，我自己也在想，有没有一个网站或者合集，能够讲解各种控制算法的实现，比如说PID算法、LQR、MPC、自适应等等。做一个控制算法合集，基础实现即可，让我们能够简单清晰地看到这些算法的基本功能和区别。至于什么编程语言，暂时不…",
     "Favlists": [
