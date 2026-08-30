@@ -106,30 +106,42 @@ export default function BlogListPage({ localPosts }: { localPosts: PostSummary[]
 
           {showPosts ? (
             <section aria-labelledby="post-list-heading">
-              {activeCategory && (
-                <div className="sticky top-20 z-30 mb-4 w-fit py-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSearch("");
-                      setCategory("");
-                    }}
-                    aria-label="返回全部博客分类"
-                    className="glass flex min-h-11 items-center gap-2 px-4 py-2 text-sm font-medium text-gray-300 shadow-lg shadow-black/20 transition-colors hover:border-brand-purple/30 hover:text-brand-cyan"
-                  >
-                    <HiArrowLeft size={16} aria-hidden="true" /> 返回全部分类
-                  </button>
+              {activeCategory ? (
+                <div className="sticky top-20 z-30 mb-6 py-2">
+                  <div className="glass grid min-h-14 grid-cols-[auto_1px_minmax(0,1fr)_auto] items-center gap-3 px-3 py-2 shadow-lg shadow-black/20 sm:px-4">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSearch("");
+                        setCategory("");
+                      }}
+                      aria-label="返回全部博客分类"
+                      className="flex min-h-11 items-center gap-2 rounded-xl px-2.5 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-brand-purple/10 hover:text-brand-cyan"
+                    >
+                      <HiArrowLeft size={16} aria-hidden="true" />
+                      <span className="hidden sm:inline">返回全部分类</span>
+                      <span className="sm:hidden">返回</span>
+                    </button>
+                    <span className="h-7 w-px bg-gray-500/20" aria-hidden="true" />
+                    <h2
+                      id="post-list-heading"
+                      className="min-w-0 truncate text-lg font-semibold text-brand-purple"
+                    >
+                      {currentCategory?.name}
+                    </h2>
+                    <p className="whitespace-nowrap text-xs text-gray-500 sm:text-sm">
+                      共 {filteredPosts.length} 篇
+                    </p>
+                  </div>
                 </div>
-              )}
-
-              <div className="mb-6 flex items-start justify-between gap-4">
-                <div>
+              ) : (
+                <div className="mb-6">
                   <h2 id="post-list-heading" className="text-2xl font-bold">
-                    {currentCategory?.name || "搜索结果"}
+                    搜索结果
                   </h2>
                   <p className="mt-2 text-sm text-gray-500">共 {filteredPosts.length} 篇文章</p>
                 </div>
-              </div>
+              )}
 
               {filteredPosts.length > 0 ? (
                 <div className="space-y-4">
