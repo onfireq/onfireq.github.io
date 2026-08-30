@@ -1,5 +1,5 @@
 // 知乎数据（自动生成，请勿手动编辑）
-// 最后更新: 2026-08-11 13:14:42
+// 最后更新: 2026-08-30 09:52:48
 
 export interface ZhihuContent {
   type: 'answer' | 'article' | 'pin' | 'video' | 'question';
@@ -62,6 +62,26 @@ export interface ZhihuFavorite {
 }
 
 export const zhihuContents: ZhihuContent[] = [
+  {
+    "type": "pin",
+    "title": "AI的能力确实是比世界上任何一个人都强的。如此强大的发动机需要懂得驾驭。",
+    "url": "https://www.zhihu.com/pin/2077178385885929822",
+    "summary": "AI的能力确实是比世界上任何一个人都强的。如此强大的发动机需要懂得驾驭。",
+    "likeCount": 0,
+    "commentCount": 0,
+    "favoriteCount": 0,
+    "createdAt": 1788017919
+  },
+  {
+    "type": "answer",
+    "title": "光学工程（光学设计）博士已经有很多项目的情况下还有必要实习吗？",
+    "url": "https://www.zhihu.com/answer/2076833210240087440",
+    "summary": "个人觉得有会比没有好",
+    "likeCount": 0,
+    "commentCount": 0,
+    "favoriteCount": 0,
+    "createdAt": 1787935623
+  },
   {
     "type": "answer",
     "title": "对于一个理科生物类专业的，想学物理光学这本书，去学工程光学里的物理光学好，还是物理光学好？",
@@ -435,19 +455,28 @@ export const zhihuContents: ZhihuContent[] = [
 ];
 
 export const zhihuStats: ZhihuStats = {
-  answerCount: 17,
-  articleCount: 2,
-  pinCount: 13,
-  videoCount: 0,
-  questionCount: 5,
-  totalLikes: 91,
-  totalLoves: 45,
-  totalComments: 9,
-  totalFavorites: 60,
-  totals: 37,
+  "answerCount": 18,
+  "articleCount": 2,
+  "pinCount": 14,
+  "videoCount": 0,
+  "questionCount": 5,
+  "totalLikes": 91,
+  "totalLoves": 91,
+  "totalComments": 9,
+  "totalFavorites": 60,
+  "totals": 39
 };
 
 export const zhihuFollowees: ZhihuFollowee[] = [
+  {
+    "Fullname": "香农大学堂",
+    "UrlToken": "shanontech",
+    "Url": "https://www.zhihu.com/people/shanontech",
+    "AvatarUrl": "https://pic3.zhimg.com/50/v2-ea064938f9dc3396958a66764cc46271_l.jpg?source=f36c2686",
+    "Headline": "公号：Optical Fiber Communication",
+    "Gender": 2,
+    "FollowerCount": 11776
+  },
   {
     "Fullname": "学习有了方法",
     "UrlToken": "xue-xi-you-liao-fang-fa",
@@ -455,49 +484,49 @@ export const zhihuFollowees: ZhihuFollowee[] = [
     "AvatarUrl": "https://pic3.zhimg.com/50/v2-82722706b0068507774c5036104df8a6_l.jpg?source=f36c2686",
     "Headline": "专注于学习方法的研究，去我公众号「学习有了方法」可领取免费课",
     "Gender": 2,
-    "FollowerCount": 26168
+    "FollowerCount": 26187
   },
   {
     "Fullname": "Mcuzone野芯科技",
     "UrlToken": "mcuzone",
     "Url": "https://www.zhihu.com/people/mcuzone",
-    "AvatarUrl": "https://pic4.zhimg.com/50/v2-c787c82eb42a52a15c7a4fbee92a1d03_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic1.zhimg.com/50/v2-c787c82eb42a52a15c7a4fbee92a1d03_l.jpg?source=f36c2686",
     "Headline": "Power up the MCU",
     "Gender": 1,
-    "FollowerCount": 391
+    "FollowerCount": 396
   },
   {
     "Fullname": "思维有了模型",
     "UrlToken": "lan-chuan-dong-41",
     "Url": "https://www.zhihu.com/people/lan-chuan-dong-41",
-    "AvatarUrl": "https://pic3.zhimg.com/50/v2-c7b0b2d6d8258bfb6433b7eeb361ab8b_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic2.zhimg.com/50/v2-c7b0b2d6d8258bfb6433b7eeb361ab8b_l.jpg?source=f36c2686",
     "Headline": "所有文章首发于公众号「思维有了模型」。",
     "Gender": 2,
-    "FollowerCount": 267856
+    "FollowerCount": 267850
   },
   {
     "Fullname": "铁匠",
     "UrlToken": "jicongmin",
     "Url": "https://www.zhihu.com/people/jicongmin",
-    "AvatarUrl": "https://pic3.zhimg.com/50/v2-4482dae6c0848b21799af82acbb6cf35_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic1.zhimg.com/50/v2-4482dae6c0848b21799af82acbb6cf35_l.jpg?source=f36c2686",
     "Headline": "纳米新材料从业者&amp;化学科普爱好者",
     "Gender": 2,
-    "FollowerCount": 10140
+    "FollowerCount": 10142
   },
   {
     "Fullname": "三脚猫Frank",
     "UrlToken": "noobFrank",
     "Url": "https://www.zhihu.com/people/noobFrank",
-    "AvatarUrl": "https://pic1.zhimg.com/50/v2-63efd41b3ea1168b7415242a66b6c435_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic3.zhimg.com/50/v2-63efd41b3ea1168b7415242a66b6c435_l.jpg?source=f36c2686",
     "Headline": "我是一只无知的三脚猫",
     "Gender": 2,
-    "FollowerCount": 24699
+    "FollowerCount": 24725
   },
   {
     "Fullname": "你给的糖",
     "UrlToken": "yi-ni-99-5-39",
     "Url": "https://www.zhihu.com/people/yi-ni-99-5-39",
-    "AvatarUrl": "https://pic4.zhimg.com/50/v2-96d7c09da560f856e31da287c487db26_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic1.zhimg.com/50/v2-96d7c09da560f856e31da287c487db26_l.jpg?source=f36c2686",
     "Headline": "",
     "Gender": 2,
     "FollowerCount": 1
@@ -506,10 +535,10 @@ export const zhihuFollowees: ZhihuFollowee[] = [
     "Fullname": "任杰",
     "UrlToken": "ren-51-7",
     "Url": "https://www.zhihu.com/people/ren-51-7",
-    "AvatarUrl": "https://pic4.zhimg.com/50/v2-69ccbb0197f1e03f53ca964caee78daf_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic3.zhimg.com/50/v2-69ccbb0197f1e03f53ca964caee78daf_l.jpg?source=f36c2686",
     "Headline": "量子多体物理",
     "Gender": 2,
-    "FollowerCount": 10852
+    "FollowerCount": 10853
   },
   {
     "Fullname": "momo",
@@ -518,13 +547,13 @@ export const zhihuFollowees: ZhihuFollowee[] = [
     "AvatarUrl": "https://pic3.zhimg.com/50/v2-2725466f8fa7a318167ee2a74ccbfe86_l.jpg?source=f36c2686",
     "Headline": "github.com/momostudy",
     "Gender": 1,
-    "FollowerCount": 34998
+    "FollowerCount": 35010
   },
   {
     "Fullname": "落叶红不扫",
     "UrlToken": "qi-xing-deng-87",
     "Url": "https://www.zhihu.com/people/qi-xing-deng-87",
-    "AvatarUrl": "https://pic1.zhimg.com/50/v2-b49623e26e68db9da40ba104ab61f4d2_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic4.zhimg.com/50/v2-b49623e26e68db9da40ba104ab61f4d2_l.jpg?source=f36c2686",
     "Headline": "|落叶红不扫&gt; ",
     "Gender": 1,
     "FollowerCount": 630
@@ -533,46 +562,46 @@ export const zhihuFollowees: ZhihuFollowee[] = [
     "Fullname": "小枣君",
     "UrlToken": "xzclass",
     "Url": "https://www.zhihu.com/people/xzclass",
-    "AvatarUrl": "https://pic4.zhimg.com/50/v2-7ac7e6b620ff93998cc4e0363745fd2b_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic1.zhimg.com/50/v2-7ac7e6b620ff93998cc4e0363745fd2b_l.jpg?source=f36c2686",
     "Headline": "公号：鲜枣课堂。擅长领域：通信知识科普，通信职涯劝退。",
     "Gender": 2,
-    "FollowerCount": 162350
+    "FollowerCount": 162470
   },
   {
-    "Fullname": "小样Oak",
+    "Fullname": "欧克张",
     "UrlToken": "ou-di-dong-ge",
     "Url": "https://www.zhihu.com/people/ou-di-dong-ge",
     "AvatarUrl": "https://pic3.zhimg.com/50/v2-60f22952c3647c9a7ef9d557c321bd69_l.jpg?source=f36c2686",
     "Headline": "有些人能感受雨，而其他人只是被淋湿。",
-    "Gender": 1,
-    "FollowerCount": 734127
+    "Gender": 2,
+    "FollowerCount": 734049
   },
   {
     "Fullname": "她整夜在写信",
     "UrlToken": "tazhengyezaixin",
     "Url": "https://www.zhihu.com/people/tazhengyezaixin",
-    "AvatarUrl": "https://pic2.zhimg.com/50/v2-e1fa32691dab45c07b66d28bf63e59ce_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic4.zhimg.com/50/v2-e1fa32691dab45c07b66d28bf63e59ce_l.jpg?source=f36c2686",
     "Headline": "",
     "Gender": 1,
-    "FollowerCount": 238917
+    "FollowerCount": 238868
   },
   {
     "Fullname": "茶花路莫里亚蒂",
     "UrlToken": "cha-hua-lu-mo-li-ya-ti",
     "Url": "https://www.zhihu.com/people/cha-hua-lu-mo-li-ya-ti",
-    "AvatarUrl": "https://pic2.zhimg.com/50/040224afb1d45eb0004b8791b481621b_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic1.zhimg.com/50/040224afb1d45eb0004b8791b481621b_l.jpg?source=f36c2686",
     "Headline": "雪山千古冷，独照峨眉峰",
     "Gender": 2,
-    "FollowerCount": 63634
+    "FollowerCount": 64065
   },
   {
     "Fullname": "俞min家",
     "UrlToken": "yu-minjia",
     "Url": "https://www.zhihu.com/people/yu-minjia",
-    "AvatarUrl": "https://pic2.zhimg.com/50/v2-354147e3d8aa7643b9ec2741b348f319_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic1.zhimg.com/50/v2-354147e3d8aa7643b9ec2741b348f319_l.jpg?source=f36c2686",
     "Headline": "情感咨询  和分析解答 (pn8083)",
     "Gender": 1,
-    "FollowerCount": 6766
+    "FollowerCount": 6770
   },
   {
     "Fullname": "二土电子",
@@ -581,7 +610,7 @@ export const zhihuFollowees: ZhihuFollowee[] = [
     "AvatarUrl": "https://pic4.zhimg.com/50/v2-5d956f44a5ce6348fa466feb74958f76_l.jpg?source=f36c2686",
     "Headline": "CSDN嵌入式领域新星创作者，阿里云专家博主。",
     "Gender": 1,
-    "FollowerCount": 139
+    "FollowerCount": 140
   },
   {
     "Fullname": "路过",
@@ -590,7 +619,7 @@ export const zhihuFollowees: ZhihuFollowee[] = [
     "AvatarUrl": "https://pic1.zhimg.com/50/v2-d0525c55ad4664a004de3850146adbb4_l.jpg?source=f36c2686",
     "Headline": "我只是一只声学攻城狮",
     "Gender": 2,
-    "FollowerCount": 1988
+    "FollowerCount": 1993
   },
   {
     "Fullname": "PeiLingX",
@@ -599,13 +628,13 @@ export const zhihuFollowees: ZhihuFollowee[] = [
     "AvatarUrl": "https://pic3.zhimg.com/50/v2-c07ef32c3a7d50dd2cb3a004c6d5020d_l.jpg?source=f36c2686",
     "Headline": "野生科普工作者兼乐子人",
     "Gender": 2,
-    "FollowerCount": 94971
+    "FollowerCount": 94984
   },
   {
     "Fullname": "秋之白日梦",
     "UrlToken": "yang-yu-tong-82-67",
     "Url": "https://www.zhihu.com/people/yang-yu-tong-82-67",
-    "AvatarUrl": "https://pic1.zhimg.com/50/v2-59b2587b77b4a8cafe849781bed68b89_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic4.zhimg.com/50/v2-59b2587b77b4a8cafe849781bed68b89_l.jpg?source=f36c2686",
     "Headline": "喜欢孤独 别派人来找我",
     "Gender": 2,
     "FollowerCount": 472
@@ -623,10 +652,10 @@ export const zhihuFollowees: ZhihuFollowee[] = [
     "Fullname": "中科院物理所",
     "UrlToken": "zhong-ke-yuan-wu-li-suo",
     "Url": "https://www.zhihu.com/people/zhong-ke-yuan-wu-li-suo",
-    "AvatarUrl": "https://pic3.zhimg.com/50/v2-87e5dec00e3714fae3696992ed465d52_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic2.zhimg.com/50/v2-87e5dec00e3714fae3696992ed465d52_l.jpg?source=f36c2686",
     "Headline": "没错，我就是那个物理所。",
     "Gender": 1,
-    "FollowerCount": 972560
+    "FollowerCount": 972696
   },
   {
     "Fullname": "大族激光",
@@ -635,25 +664,25 @@ export const zhihuFollowees: ZhihuFollowee[] = [
     "AvatarUrl": "https://pic1.zhimg.com/50/v2-d527b80b9565f49ec56f32dd9a13c4d1_l.jpg?source=f36c2686",
     "Headline": "",
     "Gender": 1,
-    "FollowerCount": 831
+    "FollowerCount": 838
   },
   {
     "Fullname": "老木匠",
     "UrlToken": "oldcarpenter",
     "Url": "https://www.zhihu.com/people/oldcarpenter",
-    "AvatarUrl": "https://pic1.zhimg.com/50/v2-abed1a8c04700ba7d72b45195223e0ff_l.jpg?source=f36c2686",
-    "Headline": "树木里寄宿着生命，树木正在对我倾诉。",
+    "AvatarUrl": "https://pic3.zhimg.com/50/v2-2eddaebc6b226dc7c460b22630e2ccb2_l.jpg?source=f36c2686",
+    "Headline": "有人说科普文章公式越少越好，窃以为，公式才是最容易理解的语言",
     "Gender": 2,
-    "FollowerCount": 2144
+    "FollowerCount": 2152
   },
   {
     "Fullname": "Studytips",
     "UrlToken": "my-lucky-54",
     "Url": "https://www.zhihu.com/people/my-lucky-54",
-    "AvatarUrl": "https://pic3.zhimg.com/50/v2-fb76fcc0cb42982d9376d8bff4da387b_l.jpg?source=f36c2686",
+    "AvatarUrl": "https://pic1.zhimg.com/50/v2-fb76fcc0cb42982d9376d8bff4da387b_l.jpg?source=f36c2686",
     "Headline": "世界TOP10大学学霸学习经验/方法.成为A PLAYER",
     "Gender": 1,
-    "FollowerCount": 56229
+    "FollowerCount": 56214
   },
   {
     "Fullname": "YouTube精选字幕",
@@ -662,11 +691,111 @@ export const zhihuFollowees: ZhihuFollowee[] = [
     "AvatarUrl": "https://pic4.zhimg.com/50/v2-63a5cf1feef1a9c8925d7f5914dea9ae_l.jpg?source=f36c2686",
     "Headline": "译制外文精品视频，每日分享英语视频",
     "Gender": 2,
-    "FollowerCount": 609701
+    "FollowerCount": 609534
   }
 ];
 
 export const zhihuFavorites: ZhihuFavorite[] = [
+  {
+    "ContentType": "answer",
+    "Url": "https://www.zhihu.com/answer/2034742971690643518",
+    "CreatedAt": 1777900528,
+    "FavTime": 1788066137,
+    "LikeCount": 2786,
+    "CommentCount": 112,
+    "FavoriteCount": 4800,
+    "Title": "在人生重大选择中，最应该考虑的是什么？",
+    "Summary": "人生关键的抉择，其实只有三个。说一句很现实且扎心的话： 绝大多数人，都把精力耗费在了完全错误的地方。 午饭吃什么，能纠结二十分钟；同事随口的一句闲聊，能反复琢磨一整天；朋友圈发完没人点赞，便每隔两分钟刷新一次，陷入内耗许久；买一件衣服，反复跨平台比价，最终选了打折款，可穿不过两次，就随手塞进衣柜角落，再也不会翻看。 可偏偏在那些真正左右人生走向的大事上，人们却无比草率。和谁共度余生，相识半年便仓促…",
+    "Favlists": [
+      {
+        "UrlToken": 689695215,
+        "Title": "我的收藏",
+        "Url": "https://www.zhihu.com/collection/689695215"
+      }
+    ],
+    "Author": {
+      "Name": "XENON",
+      "UrlToken": "xian-zhi-21-71",
+      "Url": "https://www.zhihu.com/people/xian-zhi-21-71",
+      "Gender": 0,
+      "Headline": ""
+    }
+  },
+  {
+    "ContentType": "article",
+    "Url": "https://zhuanlan.zhihu.com/p/2074464585810178424",
+    "CreatedAt": 1787371006,
+    "FavTime": 1788018380,
+    "LikeCount": 14,
+    "CommentCount": 1,
+    "FavoriteCount": 7,
+    "Title": "科学品味的本质是长期主义",
+    "Summary": "文章者，经国之大业，不朽之盛事。——曹丕《典论·论文》几乎每位科学家都能谈几句科研的品味与审美。每个关心 AI 科研（AI for Science）的人，也大概都想过同一个问题：人工智能能否学会人类的审美？ 从科学共同体乃至科学史的尺度看，这里有一个有趣的矛盾：每年都有大量论文凭借繁复的技巧刷新 SOTA，其中大部分很难称得上优美；然而多年以后，我们反复引用的，往往又是那些简洁而深刻的工作。 换言之，单个科学家未必有极…",
+    "Favlists": [
+      {
+        "UrlToken": 689695215,
+        "Title": "我的收藏",
+        "Url": "https://www.zhihu.com/collection/689695215"
+      }
+    ],
+    "Author": {
+      "Name": "章彦博",
+      "UrlToken": "excited-zyb",
+      "Url": "https://www.zhihu.com/people/excited-zyb",
+      "Gender": 2,
+      "Headline": "云行雨施，品物流形"
+    }
+  },
+  {
+    "ContentType": "answer",
+    "Url": "https://www.zhihu.com/answer/2075313621584893272",
+    "CreatedAt": 1787573324,
+    "FavTime": 1788012966,
+    "LikeCount": 61,
+    "CommentCount": 9,
+    "FavoriteCount": 64,
+    "Title": "为什么自动化所很多做强化学习的课题组？",
+    "Summary": "胡言乱语几句。大家当民科看就好 首先最基本的控制理论。就是所谓反馈负反馈那套，其实在ai基本算法的forward和backward完全是一个框架呀。包括判断系统稳态理论基础也来自控制 只是训练backward方法太成熟了，目前看，很少有人想从控制理论里面的几个系统稳态判别角度玩优化。backward本质不就是负反馈嘛。从控制系统理论看，需要分析奈克斯特曲线和伯德图，甚至复杂了做需要看相关矩阵的正定性。但是很遗憾目前主流做法都是类…",
+    "Favlists": [
+      {
+        "UrlToken": 689695215,
+        "Title": "我的收藏",
+        "Url": "https://www.zhihu.com/collection/689695215"
+      }
+    ],
+    "Author": {
+      "Name": "我爱打灰",
+      "UrlToken": "chuai-shou-shou-de-mao-64",
+      "Url": "https://www.zhihu.com/people/chuai-shou-shou-de-mao-64",
+      "Gender": 2,
+      "Headline": "带专人，带专魂，本带专是人上人"
+    }
+  },
+  {
+    "ContentType": "article",
+    "Url": "https://zhuanlan.zhihu.com/p/2060663242658150143",
+    "CreatedAt": 1784132478,
+    "FavTime": 1787928957,
+    "LikeCount": 491,
+    "CommentCount": 21,
+    "FavoriteCount": 702,
+    "Title": "《强化学习导论》初版完成",
+    "Summary": "强化学习导论终于交稿了。为了方便在知乎上阅读、检索，也同时考虑到出版商的权益，我把每一章的贴图改成了markdown。也就是专栏中的文章： 强化学习导论 希望在AI热辣滚烫的背景下，读者还能感到本书有这么一些作用。 [图片] [图片] [图片] [图片] [图片]",
+    "Favlists": [
+      {
+        "UrlToken": 689695215,
+        "Title": "我的收藏",
+        "Url": "https://www.zhihu.com/collection/689695215"
+      }
+    ],
+    "Author": {
+      "Name": "俞扬",
+      "UrlToken": "eyounx",
+      "Url": "https://www.zhihu.com/people/eyounx",
+      "Gender": 2,
+      "Headline": "A.I."
+    }
+  },
   {
     "ContentType": "article",
     "Url": "https://zhuanlan.zhihu.com/p/2028075277591277848",
@@ -674,7 +803,7 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "FavTime": 1783087802,
     "LikeCount": 24,
     "CommentCount": 0,
-    "FavoriteCount": 53,
+    "FavoriteCount": 55,
     "Title": "Action Chunking 与 Generative Control：破解连续控制的指数级误差累积",
     "Summary": "摘要Moravec’s Paradox指出，人工智能系统在学习物理动作方面的难度，远高于符号推理领域。然而近期，人工智能驱动的机器人系统能力取得了跨越式提升，这一发展态势与数年前语言建模能力的早期突破颇为相似。本演讲将通过数学论证表明，若未做出特定关键算法设计选择，机器人学这类连续控制场景下的学习难度，较语言这类离散场景会呈指数级增加——这一结论也为莫拉维茨的观点提供了数学层面的佐证。在此基础上，我们将阐释现代…",
     "Favlists": [
@@ -697,9 +826,9 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://www.zhihu.com/answer/2045245004566853103",
     "CreatedAt": 1780404407,
     "FavTime": 1781593099,
-    "LikeCount": 4895,
-    "CommentCount": 207,
-    "FavoriteCount": 2271,
+    "LikeCount": 4915,
+    "CommentCount": 208,
+    "FavoriteCount": 2284,
     "Title": "为什么有人读博士会抑郁？",
     "Summary": "谢邀，你是一名本科生，你平日的日常就是，白天去上课，如果没课就去图书馆做作业。 寝室室友太烦了，你打心底觉得大家只能一起玩，吵吵吹吹比，但没法在寝室安心学习。 为了和室友合群，显得自己不是那么孤僻，你也会和他们一起打打手游，节日一起吃饭，但也止步于此。 你也不知道为什么要学习，一切都只是源于从小的教育，毕竟你一路就是这么过来的。 你还记得高三那年，高考百天誓言的情形，这一切都是过去了。 你有时候会质…",
     "Favlists": [
@@ -722,9 +851,9 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://zhuanlan.zhihu.com/p/1974994324522565833",
     "CreatedAt": 1764781707,
     "FavTime": 1781232886,
-    "LikeCount": 234,
+    "LikeCount": 239,
     "CommentCount": 26,
-    "FavoriteCount": 555,
+    "FavoriteCount": 563,
     "Title": "随机轨迹优化方法入门:以MPPI为例",
     "Summary": "封面图片来自于原始MPPI论文 Information Theoretic Model Predictive Control: Theory and Applications to Autonomous Driving[1]，文章从信息论和自由能的角度推导了MPPI的更新公式，但自己一直没太看懂。近期看了Model Predictive Control via Probabilistic Inference: A Tutorial[2]，该文章的理论推导部分不涉及自由能、自然梯度、Feynman-Kac引理等更容易看懂，同时阐述了 [公式] 参数的影响等细节，学习记录一下。1. …",
     "Favlists": [
@@ -747,9 +876,9 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://www.zhihu.com/answer/2030667028579738719",
     "CreatedAt": 1776928747,
     "FavTime": 1778652299,
-    "LikeCount": 1360,
-    "CommentCount": 70,
-    "FavoriteCount": 1213,
+    "LikeCount": 1430,
+    "CommentCount": 72,
+    "FavoriteCount": 1272,
     "Title": "目前博士高年级在读，科研没成果，我要不要退学？",
     "Summary": "在学校里待久了的人，容易把自己看得过于珍贵。 三年读博没有成果，我逝去的时光完蛋了。可能要延期毕业，我的人生计划完蛋了。日复一日调着无意义的参数，我几年的精力完蛋了。够不到导师的期待，我的推荐信完蛋了。不敢选择性优化数据，我的科研理想完蛋了。回应不了父母和老师的目光，我在他们心中的样子完蛋了。看着身边的人论文一篇接一篇，我的自尊完蛋了。可是，你为什么不这么想呢？ 如果你不曾坐在这三年的冷板凳上，你…",
     "Favlists": [
@@ -772,9 +901,9 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://www.zhihu.com/answer/2022307874802517337",
     "CreatedAt": 1774935770,
     "FavTime": 1775652328,
-    "LikeCount": 248,
+    "LikeCount": 255,
     "CommentCount": 5,
-    "FavoriteCount": 850,
+    "FavoriteCount": 880,
     "Title": "具身智能（运动控制方向）如何学习？",
     "Summary": "运动控制方向和操作任务有所不同，它更偏 RL 和动力学仿真，整条学习路径也比较线性： 先把仿真跑通，再搞懂 sim-to-real，最后上真机。 分三部分：入门仿真、算法实战、学术路线。 入门仿真先把仿真环境跑起来。 1、Isaac Lab NVIDIA 官方的具身智能 RL 训练平台，基于 Isaac Sim，GPU 并行训练速度快，内置了大量运动控制任务模板。运动控制方向的首选仿真环境。 链接： https://github.com/isaac-sim/IsaacLab [图片] 2、legged_gym ETH RSL 实验室的经…",
     "Favlists": [
@@ -797,7 +926,7 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://zhuanlan.zhihu.com/p/1974235172674229147",
     "CreatedAt": 1763475574,
     "FavTime": 1775646219,
-    "LikeCount": 173,
+    "LikeCount": 175,
     "CommentCount": 5,
     "FavoriteCount": 247,
     "Title": "【VLA+RL】PI*0.6 解读（一）：blog篇",
@@ -822,9 +951,9 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://www.zhihu.com/answer/1953813671940716392",
     "CreatedAt": 1758605479,
     "FavTime": 1774893819,
-    "LikeCount": 849,
+    "LikeCount": 872,
     "CommentCount": 26,
-    "FavoriteCount": 1264,
+    "FavoriteCount": 1296,
     "Title": "对 PhD 一年级新生有什么建议？",
     "Summary": "以下建议来自导师（加拿大皇家学会院士、工程院院士，IEEE Fellow，人品性格能力等各方面都是人生楷模） （ 帮咱们波波哥翻译一波哈，经过适当整理，老板原句见参考）： 关于人生：永无极限，与天比高。 [1] 清晨属于早起者，人生亦然。 [2] 你应当引领，而不是随波逐流。[3] 心怀善意，积极向上；人生中不必有敌人。 [4] 做真实而踏实的研究，终将赢得属于你的荣耀。 [5] 自我满足最重要，只要你快乐，就做到最好。无需成为别人…",
     "Favlists": [
@@ -847,9 +976,9 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://zhuanlan.zhihu.com/p/2020174286892061902",
     "CreatedAt": 1774427171,
     "FavTime": 1774548614,
-    "LikeCount": 178,
-    "CommentCount": 19,
-    "FavoriteCount": 233,
+    "LikeCount": 179,
+    "CommentCount": 20,
+    "FavoriteCount": 234,
     "Title": "Fast-WAM 给 World Model 领域研究的几点思考",
     "Summary": "论文：Fast-WAM: Do World Action Models Need Test-time Future Imagination? 作者：Tianyuan Yuan, Zibin Dong, Yicheng Liu, Hang Zhao 机构：清华大学IIIS, Galaxea AI 链接：论文 | 项目主页 Fast-WAM 提出了一个尖锐的问题：World Action Model（WAM）在推理时真的需要\"想象未来\"吗？论文的答案是\"不需要\"——去掉推理时的视频生成，性能几乎无损，速度快4倍以上。 这个结论乍看非常有冲击力。但仔细审视之后，我认为论文的…",
     "Favlists": [
@@ -872,9 +1001,9 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://www.zhihu.com/answer/2007111432962061410",
     "CreatedAt": 1771312655,
     "FavTime": 1774457962,
-    "LikeCount": 242,
+    "LikeCount": 251,
     "CommentCount": 5,
-    "FavoriteCount": 429,
+    "FavoriteCount": 452,
     "Title": "VLA真的能走通吗?",
     "Summary": "1. 主流 VLA 架构以及为什么我们需要 action tokenizer不得不承认 physical intelligence 依旧是 VLA 实践灯塔之一，自从 [公式] 和配套 Knowledge Isolation 的架构提出，各大厂和实验室推出新 VLA 模型也大差不差延续了这一经典范式——VLM 拼接 Action Expert，KV cache 传递 perception 信息。 打断补充：最近 NVIDIA 的 DreamZero 和蚂蚁的 Lingbot-VA 都在从 video generation model 出发探索新的架构可能性，这些都非…",
     "Favlists": [
@@ -889,7 +1018,7 @@ export const zhihuFavorites: ZhihuFavorite[] = [
       "UrlToken": "yi-zhi-lu-lu-zhu-59",
       "Url": "https://www.zhihu.com/people/yi-zhi-lu-lu-zhu-59",
       "Gender": 2,
-      "Headline": "EmbodiedAI TJURLLab 硕士在读"
+      "Headline": "EmbodiedAI"
     }
   },
   {
@@ -897,9 +1026,9 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://zhuanlan.zhihu.com/p/2019841160064059225",
     "CreatedAt": 1774347717,
     "FavTime": 1774437330,
-    "LikeCount": 95,
+    "LikeCount": 96,
     "CommentCount": 1,
-    "FavoriteCount": 157,
+    "FavoriteCount": 158,
     "Title": "世界模型开始做减法？LeCun团队和清华团队给出两种思路",
     "Summary": "近期，围绕「世界模型」这一方向，有两项工作受到较多关注。 一篇是来自 Yann LeCun 团队的 LeWorldModel，尝试以更简洁的 JEPA 实现从像素端到端训练的世界模型，在降低训练复杂度的同时，验证了潜在空间中对物理结构的刻画能力。 [图片] 另一篇是清华大学团队的 Fast-WAM，则从应用角度出发，重新审视当前主流 World Action Model（WAM）的设计范式，探讨「是否真的需要在推理阶段显式生成未来」这一关键问题，并给出了一种更高效的替…",
     "Favlists": [
@@ -947,9 +1076,9 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://www.zhihu.com/answer/1959616192768616030",
     "CreatedAt": 1759988908,
     "FavTime": 1774373788,
-    "LikeCount": 58,
+    "LikeCount": 59,
     "CommentCount": 2,
-    "FavoriteCount": 117,
+    "FavoriteCount": 120,
     "Title": "为什么flow matching模型都是以高斯分布作为源域的？",
     "Summary": "补充一篇同样不用Gaussian做源域的工作VITA。文章发表在ICLR 2026，通过非Gaussian源去除visual conditioning modules，提升机器人policy效率。文章发现这样的学习范式下，visual latents (source)学习出到了latent actions (target)的语义。 如下图，通过VITA学习到的source/target latent manfolds彼此接近，我们可以认为visual encoder默默的学习到了action-relevant visual features。一个意想不到的好处是，在两个相似manif…",
     "Favlists": [
@@ -997,9 +1126,9 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://zhuanlan.zhihu.com/p/2015050462794122357",
     "CreatedAt": 1773211613,
     "FavTime": 1774373419,
-    "LikeCount": 192,
-    "CommentCount": 2,
-    "FavoriteCount": 375,
+    "LikeCount": 200,
+    "CommentCount": 3,
+    "FavoriteCount": 387,
     "Title": "最优控制视角下的flow matching （不推公式版本，理解物理图像）",
     "Summary": "从更新的视角理解 Flow Matching：一些意识流思考最近在了解 Information-Geometric Optimization（IGO）之后，我再回头看 Flow Matching（FM），忽然觉得这个连续空间里的强大生成算法，也许可以从“更新”的角度重新理解。这里记录一些比较意识流的思考，希望能帮助初学者和相关研究者建立对 FM 更直观的物理图像。 最朴素的 Flow Matching 理解坦白说，我一直不算擅长 FM 的那套理论推导。每次看到连续性方程、概率路径、条件…",
     "Favlists": [
@@ -1147,9 +1276,9 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://zhuanlan.zhihu.com/p/1963075673762555122",
     "CreatedAt": 1760827553,
     "FavTime": 1774372933,
-    "LikeCount": 200,
+    "LikeCount": 203,
     "CommentCount": 2,
-    "FavoriteCount": 497,
+    "FavoriteCount": 503,
     "Title": "Diffusion + RL 系列一 （DQL 及其后续发展）",
     "Summary": "本篇博客算是本人对于过去一年对于 Diffusion RL 的一些探索与经验性总结，后续估计不再深入地做此具体的方向（也不一定hhh），因此希望借此机会，对这一年的研究旅程做一个阶段性回顾。 对于 Diffusion 的部分笔者笔力有限，对基础的知识不打算展开，感兴趣的朋友可以看看 Diffusion Models 基础知识总结回顾 、 https://www.youtube.com/watch?v=wMmqCMwuM2Q 、 What are Diffusion Models? | Lil'Log ，都是我感觉非常好的博客和 video ；我们都知道…",
     "Favlists": [
@@ -1172,9 +1301,9 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://zhuanlan.zhihu.com/p/6223910015",
     "CreatedAt": 1731347634,
     "FavTime": 1774372828,
-    "LikeCount": 631,
+    "LikeCount": 632,
     "CommentCount": 23,
-    "FavoriteCount": 1027,
+    "FavoriteCount": 1029,
     "Title": "扩散策略算法归纳整理（一）：优势与挑战",
     "Summary": "记得两年前刚投稿ICLR时，扩散策略（Diffusion Policy）还基本是一个纯理论的概念，全网只有寥寥两三篇arxiv，而现在它俨然已成为RL和具身领域的“显学”了。组里目前也在探索大规模扩散通用具身智能体的构建（RDT-1B）。最近闲了点，打算梳理一下近两年领域的理论进展，也算总结下自己研究的心路历程，做个宣传。 要回答的问题：扩散策略究竟“好”在哪？扩散模型引入RL，带来的本质挑战和核心难点（坑）是什么？总结Diffusion …",
     "Favlists": [
@@ -1197,9 +1326,9 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://zhuanlan.zhihu.com/p/2013366696811963216",
     "CreatedAt": 1772804196,
     "FavTime": 1774372732,
-    "LikeCount": 66,
+    "LikeCount": 67,
     "CommentCount": 0,
-    "FavoriteCount": 136,
+    "FavoriteCount": 139,
     "Title": "🤖 Physical Intelligence (π) 研究全面总结：从 π0 到 MEM",
     "Summary": "一、公司简介与整体方向 Physical Intelligence 是当前硅谷最受关注的机器人 AI 公司之一。他们的使命很简单，也很宏大：让机器人像 ChatGPT 一样好用。 今天你开发一个 App，只需要调用 OpenAI 的 API 就能获得语言智能。但如果你想开发一个机器人应用，你得自己搭控制器、自己采集数据、自己训练模型——几乎要从零开始。Physical Intelligence 想改变这一点，他们要提供一个开箱即用的「物理智能层」（Physical Intelligence …",
     "Favlists": [
@@ -1247,9 +1376,9 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://www.zhihu.com/answer/2002067273612035869",
     "CreatedAt": 1770110034,
     "FavTime": 1774348881,
-    "LikeCount": 478,
-    "CommentCount": 17,
-    "FavoriteCount": 803,
+    "LikeCount": 512,
+    "CommentCount": 18,
+    "FavoriteCount": 863,
     "Title": "怎么样才能想出一个work的idea？",
     "Summary": "很高兴我的一项工作中稿ICLR26（现在arxiv版本写得有点垃圾，后面会做一些大修改）： [图片] 这是我近几年非常非常满意的一个工作，可以说从各个角度都有许多典型的、在科研领域里有复盘价值的因素，包括怎么想到的这个idea、idea的缺陷、“故事”的重要性与是否需要SOTA、审稿人的喜好、研究领域等等，所以把这个工作和大家分享出来，希望能给大家带来一点有用的经验。 贝叶斯优化算法（BO）是一个相对小众的传统人工智能研究领域，不…",
     "Favlists": [
@@ -1272,7 +1401,7 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://zhuanlan.zhihu.com/p/1969799804625350704",
     "CreatedAt": 1762423093,
     "FavTime": 1774288491,
-    "LikeCount": 5,
+    "LikeCount": 6,
     "CommentCount": 0,
     "FavoriteCount": 15,
     "Title": "【论文阅读】生成对抗网络（GANs）综述",
@@ -1324,7 +1453,7 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "FavTime": 1774203962,
     "LikeCount": 11,
     "CommentCount": 0,
-    "FavoriteCount": 39,
+    "FavoriteCount": 41,
     "Title": "现在端到端这么火的大背景下，对于规控领域学习传统规控算法还有意义吗?",
     "Summary": "本篇论文出发点：自动驾驶规划器通常由两个模块组成， 行为规划确定高层次的决策，例如变道、超车和让行，而轨迹规划则生成平滑的轨迹以实现这些高层次目标。基于端到端方法（例如模仿学习和强化学习）能直接从感知结果或原始传感器数据生成决策。然而，这些方法缺乏可靠性、可解释性以及安全性保证。 如：大多数运动预测模型在行为规划中仅被被动使用，这意味着预测模型通常为其他agent输出固定的结果，而忽略了自车未来行动的…",
     "Favlists": [
@@ -1347,9 +1476,9 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://www.zhihu.com/answer/2017705575237060144",
     "CreatedAt": 1773838496,
     "FavTime": 1774203844,
-    "LikeCount": 139,
+    "LikeCount": 140,
     "CommentCount": 10,
-    "FavoriteCount": 414,
+    "FavoriteCount": 416,
     "Title": "现在端到端这么火的大背景下，对于规控领域学习传统规控算法还有意义吗?",
     "Summary": "开源地址： https://github.com/my-al-ilqr/al-ilqr-starter [图片] 前言这个专题也更新了好久了，终于迎来了代码。光看论文，始终无法真正理解理论，只有代码才能反映出理论细节。理论部分在之前的《时空联合规划》专题里已经写完了，这次是代码实践部分。代码聚焦AL-iLQR 算法，帮助读者从零理解： 离散时间最优控制问题如何建模无约束 iLQR 如何工作增广拉格朗日如何处理约束AL-iLQR 外层 / iLQR 内层如何协同求解如何把论文中的求解流程落到可运行代码来看一…",
     "Favlists": [
@@ -1372,9 +1501,9 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://www.zhihu.com/answer/2001439677928998208",
     "CreatedAt": 1769960404,
     "FavTime": 1774115820,
-    "LikeCount": 136,
+    "LikeCount": 146,
     "CommentCount": 0,
-    "FavoriteCount": 274,
+    "FavoriteCount": 291,
     "Title": "把高飞老师组的路径规划相关论文都看完，能跟上领域前沿水平吗？",
     "Summary": "目前小型多旋翼无人机研究做的比较好的组，国内绝对是高飞教授。大部分文章我都看过了，目前除了做经典优化的路径规划，也开始侧重AI了。 还有中山大学的HI LAB，这个组我关注的不多。 国外的话就是eth uzh和epfl的几个相关实验室，他们组以前做mpc，现在的话，主要是弄基于学习的方法。他们开发的无人机系统甚至超越了人类冠军飞手。比如RPG实验室。 然后就是TU Delft的MAVLAB。他们也做固定翼无人机。他们也几乎都是AI的研究了…",
     "Favlists": [
@@ -1447,7 +1576,7 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://zhuanlan.zhihu.com/p/1986941988331864227",
     "CreatedAt": 1766504081,
     "FavTime": 1773834960,
-    "LikeCount": 51,
+    "LikeCount": 53,
     "CommentCount": 3,
     "FavoriteCount": 102,
     "Title": "SpaceX 算法：软着陆最优控制中的非凸控制边界与指向约束的无损凸化",
@@ -1472,9 +1601,9 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://www.zhihu.com/answer/2012640698172732092",
     "CreatedAt": 1772630935,
     "FavTime": 1773812753,
-    "LikeCount": 1385,
+    "LikeCount": 1422,
     "CommentCount": 144,
-    "FavoriteCount": 2722,
+    "FavoriteCount": 2765,
     "Title": "从哪里可以看出一个人能成大事？",
     "Summary": "能成大事的人，早期几乎看不出来。 不是因为他们藏得深，而是因为大多数人看人的维度，从一开始就错了。 大家习惯看颜值、看学历、看家境，看他说话是否自信，或者看他身上有没有那种所谓的“气场”。 其实这些外在的东西，和一个人最终能不能成事，关系远没你想的那么大。 真正决定一个人能走多远的，是几个藏在日常细节里、极容易被忽视的底层特质。 看懂了这几点，你看人的眼光，将会发生质的飞跃。 第一个特征：看他如何对待…",
     "Favlists": [
@@ -1499,7 +1628,7 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "FavTime": 1773469565,
     "LikeCount": 32,
     "CommentCount": 1,
-    "FavoriteCount": 86,
+    "FavoriteCount": 87,
     "Title": "有没有比较好的教材是从微分几何的观点讲最优控制的？",
     "Summary": "本人旁听过几何力学，我记得老师讲过这个领域现在仍在研究前沿，还有很多没解决的问题，在力学方面好像有三本教科书在探讨用几何方法做控制这个问题，其中一个是《Geometric Control of Mechanical Systems: Modeling, Analysis, and Design for Simple Mechanical Control Systems》 by Francesco Bullo and Andrew D. Lewis（ https://www.amazon.com/-/zh/Geometric-Control-Mechanical-Systems-Mathematics-ebook/dp/B07ZKTDN9X/ref=sr_1_1?__mk_zh_CN=%E4%BA%9A%E9%A9%AC%E9%80%8A%E7%BD%91%E7%AB%99&dchild=1&keywords=Geometric+Control+of+Mechanical+Systems&qid=1595491580&s=books&sr=1-1 ），还有一本是Nonholonomic Mechanics and Control（https://www.amazon.com/exec/obidos/ASIN/0387955356/melvinleokshomep ）…",
     "Favlists": [
@@ -1599,7 +1728,7 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "FavTime": 1773469539,
     "LikeCount": 25,
     "CommentCount": 17,
-    "FavoriteCount": 41,
+    "FavoriteCount": 40,
     "Title": "力学系统的几何控制1.1-构型空间",
     "Summary": "一个力学系统几何控制的系列，主要参考Frances Bullo的书。 [图片] [图片] [图片] [图片] [图片] [图片] [图片]",
     "Favlists": [
@@ -1699,7 +1828,7 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "FavTime": 1773469526,
     "LikeCount": 74,
     "CommentCount": 4,
-    "FavoriteCount": 350,
+    "FavoriteCount": 348,
     "Title": "非线性系统控制相关资料",
     "Summary": "2026.4前来更新，现在对非线性系统控制有了更多的理解。同时也是想对知乎上的一些内容做一个综合，方便大家还有自己学习。但是同样的，这个也是长期更新的活，没法一次就到位。这个文章将会是长期施工状态。在这里还要再次感谢知乎上的诸多大佬，是你们的分享给后来的学习者们诸多的启发！ 大三古早内容：本人对控制理论还是有很强的兴趣的，今后还会不断完善本篇文章，主要用于自己学习参考，如果能帮到其他人那就更好了。 绪可…",
     "Favlists": [
@@ -1747,9 +1876,9 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://www.zhihu.com/answer/128909334628",
     "CreatedAt": 1742532206,
     "FavTime": 1773469521,
-    "LikeCount": 412,
+    "LikeCount": 420,
     "CommentCount": 44,
-    "FavoriteCount": 766,
+    "FavoriteCount": 776,
     "Title": "几何控制 Geometric Control 之美在于什么？",
     "Summary": "这个话题已经好久没人回答，但是真的太重要、实在有太多想聊的了。作为后来者，补充一下自己的浅薄看法 几何是更好的语言控制学科的发展是非常可惜的：人们在控制技术的实践上走得太远太匆忙，硬生生把控制做成了工具箱式的唯象学科，工程上走得太远就会不直观和晦涩，因为整个体系并没有基于良好的品味被构建，这导致大部分控制课堂变成了冗长历史课。在我看来，控制这个话题天生就是几何的，最简单的讲法也是通过几何，因为控…",
     "Favlists": [
@@ -1797,9 +1926,9 @@ export const zhihuFavorites: ZhihuFavorite[] = [
     "Url": "https://zhuanlan.zhihu.com/p/2002328291592401820",
     "CreatedAt": 1770365720,
     "FavTime": 1773469509,
-    "LikeCount": 147,
+    "LikeCount": 155,
     "CommentCount": 6,
-    "FavoriteCount": 340,
+    "FavoriteCount": 352,
     "Title": "2026年RL（强化学习）在Robotics（具身智能）中的新范式分析",
     "Summary": "前言2026年的具身智能 RL 正在从“单点算法突破”转向“可扩展、可验证、可对齐”的系统范式：云端世界模型、生成式策略后训练、真实机器人三段式闭环、以及 GPU 物理仿真规模化共同构成新主线。 总体趋势是：RL 从“从零学控制”逐步变成“面向大策略/大模型的后训练（post-training）与稳健性/对齐工具”，并与世界模型、扩散策略、真实机器人数据闭环、安全约束强耦合。下面结合相关趋势，简要分析其中相关议题，便于忙碌的“…",
     "Favlists": [
@@ -1815,106 +1944,6 @@ export const zhihuFavorites: ZhihuFavorite[] = [
       "Url": "https://www.zhihu.com/people/7-26-9-23-17",
       "Gender": 2,
       "Headline": "Robotics, Embodied AI learning"
-    }
-  },
-  {
-    "ContentType": "answer",
-    "Url": "https://www.zhihu.com/answer/1993478691863413655",
-    "CreatedAt": 1768062357,
-    "FavTime": 1773341507,
-    "LikeCount": 370,
-    "CommentCount": 21,
-    "FavoriteCount": 697,
-    "Title": "是否有介于预测控制（MPC）和强化学习（RL）之间的模型？",
-    "Summary": "就题目这个话题，HJB朴素求解 - MPC - RL这三个节点之间，谱系其实是连续的，这里有的是东西可以做，要踏踏实实扩充思维、深入进去，发展真正有用的工具和思想，别被资本故事忽悠瘸了。 站在现在这个年代，我们必须重新审视YuChi Ho 99年说的“ 任何控制与决策问题本质上均可归结为优化问题 ”——这个前算力时代野心勃勃的宣言。不论是什么任务，Control终究还是Control。受限于篇幅，我尝试用稍微抽象一点方式把这个故事描述完…",
-    "Favlists": [
-      {
-        "UrlToken": 689695215,
-        "Title": "我的收藏",
-        "Url": "https://www.zhihu.com/collection/689695215"
-      }
-    ],
-    "Author": {
-      "Name": "V777",
-      "UrlToken": "weiqi-50-78",
-      "Url": "https://www.zhihu.com/people/weiqi-50-78",
-      "Gender": 2,
-      "Headline": "液压机械臂智能搬砖"
-    }
-  },
-  {
-    "ContentType": "answer",
-    "Url": "https://www.zhihu.com/answer/2010011086049521770",
-    "CreatedAt": 1772003987,
-    "FavTime": 1772893329,
-    "LikeCount": 991,
-    "CommentCount": 95,
-    "FavoriteCount": 1423,
-    "Title": "明明和很多女生感觉关系已经较亲密了，为什么在尝试和她们肢体接触后，都和我翻脸了呢？",
-    "Summary": "女生心中对男人有好几层欲求度。 第一层: 人还不错，态度还行，整体来说也就那样吧，不是很动心，但也可以聊聊。不讨厌，硬要约我吧，也不是不能去。大概率跟他是不可能的，但最近心里很多事儿，想找个能聊天的。如果他能给我超预期的惊喜，也不是不能试着处一下，再说吧，我无所谓。 绝无可能牵手接吻，敢碰我死定了。 第二层: 我觉得他挺好的，我也看得出他喜欢我，各方面条件还可以，作为男朋友是合格的。我愿意给他一个机会…",
-    "Favlists": [
-      {
-        "UrlToken": 689695215,
-        "Title": "我的收藏",
-        "Url": "https://www.zhihu.com/collection/689695215"
-      }
-    ],
-    "Author": {
-      "Name": "茶花路莫里亚蒂",
-      "UrlToken": "cha-hua-lu-mo-li-ya-ti",
-      "Url": "https://www.zhihu.com/people/cha-hua-lu-mo-li-ya-ti",
-      "Gender": 2,
-      "Headline": "雪山千古冷，独照峨眉峰"
-    }
-  },
-  {
-    "ContentType": "article",
-    "Url": "https://zhuanlan.zhihu.com/p/1955672775965536626",
-    "CreatedAt": 1759049275,
-    "FavTime": 1772893279,
-    "LikeCount": 146,
-    "CommentCount": 7,
-    "FavoriteCount": 417,
-    "Title": "清华大学提出控制系统的状态熵理论，为系统智能性的定量化分析提供全新视角",
-    "Summary": "控制系统作为现代工程与科学的核心技术之一，广泛应用于自动驾驶、机器人、航空航天、电力系统等多个领域。自上世纪60年代兴起的现代控制理论使用状态空间方程作为描述工具，对系统的可控性、可观性、稳定性等基本属性进行分析。其中，可控性描述了系统是否能在有限时间内从任意初始状态转移到目标状态；可观性则衡量系统内部状态是否能通过输出信号唯一重构；稳定性则确保系统在受到扰动后仍能保持在平衡状态附近。这些性质为控…",
-    "Favlists": [
-      {
-        "UrlToken": 689695215,
-        "Title": "我的收藏",
-        "Url": "https://www.zhihu.com/collection/689695215"
-      }
-    ],
-    "Author": {
-      "Name": "风间琉璃",
-      "UrlToken": "67-8-38-81",
-      "Url": "https://www.zhihu.com/people/67-8-38-81",
-      "Gender": 2,
-      "Headline": ""
-    }
-  },
-  {
-    "ContentType": "article",
-    "Url": "https://zhuanlan.zhihu.com/p/1987523416065073781",
-    "CreatedAt": 1768781293,
-    "FavTime": 1772893221,
-    "LikeCount": 204,
-    "CommentCount": 2,
-    "FavoriteCount": 968,
-    "Title": "GitHub上一些控制算法合集",
-    "Summary": "很多时候，我们在网络上，可以看到很多关于控制理论的学习资源，主要是集中在书籍、教学网站、博客、视频资源、课件等等。但是很少有看到能够集中、系统地讲解一些常见的控制算法的代码实现。 有时候，我自己也在想，有没有一个网站或者合集，能够讲解各种控制算法的实现，比如说PID算法、LQR、MPC、自适应等等。做一个控制算法合集，基础实现即可，让我们能够简单清晰地看到这些算法的基本功能和区别。至于什么编程语言，暂时不…",
-    "Favlists": [
-      {
-        "UrlToken": 689695215,
-        "Title": "我的收藏",
-        "Url": "https://www.zhihu.com/collection/689695215"
-      }
-    ],
-    "Author": {
-      "Name": "萧然",
-      "UrlToken": "xiao-ran-63-64",
-      "Url": "https://www.zhihu.com/people/xiao-ran-63-64",
-      "Gender": 2,
-      "Headline": "人生如旅，步履不停，在机器人世界里探索前行！"
     }
   }
 ];

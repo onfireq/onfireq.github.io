@@ -3,57 +3,117 @@ name: Sync Zhihu Data
 on:
   schedule:
     # 每天 04:00 UTC（北京时间 12:00）
-    - cron: '0 4 * * *'
-  workflow_dispatch:  # 允许手动触发
+    - cron: "0 4 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: sync-zhihu-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
-  sync:
-    runs-on: windows-latest  # 用 Windows runner 跑 zhihu-cli
+  fetch:
+    runs-on: windows-latest
     permissions:
-      contents: write  # 给 GITHUB_TOKEN 写权限
-    
+      contents: read
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+        with:
+          persist-credentials: false
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      
+          python-version: "3.12"
+
       - name: Download zhihu-cli
+        shell: pwsh
         run: |
           $url = "https://developer-cdn.zhihu.com/zhihu-cli/releases/stable/cli/0.2.0/zhihu-cli-0.2.0-windows-amd64.zip"
-          $output = "zhihu-cli.zip"
-          Invoke-WebRequest -Uri $url -OutFile $output
-          Expand-Archive -Path $output -DestinationPath "zhihu-cli"
-          $env:PATH += ";$PWD\zhihu-cli"
-          echo "PATH=$env:PATH" >> $env:GITHUB_ENV
-      
-      - name: Set Access Secret
-        run: |
-          $env:ZHIHU_ACCESS_SECRET = "${{ secrets.ZHIHU_ACCESS_SECRET }}"
-          echo "ZHIHU_ACCESS_SECRET=$env:ZHIHU_ACCESS_SECRET" >> $env:GITHUB_ENV
-      
+          $archive = "zhihu-cli.zip"
+          $cliDirectory = Join-Path $PWD "zhihu-cli"
+          $expectedSha256 = "2e3a56b6e70c1263288dc6556e02c415b8d49a42ef2a2209125264830f2a9b09"
+          Invoke-WebRequest -Uri $url -OutFile $archive
+          $actualSha256 = (Get-FileHash -Path $archive -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($actualSha256 -ne $expectedSha256) {
+            throw "zhihu-cli archive checksum mismatch."
+          }
+          Expand-Archive -Path $archive -DestinationPath $cliDirectory -Force
+          $cliDirectory | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
       - name: Fetch Zhihu data
+        shell: pwsh
+        env:
+          ZHIHU_ACCESS_SECRET: ${{ secrets.ZHIHU_ACCESS_SECRET }}
         run: |
-          zhihu-cli me contents --type all --limit 50 > zhihu_raw.json 2> zhihu_raw.err
-          if ($LASTEXITCODE -ne 0) { echo "Error: $LASTEXITCODE"; echo "=== stderr ==="; cat zhihu_raw.err; echo "=== stdout ==="; cat zhihu_raw.json; exit 1 }
-          zhihu-cli me favorites recent --limit 50 > zhihu_favorites.json 2> zhihu_favorites.err
-          if ($LASTEXITCODE -ne 0) { echo "Error: $LASTEXITCODE"; echo "=== stderr ==="; cat zhihu_favorites.err; echo "=== stdout ==="; cat zhihu_favorites.json; exit 1 }
-          zhihu-cli me followees --limit 50 > zhihu_followees.json 2> zhihu_followees.err
-          if ($LASTEXITCODE -ne 0) { echo "Error: $LASTEXITCODE"; echo "=== stderr ==="; cat zhihu_followees.err; echo "=== stdout ==="; cat zhihu_followees.json; exit 1 }
-      
-      - name: Sync to zhihu.ts
-        run: |
-          python sync_zhihu.py
-      
+          if ([string]::IsNullOrWhiteSpace($env:ZHIHU_ACCESS_SECRET)) {
+            throw "ZHIHU_ACCESS_SECRET is not configured."
+          }
+
+          function Invoke-ZhihuCli {
+            param(
+              [string[]]$Arguments,
+              [string]$OutputFile,
+              [string]$ErrorFile
+            )
+
+            & zhihu-cli @Arguments 1> $OutputFile 2> $ErrorFile
+            $exitCode = $LASTEXITCODE
+            if ($exitCode -ne 0) {
+              if (Test-Path $ErrorFile) {
+                Get-Content $ErrorFile
+              }
+              throw "zhihu-cli failed with exit code $exitCode."
+            }
+          }
+
+          Invoke-ZhihuCli -Arguments @("me", "contents", "--type", "all", "--limit", "50") -OutputFile "zhihu_raw.json" -ErrorFile "zhihu_raw.err"
+          Invoke-ZhihuCli -Arguments @("me", "favorites", "recent", "--limit", "50") -OutputFile "zhihu_favorites.json" -ErrorFile "zhihu_favorites.err"
+          Invoke-ZhihuCli -Arguments @("me", "followees", "--limit", "50") -OutputFile "zhihu_followees.json" -ErrorFile "zhihu_followees.err"
+
+      - name: Generate site data
+        shell: pwsh
+        run: python sync_zhihu.py
+
+      - name: Upload generated data
+        uses: actions/upload-artifact@v4
+        with:
+          name: zhihu-data
+          path: |
+            src/data/zhihu.ts
+            public/zhihu.json
+          if-no-files-found: error
+
+  commit:
+    needs: fetch
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout latest code
+        uses: actions/checkout@v4
+
+      - name: Download generated data
+        uses: actions/download-artifact@v4
+        with:
+          name: zhihu-data
+          path: .
+
       - name: Commit and push
+        shell: bash
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add src/data/zhihu.ts public/zhihu.json
-          git diff --staged --quiet || git commit -m "🤖 自动同步知乎数据 $(date +'%Y-%m-%d %H:%M:%S')"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+          if git diff --staged --quiet; then
+            echo "No Zhihu data changes to commit."
+            exit 0
+          fi
+
+          timestamp="$(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S')"
+          git commit -m "🤖 自动同步知乎数据 ${timestamp}"
+          git pull --rebase origin main
+          git push origin HEAD:main
