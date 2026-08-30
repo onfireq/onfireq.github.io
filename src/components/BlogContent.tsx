@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
@@ -8,6 +7,7 @@ import rehypeHighlight from "rehype-highlight";
 import rehypeKatex from "rehype-katex";
 import rehypeSlug from "rehype-slug";
 import { prepareBlogContent, type BlogFormat } from "@/lib/blog-content";
+import rehypeCallouts from "@/lib/rehype-callouts";
 
 export default function BlogContent({
   content,
@@ -22,7 +22,7 @@ export default function BlogContent({
     <div className="prose prose-invert prose-lg max-w-none">
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkMath]}
-        rehypePlugins={[rehypeSlug, rehypeKatex, rehypeHighlight]}
+        rehypePlugins={[rehypeSlug, rehypeCallouts, rehypeKatex, rehypeHighlight]}
         components={{
           h1: ({ children, id }) => (
             <h1 id={id} className="scroll-mt-24 text-3xl font-bold mt-8 mb-4 text-gradient">
@@ -63,28 +63,9 @@ export default function BlogContent({
             <ol className="list-decimal list-inside text-gray-300 mb-4 space-y-1">{children}</ol>
           ),
           li: ({ children }) => <li className="text-gray-300">{children}</li>,
-          blockquote: ({ children }) => {
-            const childArray = React.Children.toArray(children);
-            let calloutType = "";
-            let calloutContent = children;
-
-            if (childArray.length > 0) {
-              const firstChild = childArray[0] as React.ReactElement<{ children?: React.ReactNode }>;
-              if (firstChild?.props?.children) {
-                const text = String(firstChild.props.children);
-                const match = text.match(/^\[!(\w+)\]/);
-                if (match) {
-                  calloutType = match[1].toLowerCase();
-                  const remaining = text.replace(/^\[!\w+\]\n?/, "").trim();
-                  calloutContent = (
-                    <>
-                      {remaining && <p className="text-gray-300">{remaining}</p>}
-                      {childArray.slice(1)}
-                    </>
-                  );
-                }
-              }
-            }
+          blockquote: ({ children, node }) => {
+            const value = node?.properties?.calloutType;
+            const calloutType = typeof value === "string" ? value : "";
 
             const calloutStyles: Record<string, { bg: string; border: string; icon: string }> = {
               tip: { bg: "bg-green-500/10", border: "border-green-500/30", icon: "💡" },
@@ -102,7 +83,7 @@ export default function BlogContent({
                     <span className="text-lg mt-0.5" aria-hidden="true">
                       {style.icon}
                     </span>
-                    <div className="text-sm text-gray-300">{calloutContent}</div>
+                    <div className="text-sm text-gray-300 [&>p:last-child]:mb-0">{children}</div>
                   </div>
                 </div>
               );
