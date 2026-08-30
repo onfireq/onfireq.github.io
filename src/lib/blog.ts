@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import { z } from "zod";
 import { CATEGORIES, getCategoryName as gcn, type Category } from "./categories";
 
 export type { Category };
@@ -19,24 +20,104 @@ export interface Post {
   category: string;
 }
 
-type PostSummary = Omit<Post, "content">;
-type Frontmatter = Record<string, unknown>;
+export type PostSummary = Omit<Post, "content">;
+
+export interface AdjacentPosts {
+  previous: PostSummary | null;
+  next: PostSummary | null;
+}
 
 export { CATEGORIES, gcn as getCategoryName };
 
 const postsDir = path.join(process.cwd(), "content/blog");
 
-function parseTexFile(raw: string, filename: string) {
+const frontmatterDateSchema = z.preprocess(
+  (value) =>
+    value instanceof Date && !Number.isNaN(value.valueOf())
+      ? value.toISOString().slice(0, 10)
+      : value,
+  z
+    .string()
+    .trim()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "日期必须使用 YYYY-MM-DD 格式")
+    .refine((value) => {
+      const time = Date.parse(`${value}T00:00:00Z`);
+      return Number.isFinite(time) && new Date(time).toISOString().slice(0, 10) === value;
+    }, "日期无效"),
+);
+
+const frontmatterSchema = z
+  .object({
+    title: z.string().trim().min(1, "标题不能为空").max(120, "标题不能超过 120 个字符"),
+    date: frontmatterDateSchema,
+    tags: z
+      .array(z.string().trim().min(1, "标签不能为空").max(40, "单个标签不能超过 40 个字符"))
+      .max(12, "标签不能超过 12 个")
+      .transform((tags) => Array.from(new Set(tags))),
+    published: z.boolean(),
+    description: z.string().trim().max(240, "摘要不能超过 240 个字符"),
+    slug: z
+      .string()
+      .trim()
+      .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "slug 只能包含小写字母、数字和连字符")
+      .optional(),
+    cover: z.preprocess(
+      (value) => (value === null || value === "" ? undefined : value),
+      z
+        .string()
+        .trim()
+        .refine(
+          (value) => value.startsWith("/") || /^https?:\/\//.test(value),
+          "封面必须是站内绝对路径或 HTTP(S) 地址",
+        )
+        .optional(),
+    ),
+  })
+  .strict()
+  .superRefine((data, context) => {
+    if (!data.published) return;
+
+    if (!data.description) {
+      context.addIssue({
+        code: "custom",
+        path: ["description"],
+        message: "公开文章必须填写摘要",
+      });
+    }
+
+    if (data.tags.length === 0) {
+      context.addIssue({
+        code: "custom",
+        path: ["tags"],
+        message: "公开文章至少需要一个标签",
+      });
+    }
+  });
+
+type Frontmatter = z.infer<typeof frontmatterSchema>;
+
+function validateFrontmatter(data: unknown, filePath: string): Frontmatter {
+  const result = frontmatterSchema.safeParse(data);
+  if (result.success) return result.data;
+
+  const relativePath = path.relative(postsDir, filePath);
+  const details = result.error.issues
+    .map((issue) => `${issue.path.join(".") || "frontmatter"}: ${issue.message}`)
+    .join("; ");
+  throw new Error(`博客元数据校验失败（${relativePath}）：${details}`);
+}
+
+function parseTexFile(raw: string) {
   const tagsMatch = raw.match(/^%\s*tags?:\s*(.+)$/m);
-  const tags = tagsMatch ? tagsMatch[1].split(",").map((tag) => tag.trim()) : ["LaTeX"];
+  const tags = tagsMatch ? tagsMatch[1].split(",").map((tag) => tag.trim()) : undefined;
   const descMatch = raw.match(/^%\s*description?:\s*(.+)$/m);
-  const description = descMatch ? descMatch[1].trim() : `LaTeX 文档: ${filename}`;
+  const description = descMatch ? descMatch[1].trim() : undefined;
   const pubMatch = raw.match(/^%\s*published?:\s*(true|false)/m);
-  const published = pubMatch ? pubMatch[1] === "true" : true;
+  const published = pubMatch ? pubMatch[1] === "true" : undefined;
   const titleMatch = raw.match(/\\title\{([^}]+)\}/);
   const dateMatch = raw.match(/\\date\{([^}]+)\}/);
-  const title = titleMatch ? titleMatch[1] : filename;
-  const date = dateMatch ? dateMatch[1] : "2026-01-01";
+  const title = titleMatch?.[1];
+  const date = dateMatch?.[1];
   const content = raw
     .replace(/\\documentclass\{[^}]+\}/g, "")
     .replace(/\\usepackage\{[^}]+\}/g, "")
@@ -48,7 +129,10 @@ function parseTexFile(raw: string, filename: string) {
     .replace(/\\maketitle/g, "")
     .trim();
 
-  return { title, date, content, tags, description, published };
+  return {
+    data: { title, date, tags, description, published },
+    content,
+  };
 }
 
 function getAllFiles(dir: string): string[] {
@@ -73,30 +157,8 @@ function getCategoryFromPath(filePath: string): string {
   return CATEGORIES.some((candidate) => candidate.slug === category) ? category : "default";
 }
 
-function getString(data: Frontmatter, key: string, fallback: string): string {
-  const value = data[key];
-  if (value instanceof Date) return value.toISOString().slice(0, 10);
-  return typeof value === "string" && value.trim() ? value.trim() : fallback;
-}
-
-function getOptionalString(data: Frontmatter, key: string): string | undefined {
-  const value = data[key];
-  return typeof value === "string" && value.trim() ? value.trim() : undefined;
-}
-
-function getTags(data: Frontmatter): string[] {
-  const value = data.tags;
-  if (Array.isArray(value)) {
-    return value.filter((tag): tag is string => typeof tag === "string" && Boolean(tag.trim()));
-  }
-  if (typeof value === "string") {
-    return value.split(",").map((tag) => tag.trim()).filter(Boolean);
-  }
-  return [];
-}
-
 function computeSlug(fileName: string, data: Frontmatter, category: string): string {
-  let slug = getString(data, "slug", fileName);
+  let slug = data.slug || fileName;
   if (/[^\x00-\x7F]/.test(slug)) {
     slug = Buffer.from(slug).toString("hex");
   }
@@ -106,46 +168,28 @@ function computeSlug(fileName: string, data: Frontmatter, category: string): str
   return slug;
 }
 
-function parsePostFile(filePath: string): Post | null {
+function parsePostFile(filePath: string): Post {
   const fileName = path.basename(filePath);
   const fileNameSlug = fileName.replace(/\.(md|tex)$/, "");
   const category = getCategoryFromPath(filePath);
+  const raw = fs.readFileSync(filePath, "utf-8");
+  const isTex = filePath.endsWith(".tex");
+  const parsed = isTex ? parseTexFile(raw) : matter(raw);
+  const data = validateFrontmatter(parsed.data, filePath);
 
-  try {
-    const raw = fs.readFileSync(filePath, "utf-8");
-    const isTex = filePath.endsWith(".tex");
-    let data: Frontmatter;
-    let content: string;
-
-    if (isTex) {
-      const parsed = parseTexFile(raw, fileNameSlug);
-      data = parsed;
-      content = parsed.content;
-    } else {
-      const parsed = matter(raw);
-      data = parsed.data as Frontmatter;
-      content = parsed.content;
-    }
-
-    return {
-      slug: computeSlug(fileNameSlug, data, category),
-      originalSlug: getString(data, "slug", fileNameSlug),
-      title: getString(data, "title", fileNameSlug),
-      date: getString(data, "date", "2026-01-01"),
-      tags: getTags(data),
-      published: data.published !== false,
-      description: getString(data, "description", ""),
-      cover: getOptionalString(data, "cover"),
-      content,
-      format: isTex ? "tex" : "md",
-      category,
-    };
-  } catch (error) {
-    const relativePath = path.relative(postsDir, filePath);
-    const reason = error instanceof Error ? error.message : "unknown parse error";
-    console.warn(`Skipping blog post ${relativePath}: ${reason}`);
-    return null;
-  }
+  return {
+    slug: computeSlug(fileNameSlug, data, category),
+    originalSlug: data.slug || fileNameSlug,
+    title: data.title,
+    date: data.date,
+    tags: data.tags,
+    published: data.published,
+    description: data.description,
+    cover: data.cover,
+    content: parsed.content,
+    format: isTex ? "tex" : "md",
+    category,
+  };
 }
 
 function toSummary(post: Post): PostSummary {
@@ -168,9 +212,13 @@ export function getAllPosts(showAll = false): PostSummary[] {
 
   return getAllFiles(postsDir)
     .map(parsePostFile)
-    .filter((post): post is Post => post !== null && (showAll || post.published))
+    .filter((post) => showAll || post.published)
     .map(toSummary)
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    .sort((a, b) => {
+      const dateDifference = new Date(b.date).getTime() - new Date(a.date).getTime();
+      if (dateDifference) return dateDifference;
+      return a.slug < b.slug ? -1 : a.slug > b.slug ? 1 : 0;
+    });
 }
 
 export function getPostBySlug(slug: string): Post | null {
@@ -178,7 +226,7 @@ export function getPostBySlug(slug: string): Post | null {
 
   for (const filePath of getAllFiles(postsDir)) {
     const post = parsePostFile(filePath);
-    if (post?.slug === slug && post.published) return post;
+    if (post.slug === slug && post.published) return post;
   }
   return null;
 }
@@ -191,4 +239,16 @@ export function getAllTags(): string[] {
 
 export function getPostsByCategory(category: string): PostSummary[] {
   return getAllPosts().filter((post) => post.category === category);
+}
+
+export function getAdjacentPosts(slug: string, category: string): AdjacentPosts {
+  const posts = getAllPosts().filter((post) => post.category === category);
+  const index = posts.findIndex((post) => post.slug === slug);
+
+  if (index === -1) return { previous: null, next: null };
+
+  return {
+    previous: posts[index + 1] || null,
+    next: posts[index - 1] || null,
+  };
 }

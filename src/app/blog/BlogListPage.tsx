@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { HiArrowLeft, HiPencil, HiSearch } from "react-icons/hi";
+import { HiArrowLeft, HiPencil, HiRss, HiSearch } from "react-icons/hi";
 import BlogCard from "@/components/BlogCard";
 import ZhihuSidebar from "@/components/ZhihuSidebar";
 import { CATEGORIES } from "@/lib/categories";
@@ -79,9 +79,17 @@ export default function BlogListPage({ localPosts }: { localPosts: PostSummary[]
           <header className="mb-8">
             <p className="mb-3 text-sm font-semibold tracking-[0.18em] text-brand-cyan">NOTES & WRITING</p>
             <h1 className="text-3xl font-bold md:text-4xl">技术博客</h1>
-            <p className="mt-3 text-sm leading-relaxed text-gray-400">
-              偏振控制、FPGA 时序、全栈开发与持续学习的实践记录。
-            </p>
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+              <p className="text-sm leading-relaxed text-gray-400">
+                偏振控制、FPGA 时序、全栈开发与持续学习的实践记录。
+              </p>
+              <a
+                href="/rss.xml"
+                className="inline-flex min-h-11 items-center gap-1.5 rounded-xl px-3 text-sm text-gray-400 transition-colors hover:bg-brand-purple/10 hover:text-brand-cyan"
+              >
+                <HiRss size={16} aria-hidden="true" /> RSS 订阅
+              </a>
+            </div>
           </header>
 
           <div className="mb-8 flex flex-col gap-3 sm:flex-row">

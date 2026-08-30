@@ -1,4 +1,10 @@
-# 文件与软件
+---
+title: "文件与软件"
+date: "2026-08-24"
+tags: ["计算机基础", "文件系统", "路径"]
+description: "理解文件、软件、扩展名，以及 Windows、macOS 和 Linux 中的路径写法。"
+published: true
+---
 
 ## 文件是内容
 

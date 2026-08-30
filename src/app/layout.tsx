@@ -17,7 +17,10 @@ export const metadata: Metadata = {
   keywords: ["偏振控制", "FPGA", "光学工程", "扰偏算法", "全栈开发"],
   authors: [{ name: "OnfireQ", url: siteUrl }],
   creator: "OnfireQ",
-  alternates: { canonical: "/" },
+  alternates: {
+    canonical: "/",
+    types: { "application/rss+xml": "/rss.xml" },
+  },
   openGraph: {
     type: "website",
     locale: "zh_CN",

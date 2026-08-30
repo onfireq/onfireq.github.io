@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getAllPosts, getPostBySlug } from "@/lib/blog";
+import { getAdjacentPosts, getAllPosts, getPostBySlug } from "@/lib/blog";
+import { getBlogHeadings } from "@/lib/blog-headings";
 import BlogPostPage from "./BlogPostPage";
 
 const siteUrl = "https://onfireq.github.io";
@@ -21,7 +22,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: post.title,
     description: post.description,
-    alternates: { canonical: canonicalPath },
+    alternates: {
+      canonical: canonicalPath,
+      types: { "application/rss+xml": "/rss.xml" },
+    },
     openGraph: {
       type: "article",
       title: post.title,
@@ -44,6 +48,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const { slug } = await params;
   const post = getPostBySlug(slug);
   if (!post) notFound();
+  const headings = getBlogHeadings(post.content, post.format);
+  const { previous, next } = getAdjacentPosts(post.slug, post.category);
 
   const articleJsonLd = {
     "@context": "https://schema.org",
@@ -70,7 +76,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           __html: JSON.stringify(articleJsonLd).replace(/</g, "\\u003c"),
         }}
       />
-      <BlogPostPage post={post} />
+      <BlogPostPage
+        post={post}
+        headings={headings}
+        previousPost={previous}
+        nextPost={next}
+      />
     </>
   );
 }

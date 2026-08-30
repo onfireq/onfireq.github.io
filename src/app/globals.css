@@ -73,6 +73,7 @@
   html[data-theme="light"] body .text-gray-300 { color: #475569; }
   html[data-theme="light"] body .text-gray-400 { color: #64748b; }
   html[data-theme="light"] body .text-gray-500 { color: #64748b; }
+  html[data-theme="light"] body .text-white { color: #0f172a; }
 
   html[data-theme="light"] body textarea,
   html[data-theme="light"] body input {

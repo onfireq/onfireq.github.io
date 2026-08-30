@@ -3,7 +3,7 @@ title: "LaTeX 公式测试"
 date: "2026-07-29"
 tags: ["LaTeX", "数学", "测试"]
 description: "测试博客的 LaTeX 数学公式渲染"
-published: true
+published: false
 ---
 
 ## 行内公式
