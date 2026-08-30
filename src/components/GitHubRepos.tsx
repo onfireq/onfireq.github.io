@@ -81,7 +81,7 @@ export default function GitHubRepos() {
   if (error) {
     return (
       <div className="glass p-8 text-center">
-        <p className="mb-4 text-sm text-gray-400">GitHub 仓库暂时无法加载，代表项目仍可在上方查看。</p>
+        <p className="mb-4 text-sm text-gray-400">GitHub 仓库暂时无法加载，请稍后重试或直接访问 GitHub。</p>
         <a
           href="https://github.com/onfireq"
           target="_blank"

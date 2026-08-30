@@ -1,9 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import { HiArrowDown, HiArrowRight, HiBookOpen } from "react-icons/hi";
+import { HiArrowDown } from "react-icons/hi";
 
 const ThreeBackground = dynamic(() => import("./ThreeBackground"), {
   ssr: false,
@@ -36,7 +35,7 @@ export default function HeroSection() {
           transition={{ duration: 0.8 }}
         >
           <span className="inline-block px-4 py-1.5 mb-6 text-sm text-brand-purple border border-brand-purple/30 rounded-full bg-brand-purple/10">
-            光学算法 × FPGA × 产品工程
+            👋 欢迎来到我的主页
           </span>
         </motion.div>
 
@@ -44,62 +43,27 @@ export default function HeroSection() {
           initial={reduceMotion ? false : { opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.15 }}
-          className="max-w-4xl text-4xl md:text-6xl lg:text-7xl font-extrabold leading-[1.08] mb-6"
+          className="text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6"
         >
-          让偏振控制算法，
-          <br className="hidden sm:block" />
-          <span className="text-gradient">从仿真真正跑进 FPGA</span>
+          你好，我是
+          <br />
+          <span className="text-gradient">onfireq</span>
         </motion.h1>
 
         <motion.p
           initial={reduceMotion ? false : { opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="text-gray-400 text-base md:text-lg max-w-2xl mb-8 leading-relaxed"
+          className="text-gray-400 text-base md:text-lg max-w-xl mb-10 leading-relaxed"
         >
-          你好，我是 OnfireQ。我研究偏振控制与扰偏算法，关注定点化、时序与实时部署，
-          也用 Next.js、Python 等工具把复杂技术变成可复现的项目与文章。
+          硬件 &amp; 软件 全栈工程师。
+          热衷于用现代技术构建优雅的数字体验。
         </motion.p>
-
-        <motion.div
-          initial={reduceMotion ? false : { opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.42 }}
-          className="flex flex-col sm:flex-row gap-3 mb-10"
-        >
-          <Link
-            href="/projects"
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-brand-purple to-brand-cyan px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-purple/20 transition-transform hover:-translate-y-0.5"
-          >
-            查看代表项目 <HiArrowRight aria-hidden="true" />
-          </Link>
-          <Link
-            href="/blog"
-            className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-gray-300 transition-colors hover:border-brand-cyan/30 hover:text-white"
-          >
-            <HiBookOpen aria-hidden="true" /> 阅读技术博客
-          </Link>
-        </motion.div>
-
-        <motion.ul
-          initial={reduceMotion ? false : { opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.62 }}
-          className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-gray-500"
-          aria-label="核心工作链路"
-        >
-          {["算法建模", "定点化验证", "FPGA 部署", "全栈呈现"].map((item) => (
-            <li key={item} className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-brand-cyan" aria-hidden="true" />
-              {item}
-            </li>
-          ))}
-        </motion.ul>
       </div>
 
       {/* Scroll indicator */}
       <motion.a
-        href="#home-overview"
+        href="#home-links"
         aria-label="继续浏览"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
