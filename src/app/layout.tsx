@@ -5,8 +5,7 @@ import Footer from "@/components/Footer";
 import "./globals.css";
 
 const siteUrl = new URL("https://onfireq.github.io");
-const siteDescription =
-  "聚焦偏振控制、扰偏算法与 FPGA 硬件部署，也记录全栈开发中的实践与思考。";
+const siteDescription = "onfireq的个人网站";
 
 export const metadata: Metadata = {
   metadataBase: siteUrl,
