@@ -119,6 +119,7 @@ function parseTexFile(raw: string) {
   const title = titleMatch?.[1];
   const date = dateMatch?.[1];
   const content = raw
+    .replace(/^\s*%.*$/gm, "")
     .replace(/\\documentclass\{[^}]+\}/g, "")
     .replace(/\\usepackage\{[^}]+\}/g, "")
     .replace(/\\title\{[^}]+\}/g, "")
