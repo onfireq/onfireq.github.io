@@ -7,8 +7,9 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/api/', '/_next/'],
+      disallow: ['/blog/editor/'],
     },
     sitemap: 'https://onfireq.github.io/sitemap.xml',
+    host: 'https://onfireq.github.io',
   };
 }

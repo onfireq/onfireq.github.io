@@ -4,7 +4,7 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
-import rehypeRaw from "rehype-raw";
+import rehypeHighlight from "rehype-highlight";
 import rehypeKatex from "rehype-katex";
 
 export default function BlogContent({ content, format = "md" }: { content: string; format?: "md" | "tex" }) {
@@ -39,7 +39,7 @@ export default function BlogContent({ content, format = "md" }: { content: strin
       <div className="prose prose-invert prose-lg max-w-none">
         <ReactMarkdown
           remarkPlugins={[remarkGfm, remarkMath]}
-          rehypePlugins={[rehypeRaw, rehypeKatex]}
+          rehypePlugins={[rehypeKatex, rehypeHighlight]}
           components={{
             h1: ({ children }) => <h1 className="text-3xl font-bold mt-8 mb-4 text-gradient">{children}</h1>,
             h2: ({ children }) => <h2 className="text-2xl font-bold mt-8 mb-3 border-b border-white/10 pb-2">{children}</h2>,
@@ -69,7 +69,7 @@ export default function BlogContent({ content, format = "md" }: { content: strin
     <div className="prose prose-invert prose-lg max-w-none">
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkMath]}
-        rehypePlugins={[rehypeRaw, rehypeKatex]}
+        rehypePlugins={[rehypeKatex, rehypeHighlight]}
         components={{
           h1: ({ children }) => (
             <h1 className="text-3xl font-bold mt-8 mb-4 text-gradient">{children}</h1>
@@ -83,11 +83,19 @@ export default function BlogContent({ content, format = "md" }: { content: strin
           p: ({ children }) => (
             <p className="text-gray-300 leading-relaxed mb-4">{children}</p>
           ),
-          a: ({ href, children }) => (
-            <a href={href} className="text-brand-cyan hover:underline" target="_blank" rel="noopener">
-              {children}
-            </a>
-          ),
+          a: ({ href, children }) => {
+            const external = href?.startsWith("http://") || href?.startsWith("https://");
+            return (
+              <a
+                href={href}
+                className="text-brand-cyan hover:underline"
+                target={external ? "_blank" : undefined}
+                rel={external ? "noopener noreferrer" : undefined}
+              >
+                {children}
+              </a>
+            );
+          },
           ul: ({ children }) => (
             <ul className="list-disc list-inside text-gray-300 mb-4 space-y-1">{children}</ul>
           ),
@@ -95,7 +103,7 @@ export default function BlogContent({ content, format = "md" }: { content: strin
             <ol className="list-decimal list-inside text-gray-300 mb-4 space-y-1">{children}</ol>
           ),
           li: ({ children }) => <li className="text-gray-300">{children}</li>,
-          blockquote: ({ children, className, ...props }) => {
+          blockquote: ({ children }) => {
             // Parse callout syntax: > [!type]
             const childArray = React.Children.toArray(children);
             let calloutType = "";

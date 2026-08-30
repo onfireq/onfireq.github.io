@@ -7,8 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "elog:sync": "npx @elog/cli sync -e .elog.env",
-    "blog:publish": "npx @elog/cli sync -e .elog.env && git add . && git commit -m '📝 同步 wolai 博客' && git push"
+    "typecheck": "tsc --noEmit --incremental false",
+    "check": "npm run lint && npm run typecheck && npm run build",
+    "elog:sync": "elog sync -e .elog.env",
+    "blog:publish": "npm run elog:sync && git add content/blog && git commit -m '📝 同步 wolai 博客' && git push"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",
@@ -16,14 +18,13 @@
     "framer-motion": "^12.42.2",
     "gray-matter": "^4.0.3",
     "katex": "^0.18.1",
-    "next": "16.2.12",
+    "next": "^16.3.3",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-icons": "^5.7.0",
     "react-markdown": "^10.1.0",
     "rehype-highlight": "^7.0.2",
     "rehype-katex": "^7.0.1",
-    "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.1",
     "remark-math": "^6.0.0",
     "three": "^0.185.1"
@@ -35,7 +36,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.2.12",
+    "eslint-config-next": "^16.3.3",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import Image from "next/image";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { HiX, HiExternalLink, HiHeart, HiChatAlt2 } from "react-icons/hi";
+import { HiX, HiExternalLink, HiHeart } from "react-icons/hi";
 import { zhihuContents, type ZhihuContent } from "@/data/zhihu";
 
 const typeConfig: Record<string, { label: string; color: string; icon: string }> = {
@@ -140,15 +141,13 @@ export default function ZhihuFloating() {
                 <h4 className="text-xs text-gray-500 mb-2.5">关于作者</h4>
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 bg-gradient-to-br from-blue-500 to-cyan-500">
-                    <img
+                    <Image
                       src="/images/avatar.jpg"
-                      alt="onfireq"
+                      alt="OnfireQ 的头像"
+                      width={48}
+                      height={48}
+                      sizes="48px"
                       className="w-full h-full object-cover"
-                      onError={(e) => {
-                        const t = e.target as HTMLImageElement;
-                        t.style.display = "none";
-                        t.parentElement!.innerHTML = '<div class="w-full h-full flex items-center justify-center text-xl">👨‍💻</div>';
-                      }}
                     />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -190,7 +189,7 @@ export default function ZhihuFloating() {
                         key={item.url}
                         href={item.url}
                         target="_blank"
-                        rel="noopener"
+                        rel="noopener noreferrer"
                         className="block p-3 rounded-lg bg-white/[0.03] hover:bg-white/[0.08] border border-white/5 hover:border-white/20 transition-all group"
                       >
                         <div className="flex items-start gap-2.5">
@@ -230,7 +229,7 @@ export default function ZhihuFloating() {
                 <a
                   href="https://www.zhihu.com/people/bai-ri-meng-you-54-77"
                   target="_blank"
-                  rel="noopener"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 text-xs text-blue-400 hover:underline"
                 >
                   访问知乎主页 <HiExternalLink size={12} />

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import { HiHeart, HiStar, HiArrowUp, HiUserAdd, HiSparkles } from "react-icons/hi";
@@ -115,7 +116,7 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
             <a
               href={zhihuHome}
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
               className="flex items-center justify-between mb-3 group/title"
             >
               <div className="flex items-center gap-2">
@@ -136,22 +137,20 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
             <a
               href={profileUrl}
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
               className="flex items-center gap-3 mb-4 p-2 -m-2 rounded-xl hover:bg-white/5 transition-all"
             >
               {/* 头像带光晕 */}
               <div className="relative flex-shrink-0">
                 <div className="absolute -inset-0.5 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full blur opacity-60" />
                 <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-cyan-500 ring-2 ring-white/10">
-                  <img
+                  <Image
                     src="/images/avatar.jpg"
-                    alt="onfireq"
+                    alt="OnfireQ 的头像"
+                    width={48}
+                    height={48}
+                    sizes="48px"
                     className="w-full h-full object-cover"
-                    onError={(e) => {
-                      const t = e.target as HTMLImageElement;
-                      t.style.display = "none";
-                      t.parentElement!.innerHTML = '<div class="w-full h-full flex items-center justify-center text-xl">👨‍💻</div>';
-                    }}
                   />
                 </div>
                 {/* 在线点 */}

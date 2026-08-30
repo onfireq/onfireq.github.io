@@ -1,31 +1,56 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useSyncExternalStore,
+  type ReactNode,
+} from "react";
 
-const ThemeCtx = createContext({
+type Theme = "dark" | "light";
+
+const THEME_EVENT = "onfireq-theme-change";
+
+const ThemeCtx = createContext<{ theme: Theme; toggle: () => void }>({
   theme: "dark",
-  toggle: () => {},
+  toggle: () => undefined,
 });
+
+function subscribeToTheme(onStoreChange: () => void) {
+  window.addEventListener(THEME_EVENT, onStoreChange);
+  window.addEventListener("storage", onStoreChange);
+  return () => {
+    window.removeEventListener(THEME_EVENT, onStoreChange);
+    window.removeEventListener("storage", onStoreChange);
+  };
+}
+
+function getThemeSnapshot(): Theme {
+  return document.documentElement.dataset.theme === "light" ? "light" : "dark";
+}
+
+function getServerThemeSnapshot(): Theme {
+  return "dark";
+}
 
 export function useTheme() {
   return useContext(ThemeCtx);
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState("dark");
+  const theme = useSyncExternalStore(
+    subscribeToTheme,
+    getThemeSnapshot,
+    getServerThemeSnapshot,
+  );
 
-  useEffect(() => {
-    const stored = localStorage.getItem("theme") || "dark";
-    setTheme(stored);
-    document.body.classList.toggle("light", stored === "light");
-  }, []);
-
-  const toggle = () => {
+  const toggle = useCallback(() => {
     const next = theme === "dark" ? "light" : "dark";
-    setTheme(next);
     localStorage.setItem("theme", next);
-    document.body.classList.toggle("light", next === "light");
-  };
+    document.documentElement.dataset.theme = next;
+    window.dispatchEvent(new Event(THEME_EVENT));
+  }, [theme]);
 
   return (
     <ThemeCtx.Provider value={{ theme, toggle }}>

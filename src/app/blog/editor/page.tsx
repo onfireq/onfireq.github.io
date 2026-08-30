@@ -46,12 +46,19 @@ export default function BlogEditor() {
 
   useEffect(() => {
     const saved = loadDrafts();
-    setDrafts(saved);
-    if (saved.length > 0) {
-      setActiveId(saved[0].id);
-      setContent(saved[0].content);
-      setFilename(saved[0].filename);
-    }
+    let cancelled = false;
+    queueMicrotask(() => {
+      if (cancelled) return;
+      setDrafts(saved);
+      if (saved.length > 0) {
+        setActiveId(saved[0].id);
+        setContent(saved[0].content);
+        setFilename(saved[0].filename);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const updateDraft = (newContent: string, newFilename?: string) => {
@@ -118,11 +125,11 @@ export default function BlogEditor() {
     <div className="pt-20 pb-4 px-4 min-h-screen flex flex-col">
       <div className="max-w-[1600px] w-full mx-auto flex-1 flex flex-col min-h-0">
         {/* Header */}
-        <div className="flex items-center justify-between mb-3 flex-shrink-0">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-3 flex-shrink-0">
           <h1 className="text-xl font-bold">
             ✍️ <span className="text-gradient">博客编辑器</span>
           </h1>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <button
               onClick={createDraft}
               className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg bg-brand-purple/10 text-brand-purple hover:bg-brand-purple/20 transition"
@@ -160,21 +167,22 @@ export default function BlogEditor() {
         </div>
 
         {/* Filename */}
-        <div className="flex items-center gap-2 mb-2 flex-shrink-0">
+        <div className="flex flex-col gap-2 mb-2 flex-shrink-0 sm:flex-row sm:items-center">
           <input
+            aria-label="Markdown 文件名"
             type="text"
             value={filename}
             onChange={(e) => updateDraft(content, e.target.value)}
-            className="w-64 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm focus:border-brand-purple outline-none"
+            className="w-full px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm focus:border-brand-purple outline-none sm:w-64"
             placeholder="文件名"
           />
           <span className="text-xs text-gray-600">自动保存 · 下载后放到 content/blog/ 目录 git push 上线</span>
         </div>
 
         {/* Split view: Editor + Preview */}
-        <div className="flex-1 flex gap-3 min-h-0">
+        <div className="flex-1 flex flex-col gap-3 min-h-0 lg:flex-row">
           {/* Left: Editor */}
-          <div className="flex-1 flex flex-col min-w-0 min-h-0">
+          <div className="flex min-h-[24rem] min-w-0 flex-1 flex-col lg:min-h-0">
             <div className="text-xs text-gray-500 mb-1.5 px-1 flex-shrink-0">📝 Markdown 编辑</div>
             <textarea
               value={content}
@@ -186,7 +194,7 @@ export default function BlogEditor() {
           </div>
 
           {/* Right: Live Preview */}
-          <div className="flex-1 flex flex-col min-w-0 min-h-0">
+          <div className="flex min-h-[24rem] min-w-0 flex-1 flex-col lg:min-h-0">
             <div className="text-xs text-gray-500 mb-1.5 px-1 flex-shrink-0">👁️ 实时预览</div>
             <div className="flex-1 overflow-y-auto glass p-6 min-h-0">
               {previewContent.trim() ? (

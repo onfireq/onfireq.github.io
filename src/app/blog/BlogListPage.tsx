@@ -1,82 +1,183 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import SectionHeading from "@/components/SectionHeading";
+import { useMemo, useState } from "react";
+import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { motion } from "framer-motion";
+import { HiArrowLeft, HiPencil, HiSearch } from "react-icons/hi";
 import BlogCard from "@/components/BlogCard";
 import ZhihuSidebar from "@/components/ZhihuSidebar";
-import { HiPencil, HiSearch } from "react-icons/hi";
-import { zhihuContents, type ZhihuContent } from "@/data/zhihu";
-import Link from "next/link";
+import { CATEGORIES } from "@/lib/categories";
+import type { Post } from "@/lib/blog";
+import type { ZhihuContent } from "@/data/zhihu";
 
 type FilterType = "all" | ZhihuContent["type"];
+type PostSummary = Omit<Post, "content">;
 
-export default function BlogListPage({ localPosts }: { localPosts: any[] }) {
+const FOLDER_STYLES: Record<string, { color: string; icon: string }> = {
+  tech: { color: "#3b82f6", icon: "💻" },
+  timing: { color: "#06b6d4", icon: "⏱️" },
+  guide: { color: "#ec4899", icon: "📚" },
+  libo: { color: "#8b5cf6", icon: "📝" },
+  default: { color: "#64748b", icon: "📁" },
+};
+
+export default function BlogListPage({ localPosts }: { localPosts: PostSummary[] }) {
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
   const [search, setSearch] = useState("");
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  // 本地博客（主区只显示这些）
-  const localFormatted = useMemo(() => {
-    return localPosts.map((p: any) => ({
-      slug: p.slug,
-      title: p.title,
-      date: p.date,
-      tags: p.tags,
-      description: p.description,
-      category: p.category === "tech" ? "技术" : p.category === "timing" ? "时序" : p.category === "guide" ? "攻略" : "其他",
+  const requestedCategory = searchParams.get("category") || "";
+  const activeCategory = CATEGORIES.some((category) => category.slug === requestedCategory)
+    ? requestedCategory
+    : "";
+
+  const setCategory = (category: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (category) params.set("category", category);
+    else params.delete("category");
+
+    const query = params.toString();
+    router.push(query ? `${pathname}?${query}` : pathname, { scroll: false });
+  };
+
+  const folders = useMemo(() => {
+    const counts = localPosts.reduce<Record<string, number>>((result, post) => {
+      result[post.category] = (result[post.category] || 0) + 1;
+      return result;
+    }, {});
+
+    return CATEGORIES.filter((category) => counts[category.slug] > 0).map((category) => ({
+      ...category,
+      count: counts[category.slug],
+      ...FOLDER_STYLES[category.slug],
     }));
   }, [localPosts]);
 
-  const filtered = useMemo(() => {
-    let list = localFormatted;
-    if (search) {
-      list = list.filter((p) => p.title.includes(search) || p.description.includes(search));
-    }
-    return list;
-  }, [localFormatted, search]);
+  const filteredPosts = useMemo(() => {
+    const query = search.trim().toLocaleLowerCase("zh-CN");
+    return localPosts.filter((post) => {
+      const matchesCategory = !activeCategory || post.category === activeCategory;
+      const searchableText = [post.title, post.description, ...post.tags]
+        .join(" ")
+        .toLocaleLowerCase("zh-CN");
+      return matchesCategory && (!query || searchableText.includes(query));
+    });
+  }, [activeCategory, localPosts, search]);
+
+  const showPosts = Boolean(activeCategory || search.trim());
+  const currentCategory = CATEGORIES.find((category) => category.slug === activeCategory);
 
   return (
-    <div className="min-h-screen pt-24 pb-16 px-6">
-      <div className="max-w-6xl mx-auto flex gap-8">
-        {/* 左侧：知乎作品摘要（侧边栏内上下联动） */}
+    <div className="min-h-screen px-6 pb-16 pt-24">
+      <div className="mx-auto flex max-w-6xl gap-8">
         <ZhihuSidebar activeFilter={activeFilter} onFilterChange={setActiveFilter} />
 
-        {/* 主内容：只显示本地博客 */}
-        <div className="flex-1 min-w-0 max-w-3xl mx-auto">
-          {/* 搜索框（暂隐藏，逻辑保留以便未来使用）*/}
-          {false && (
-            <div className="relative flex-1 max-w-sm">
-              <HiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="搜索文章..."
-                className="w-full pl-9 pr-3 py-2 rounded-xl bg-white/5 border border-white/10 text-sm focus:border-brand-purple outline-none"
-              />
-            </div>
-          )}
-          <div className="flex items-center justify-end mb-2 gap-3 flex-wrap">
-            <a
-              href="/blog/editor"
-              className="flex items-center gap-1.5 px-4 py-2 text-sm rounded-xl bg-brand-purple/10 text-brand-purple hover:bg-brand-purple/20 transition border border-brand-purple/20"
-            >
-              <HiPencil size={16} /> 写文章
-            </a>
-          </div>
-          <SectionHeading title="技术" accent="博客" subtitle="偏振控制 · FPGA · 全栈开发 · 学习记录" />
+        <div className="mx-auto min-w-0 max-w-3xl flex-1">
+          <header className="mb-8">
+            <p className="mb-3 text-sm font-semibold tracking-[0.18em] text-brand-cyan">NOTES & WRITING</p>
+            <h1 className="text-3xl font-bold md:text-4xl">技术博客</h1>
+            <p className="mt-3 text-sm leading-relaxed text-gray-400">
+              偏振控制、FPGA 时序、全栈开发与持续学习的实践记录。
+            </p>
+          </header>
 
-          {filtered.length === 0 ? (
-            <div className="glass p-12 text-center text-gray-500">
-              {search ? "没有匹配的文章" : "暂无文章"}
-            </div>
+          <div className="mb-8 flex flex-col gap-3 sm:flex-row">
+            <label className="relative flex-1">
+              <span className="sr-only">搜索文章</span>
+              <HiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={17} aria-hidden="true" />
+              <input
+                type="search"
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="搜索标题、摘要或标签"
+                className="w-full rounded-xl border border-white/10 bg-white/5 py-2.5 pl-10 pr-3 text-sm outline-none transition focus:border-brand-purple"
+              />
+            </label>
+            <Link
+              href="/blog/editor"
+              className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-brand-purple/20 bg-brand-purple/10 px-4 py-2.5 text-sm text-brand-purple transition hover:bg-brand-purple/20"
+            >
+              <HiPencil size={16} aria-hidden="true" /> Markdown 编辑器
+            </Link>
+          </div>
+
+          {showPosts ? (
+            <section aria-labelledby="post-list-heading">
+              <div className="mb-6 flex items-start justify-between gap-4">
+                <div>
+                  {activeCategory && (
+                    <button
+                      type="button"
+                      onClick={() => setCategory("")}
+                      className="mb-4 flex items-center gap-2 text-sm text-gray-400 transition-colors hover:text-white"
+                    >
+                      <HiArrowLeft size={16} aria-hidden="true" /> 返回全部分类
+                    </button>
+                  )}
+                  <h2 id="post-list-heading" className="text-2xl font-bold">
+                    {currentCategory?.name || "搜索结果"}
+                  </h2>
+                  <p className="mt-2 text-sm text-gray-500">共 {filteredPosts.length} 篇文章</p>
+                </div>
+              </div>
+
+              {filteredPosts.length > 0 ? (
+                <div className="space-y-4">
+                  {filteredPosts.map((post, index) => (
+                    <BlogCard key={post.slug} {...post} index={index} />
+                  ))}
+                </div>
+              ) : (
+                <div className="glass p-10 text-center text-sm text-gray-400">
+                  没有找到匹配的文章，试试更短的关键词。
+                </div>
+              )}
+            </section>
           ) : (
-            <div className="space-y-4">
-              {filtered.map((post, i) => (
-                <Link key={post.slug} href={`/blog/${post.slug}`} className="block">
-                  <BlogCard {...post} index={i} category={post.category} />
-                </Link>
-              ))}
-            </div>
+            <section aria-labelledby="category-heading">
+              <div className="mb-6">
+                <h2 id="category-heading" className="text-2xl font-bold">按主题浏览</h2>
+                <p className="mt-2 text-sm text-gray-500">选择一个主题，进入对应的文章集合。</p>
+              </div>
+              <div className="grid gap-5 md:grid-cols-2">
+                {folders.map((folder, index) => (
+                  <button
+                    key={folder.slug}
+                    type="button"
+                    onClick={() => setCategory(folder.slug)}
+                    className="w-full text-left"
+                  >
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.07 }}
+                      className="glass group overflow-hidden transition-all hover:border-brand-purple/30"
+                    >
+                      <div
+                        className="relative flex h-28 items-center justify-center overflow-hidden text-5xl"
+                        style={{
+                          background: `linear-gradient(135deg, ${folder.color}33 0%, ${folder.color}0d 100%)`,
+                        }}
+                      >
+                        <motion.span aria-hidden="true" whileHover={{ scale: 1.12 }}>
+                          {folder.icon}
+                        </motion.span>
+                      </div>
+                      <div className="p-5">
+                        <div className="mb-2 flex items-center justify-between gap-3">
+                          <h3 className="text-lg font-semibold">{folder.name}</h3>
+                          <span className="text-xs text-gray-500">{folder.count} 篇</span>
+                        </div>
+                        <p className="text-sm leading-relaxed text-gray-400">{folder.description}</p>
+                      </div>
+                    </motion.div>
+                  </button>
+                ))}
+              </div>
+            </section>
           )}
         </div>
       </div>

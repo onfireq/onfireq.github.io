@@ -10,7 +10,7 @@ export interface ZhihuContent {
   commentCount: number;
   favoriteCount: number;
   createdAt: number | string;  // 支持时间戳或 ISO 字符串
-  [key: string]: any;  // 允许其他任意字段
+  [key: string]: unknown;  // 允许其他任意字段
 }
 
 export interface ZhihuStats {
@@ -39,7 +39,7 @@ export interface ZhihuFollowee {
   Headline?: string;
   Gender?: number;
   FollowerCount?: number;
-  [key: string]: any;  // 允许其他任意字段
+  [key: string]: unknown;  // 允许其他任意字段
 }
 
 export interface ZhihuFavorite {
@@ -58,7 +58,7 @@ export interface ZhihuFavorite {
   CommentCount?: number;
   FavoriteCount?: number;
   ThumbnailUrl?: string;
-  [key: string]: any;  // 允许其他任意字段
+  [key: string]: unknown;  // 允许其他任意字段
 }
 
 export const zhihuContents: ZhihuContent[] = [

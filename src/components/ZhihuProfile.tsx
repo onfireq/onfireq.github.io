@@ -1,12 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { zhihuContents, type ZhihuContent } from "@/data/zhihu";
-
-interface BlogCategory {
-  slug: string;
-  name: string;
-}
 
 interface ZhihuProfileProps {
   activeFilter: "all" | ZhihuContent["type"];
@@ -62,19 +58,17 @@ export default function ZhihuProfile({ activeFilter, onFilterChange }: ZhihuProf
         <a
           href={profileUrl}
           target="_blank"
-          rel="noopener"
+          rel="noopener noreferrer"
           className="flex items-start gap-3 mb-4 -m-1 p-1 rounded-lg hover:bg-white/5 transition-colors"
         >
           <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 bg-gradient-to-br from-blue-500 to-cyan-500">
-            <img
+            <Image
               src="/images/avatar.jpg"
-              alt="onfireq"
+              alt="OnfireQ 的头像"
+              width={48}
+              height={48}
+              sizes="48px"
               className="w-full h-full object-cover"
-              onError={(e) => {
-                const t = e.target as HTMLImageElement;
-                t.style.display = "none";
-                t.parentElement!.innerHTML = '<div class="w-full h-full flex items-center justify-center text-xl">👨‍💻</div>';
-              }}
             />
           </div>
           <div className="flex-1 min-w-0">
@@ -95,7 +89,7 @@ export default function ZhihuProfile({ activeFilter, onFilterChange }: ZhihuProf
           <a
             href={urlFor("answer")}
             target="_blank"
-            rel="noopener"
+            rel="noopener noreferrer"
             className="block py-1 rounded-lg hover:bg-white/5 transition-colors"
           >
             <div className="text-lg font-bold text-blue-400">{stats.answer}</div>
@@ -104,7 +98,7 @@ export default function ZhihuProfile({ activeFilter, onFilterChange }: ZhihuProf
           <a
             href={urlFor("article")}
             target="_blank"
-            rel="noopener"
+            rel="noopener noreferrer"
             className="block py-1 rounded-lg hover:bg-white/5 transition-colors"
           >
             <div className="text-lg font-bold text-pink-400">{stats.article}</div>
@@ -113,7 +107,7 @@ export default function ZhihuProfile({ activeFilter, onFilterChange }: ZhihuProf
           <a
             href={profileUrl}
             target="_blank"
-            rel="noopener"
+            rel="noopener noreferrer"
             className="block py-1 rounded-lg hover:bg-white/5 transition-colors"
           >
             <div className="text-lg font-bold text-cyan-400">{stats.likes}</div>

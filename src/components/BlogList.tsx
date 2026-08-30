@@ -4,16 +4,9 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { HiSearch } from "react-icons/hi";
 import BlogCard from "@/components/BlogCard";
+import type { Post } from "@/lib/blog";
 
-interface Post {
-  slug: string;
-  title: string;
-  date: string;
-  tags: string[];
-  description: string;
-}
-
-export default function BlogList({ posts, tags }: { posts: any[]; tags: string[] }) {
+export default function BlogList({ posts, tags }: { posts: Omit<Post, "content">[]; tags: string[] }) {
   const [search, setSearch] = useState("");
   const [activeTag, setActiveTag] = useState<string | null>(null);
 

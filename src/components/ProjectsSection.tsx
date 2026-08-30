@@ -14,9 +14,9 @@ export default function ProjectsSection() {
         <div className="grid md:grid-cols-2 gap-5">
           {projects.map((p, i) => (
             <ScrollReveal key={p.slug} delay={i * 0.1}>
-              <motion.div
+              <motion.article
                 whileHover={{ y: -6 }}
-                className="glass overflow-hidden group cursor-pointer transition-colors hover:border-brand-purple/30"
+                className="glass h-full overflow-hidden group transition-colors hover:border-brand-purple/30"
               >
                 {/* Image area */}
                 <div
@@ -26,13 +26,14 @@ export default function ProjectsSection() {
                   }}
                 >
                   <motion.span
+                    aria-hidden="true"
                     whileHover={{ scale: 1.15 }}
                     transition={{ type: "spring" }}
                   >
                     {p.icon}
                   </motion.span>
                   <div className="absolute inset-0 bg-gradient-to-t from-surface-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                    <span className="text-sm text-brand-cyan">查看详情 →</span>
+                    <span className="text-sm text-brand-cyan">研究与工程实践</span>
                   </div>
                 </div>
 
@@ -52,7 +53,7 @@ export default function ProjectsSection() {
                     ))}
                   </div>
                 </div>
-              </motion.div>
+              </motion.article>
             </ScrollReveal>
           ))}
         </div>

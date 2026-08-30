@@ -7,6 +7,7 @@ export type { Category };
 
 export interface Post {
   slug: string;
+  originalSlug?: string;
   title: string;
   date: string;
   tags: string[];
@@ -18,26 +19,25 @@ export interface Post {
   category: string;
 }
 
+type PostSummary = Omit<Post, "content">;
+type Frontmatter = Record<string, unknown>;
+
 export { CATEGORIES, gcn as getCategoryName };
 
 const postsDir = path.join(process.cwd(), "content/blog");
 
-// 从 .tex 文件提取 frontmatter 信息
 function parseTexFile(raw: string, filename: string) {
   const tagsMatch = raw.match(/^%\s*tags?:\s*(.+)$/m);
-  const tags = tagsMatch ? tagsMatch[1].split(",").map(t => t.trim()) : ["LaTeX"];
+  const tags = tagsMatch ? tagsMatch[1].split(",").map((tag) => tag.trim()) : ["LaTeX"];
   const descMatch = raw.match(/^%\s*description?:\s*(.+)$/m);
   const description = descMatch ? descMatch[1].trim() : `LaTeX 文档: ${filename}`;
   const pubMatch = raw.match(/^%\s*published?:\s*(true|false)/m);
   const published = pubMatch ? pubMatch[1] === "true" : true;
-
   const titleMatch = raw.match(/\\title\{([^}]+)\}/);
-  const title = titleMatch ? titleMatch[1] : filename;
-
   const dateMatch = raw.match(/\\date\{([^}]+)\}/);
+  const title = titleMatch ? titleMatch[1] : filename;
   const date = dateMatch ? dateMatch[1] : "2026-01-01";
-
-  let content = raw
+  const content = raw
     .replace(/\\documentclass\{[^}]+\}/g, "")
     .replace(/\\usepackage\{[^}]+\}/g, "")
     .replace(/\\title\{[^}]+\}/g, "")
@@ -51,140 +51,144 @@ function parseTexFile(raw: string, filename: string) {
   return { title, date, content, tags, description, published };
 }
 
-// 递归获取所有 markdown 和 tex 文件
-function getAllFiles(dir: string, baseDir: string = dir): { filePath: string; relativePath: string }[] {
+function getAllFiles(dir: string): string[] {
   if (!fs.existsSync(dir)) return [];
-  const items = fs.readdirSync(dir, { withFileTypes: true });
-  const result: { filePath: string; relativePath: string }[] = [];
 
-  for (const item of items) {
+  const result: string[] = [];
+  for (const item of fs.readdirSync(dir, { withFileTypes: true })) {
     const fullPath = path.join(dir, item.name);
     if (item.isDirectory()) {
-      if (item.name.startsWith("_") || item.name === "node_modules") continue;
-      result.push(...getAllFiles(fullPath, baseDir));
+      if (!item.name.startsWith("_") && item.name !== "node_modules") {
+        result.push(...getAllFiles(fullPath));
+      }
     } else if (item.name.endsWith(".md") || item.name.endsWith(".tex")) {
-      const rel = path.relative(baseDir, fullPath).replace(/\\/g, "/");
-      result.push({ filePath: fullPath, relativePath: rel });
+      result.push(fullPath);
     }
   }
   return result;
 }
 
-// 从文件路径推断分类
 function getCategoryFromPath(filePath: string): string {
-  const rel = path.relative(postsDir, filePath);
-  const parts = rel.split(path.sep);
-  if (parts.length > 1) {
-    const cat = parts[0];
-    if (CATEGORIES.find(c => c.slug === cat)) return cat;
-  }
-  return "default";
+  const [category] = path.relative(postsDir, filePath).split(path.sep);
+  return CATEGORIES.some((candidate) => candidate.slug === category) ? category : "default";
 }
 
-function parsePostFile(filePath: string): Omit<Post, "content"> | null {
+function getString(data: Frontmatter, key: string, fallback: string): string {
+  const value = data[key];
+  if (value instanceof Date) return value.toISOString().slice(0, 10);
+  return typeof value === "string" && value.trim() ? value.trim() : fallback;
+}
+
+function getOptionalString(data: Frontmatter, key: string): string | undefined {
+  const value = data[key];
+  return typeof value === "string" && value.trim() ? value.trim() : undefined;
+}
+
+function getTags(data: Frontmatter): string[] {
+  const value = data.tags;
+  if (Array.isArray(value)) {
+    return value.filter((tag): tag is string => typeof tag === "string" && Boolean(tag.trim()));
+  }
+  if (typeof value === "string") {
+    return value.split(",").map((tag) => tag.trim()).filter(Boolean);
+  }
+  return [];
+}
+
+function computeSlug(fileName: string, data: Frontmatter, category: string): string {
+  let slug = getString(data, "slug", fileName);
+  if (/[^\x00-\x7F]/.test(slug)) {
+    slug = Buffer.from(slug).toString("hex");
+  }
+  if (category !== "default" && !slug.startsWith(`${category}-`)) {
+    slug = `${category}-${slug}`;
+  }
+  return slug;
+}
+
+function parsePostFile(filePath: string): Post | null {
   const fileName = path.basename(filePath);
-  const relativePath = path.relative(postsDir, filePath);
+  const fileNameSlug = fileName.replace(/\.(md|tex)$/, "");
   const category = getCategoryFromPath(filePath);
 
   try {
     const raw = fs.readFileSync(filePath, "utf-8");
     const isTex = filePath.endsWith(".tex");
-
-    let data: any = {};
-    let content = "";
-    let format: "md" | "tex" = "md";
+    let data: Frontmatter;
+    let content: string;
 
     if (isTex) {
-      const parsed = parseTexFile(raw, filePath.replace(/\.tex$/, ""));
-      data = { title: parsed.title, date: parsed.date, tags: parsed.tags, description: parsed.description, published: parsed.published };
+      const parsed = parseTexFile(raw, fileNameSlug);
+      data = parsed;
       content = parsed.content;
-      format = "tex";
     } else {
       const parsed = matter(raw);
-      data = parsed.data;
+      data = parsed.data as Frontmatter;
       content = parsed.content;
-      format = "md";
     }
 
-    const slug = relativePath.replace(/\.(md|tex)$/, "").replace(/\//g, "-");
-
     return {
-      slug,
-      title: data.title || fileName,
-      date: data.date || "2026-01-01",
-      tags: data.tags || [],
+      slug: computeSlug(fileNameSlug, data, category),
+      originalSlug: getString(data, "slug", fileNameSlug),
+      title: getString(data, "title", fileNameSlug),
+      date: getString(data, "date", "2026-01-01"),
+      tags: getTags(data),
       published: data.published !== false,
-      description: data.description || "",
-      cover: data.cover,
+      description: getString(data, "description", ""),
+      cover: getOptionalString(data, "cover"),
+      content,
+      format: isTex ? "tex" : "md",
       category,
-      format,
     };
-  } catch (e) {
+  } catch (error) {
+    const relativePath = path.relative(postsDir, filePath);
+    const reason = error instanceof Error ? error.message : "unknown parse error";
+    console.warn(`Skipping blog post ${relativePath}: ${reason}`);
     return null;
   }
 }
 
-export function getAllPosts(showAll = false): Omit<Post, "content">[] {
+function toSummary(post: Post): PostSummary {
+  return {
+    slug: post.slug,
+    originalSlug: post.originalSlug,
+    title: post.title,
+    date: post.date,
+    tags: post.tags,
+    published: post.published,
+    description: post.description,
+    cover: post.cover,
+    format: post.format,
+    category: post.category,
+  };
+}
+
+export function getAllPosts(showAll = false): PostSummary[] {
   if (!fs.existsSync(postsDir)) return [];
 
-  const files = getAllFiles(postsDir);
-  const posts: Omit<Post, "content">[] = [];
-
-  for (const { filePath } of files) {
-    const post = parsePostFile(filePath);
-    if (post && (showAll || post.published)) {
-      posts.push(post);
-    }
-  }
-
-  return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  return getAllFiles(postsDir)
+    .map(parsePostFile)
+    .filter((post): post is Post => post !== null && (showAll || post.published))
+    .map(toSummary)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
 export function getPostBySlug(slug: string): Post | null {
   if (!fs.existsSync(postsDir)) return null;
 
-  const files = getAllFiles(postsDir);
-  for (const { filePath, relativePath } of files) {
-    const s = relativePath.replace(/\.(md|tex)$/, "").replace(/\//g, "-");
-    if (s === slug) {
-      const meta = parsePostFile(filePath);
-      if (!meta) continue;
-
-      const isTex = filePath.endsWith(".tex");
-      const raw = fs.readFileSync(filePath, "utf-8");
-      let data: any = {};
-      let content = "";
-
-      if (isTex) {
-        const parsed = parseTexFile(raw, slug);
-        data = { title: parsed.title, date: parsed.date, tags: parsed.tags, description: parsed.description, published: parsed.published };
-        content = parsed.content;
-      } else {
-        const parsed = matter(raw);
-        data = parsed.data;
-        content = parsed.content;
-      }
-
-      return {
-        ...meta,
-        title: data.title || meta.title,
-        date: data.date || meta.date,
-        tags: data.tags || meta.tags,
-        description: data.description || meta.description,
-        content,
-      };
-    }
+  for (const filePath of getAllFiles(postsDir)) {
+    const post = parsePostFile(filePath);
+    if (post?.slug === slug && post.published) return post;
   }
   return null;
 }
 
 export function getAllTags(): string[] {
-  const posts = getAllPosts();
   const tagSet = new Set<string>();
-  posts.forEach((p) => p.tags.forEach((t) => tagSet.add(t)));
+  getAllPosts().forEach((post) => post.tags.forEach((tag) => tagSet.add(tag)));
   return Array.from(tagSet).sort();
 }
 
-export function getPostsByCategory(category: string): Omit<Post, "content">[] {
-  return getAllPosts().filter(p => p.category === category);
+export function getPostsByCategory(category: string): PostSummary[] {
+  return getAllPosts().filter((post) => post.category === category);
 }
