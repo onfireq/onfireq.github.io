@@ -45,7 +45,7 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: 0.15 }}
           className="text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6"
         >
-          你好，我是
+          Hi，我是
           <br />
           <span className="text-gradient">onfireq</span>
         </motion.h1>
@@ -56,8 +56,7 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="text-gray-400 text-base md:text-lg max-w-xl mb-10 leading-relaxed"
         >
-          硬件 &amp; 软件 全栈工程师。
-          热衷于用现代技术构建优雅的数字体验。
+          这里记录我的项目、技术笔记和踩坑过程。
         </motion.p>
       </div>
 
