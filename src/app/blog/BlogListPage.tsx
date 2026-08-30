@@ -106,17 +106,24 @@ export default function BlogListPage({ localPosts }: { localPosts: PostSummary[]
 
           {showPosts ? (
             <section aria-labelledby="post-list-heading">
+              {activeCategory && (
+                <div className="sticky top-20 z-30 mb-4 w-fit py-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSearch("");
+                      setCategory("");
+                    }}
+                    aria-label="返回全部博客分类"
+                    className="glass flex min-h-11 items-center gap-2 px-4 py-2 text-sm font-medium text-gray-300 shadow-lg shadow-black/20 transition-colors hover:border-brand-purple/30 hover:text-brand-cyan"
+                  >
+                    <HiArrowLeft size={16} aria-hidden="true" /> 返回全部分类
+                  </button>
+                </div>
+              )}
+
               <div className="mb-6 flex items-start justify-between gap-4">
                 <div>
-                  {activeCategory && (
-                    <button
-                      type="button"
-                      onClick={() => setCategory("")}
-                      className="mb-4 flex items-center gap-2 text-sm text-gray-400 transition-colors hover:text-white"
-                    >
-                      <HiArrowLeft size={16} aria-hidden="true" /> 返回全部分类
-                    </button>
-                  )}
                   <h2 id="post-list-heading" className="text-2xl font-bold">
                     {currentCategory?.name || "搜索结果"}
                   </h2>
