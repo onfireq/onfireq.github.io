@@ -10,7 +10,7 @@ const siteDescription = "onfireq的个人网站";
 export const metadata: Metadata = {
   metadataBase: siteUrl,
   title: {
-    default: "OnfireQ | 偏振控制 · FPGA · 全栈开发",
+    default: "OnfireQ",
     template: "%s | OnfireQ",
   },
   description: siteDescription,
