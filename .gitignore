@@ -6,6 +6,8 @@ out/
 .dev.vars
 .wrangler/
 *.tsbuildinfo
+__pycache__/
+*.py[cod]
 .elog.env
 sync_wolai.py
 test_wolai.py

@@ -8,6 +8,9 @@ import {
 
 const CACHE_KEY = "zhihu:feed:v1";
 const UPSTREAM_TIMEOUT_MS = 10_000;
+const MIN_RETAIN_RATIO = 0.5;
+const ZHIHU_API_ORIGIN = "https://developer.zhihu.com";
+const ALLOWED_ZHIHU_API_PATHS = new Set(["/api/v1/user/contents"]);
 
 const optionalText = z
   .string()
@@ -125,8 +128,27 @@ async function createEtag(value: string): Promise<string> {
   return `"${hex}"`;
 }
 
-async function fetchZhihuFeed(env: Env): Promise<ZhihuFeed> {
-  const url = new URL(env.ZHIHU_API_URL);
+export function createZhihuApiUrl(configuredUrl: string): URL {
+  let url: URL;
+  try {
+    url = new URL(configuredUrl);
+  } catch {
+    throw new Error("Zhihu API URL is invalid");
+  }
+
+  if (
+    url.origin !== ZHIHU_API_ORIGIN ||
+    url.protocol !== "https:" ||
+    url.hostname !== "developer.zhihu.com" ||
+    url.port !== "" ||
+    url.username !== "" ||
+    url.password !== "" ||
+    !ALLOWED_ZHIHU_API_PATHS.has(url.pathname) ||
+    url.hash !== ""
+  ) {
+    throw new Error("Zhihu API URL is not an allowed official endpoint");
+  }
+
   url.search = new URLSearchParams({
     ContentType: "all",
     SortField: "ts",
@@ -134,14 +156,24 @@ async function fetchZhihuFeed(env: Env): Promise<ZhihuFeed> {
     Offset: "0",
     Limit: "50",
   }).toString();
+  return url;
+}
+
+async function fetchZhihuFeed(env: Env): Promise<ZhihuFeed> {
+  const url = createZhihuApiUrl(env.ZHIHU_API_URL);
+  const accessSecret = env.ZHIHU_ACCESS_SECRET.trim();
+  if (!accessSecret) {
+    throw new Error("Zhihu access secret is not configured");
+  }
 
   const response = await fetch(url, {
     headers: {
       Accept: "application/json",
-      Authorization: `Bearer ${env.ZHIHU_ACCESS_SECRET.trim()}`,
+      Authorization: `Bearer ${accessSecret}`,
       "Content-Type": "application/json",
       "X-Request-Timestamp": String(Math.floor(Date.now() / 1000)),
     },
+    redirect: "error",
     signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
   });
 
@@ -191,8 +223,37 @@ async function fetchZhihuFeed(env: Env): Promise<ZhihuFeed> {
   });
 }
 
+async function getPreviousContentCount(env: Env): Promise<number | null> {
+  const cached = await env.ZHIHU_CACHE.get(CACHE_KEY, { type: "text", cacheTtl: 60 });
+  if (!cached) return null;
+
+  try {
+    const parsed = zhihuFeedSchema.safeParse(JSON.parse(cached));
+    return parsed.success ? parsed.data.contents.length : null;
+  } catch {
+    return null;
+  }
+}
+
+export function assertSafeFeedUpdate(nextCount: number, previousCount: number | null): void {
+  if (!Number.isInteger(nextCount) || nextCount <= 0) {
+    throw new Error("Refusing to replace the Zhihu feed with an empty snapshot");
+  }
+
+  if (previousCount === null || previousCount <= 0) return;
+
+  const minimumCount = Math.ceil(previousCount * MIN_RETAIN_RATIO);
+  if (nextCount < minimumCount) {
+    throw new Error(
+      `Refusing a suspicious Zhihu feed drop (${previousCount} to ${nextCount}; minimum ${minimumCount})`,
+    );
+  }
+}
+
 async function syncZhihuFeed(env: Env): Promise<ZhihuFeed> {
   const feed = await fetchZhihuFeed(env);
+  const previousCount = await getPreviousContentCount(env);
+  assertSafeFeedUpdate(feed.contents.length, previousCount);
   const serialized = JSON.stringify(feed);
   const metadata: CacheMetadata = {
     etag: await createEtag(serialized),

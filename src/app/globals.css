@@ -38,22 +38,22 @@
   }
 
   /* Light mode overrides */
-  html[data-theme="light"] body nav {
+  html[data-theme="light"] body nav[aria-label="主导航"] {
     background: rgba(255, 255, 255, 0.75);
     border-bottom-color: rgba(0, 0, 0, 0.06);
     backdrop-filter: blur(20px);
   }
 
-  html[data-theme="light"] body nav a {
+  html[data-theme="light"] body nav[aria-label="主导航"] a {
     color: #475569;
   }
 
-  html[data-theme="light"] body nav a:hover {
+  html[data-theme="light"] body nav[aria-label="主导航"] a:hover {
     color: #6c63ff;
     background: rgba(108, 99, 255, 0.08);
   }
 
-  html[data-theme="light"] body nav a[class*="bg-brand-purple"] {
+  html[data-theme="light"] body nav[aria-label="主导航"] a[class*="bg-brand-purple"] {
     color: #6c63ff;
     background: rgba(108, 99, 255, 0.1);
   }
@@ -151,6 +151,96 @@
 
 @utility glow {
   box-shadow: 0 0 40px rgba(108, 99, 255, 0.15), 0 0 80px rgba(0, 217, 255, 0.08);
+}
+
+/* Readable semantic accents in both themes. */
+.blog-link,
+.zhihu-link {
+  color: #67e8f9;
+}
+
+.zhihu-brand-text {
+  background: linear-gradient(135deg, #60a5fa, #22d3ee);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.zhihu-filter-active,
+.zhihu-mobile-trigger {
+  background: linear-gradient(135deg, #1d4ed8, #0e7490);
+  color: #ffffff;
+}
+
+html[data-theme="light"] body .blog-link,
+html[data-theme="light"] body .zhihu-link,
+html[data-theme="light"] body .text-brand-cyan {
+  color: #075985;
+}
+
+html[data-theme="light"] body .text-brand-purple {
+  color: #5b21b6;
+}
+
+html[data-theme="light"] body .text-gradient {
+  background: linear-gradient(135deg, #5b21b6, #075985);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+html[data-theme="light"] body .zhihu-brand-text {
+  background: linear-gradient(135deg, #1d4ed8, #0e7490);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+html[data-theme="light"] body .zhihu-filter-active,
+html[data-theme="light"] body .zhihu-mobile-trigger {
+  background: linear-gradient(135deg, #1d4ed8, #0e7490);
+  color: #ffffff;
+}
+
+html[data-theme="light"] body .zhihu-panel .text-blue-400 { color: #1d4ed8; }
+html[data-theme="light"] body .zhihu-panel .text-cyan-400 { color: #0e7490; }
+html[data-theme="light"] body .zhihu-panel .text-pink-400 { color: #be185d; }
+html[data-theme="light"] body .zhihu-panel .text-purple-400 { color: #7e22ce; }
+html[data-theme="light"] body .zhihu-panel .text-red-400 { color: #b91c1c; }
+html[data-theme="light"] body .zhihu-panel .text-yellow-400 { color: #854d0e; }
+
+html[data-theme="light"] :where(a, button, input, textarea, select):focus-visible {
+  outline-color: #5b21b6;
+}
+
+.blog-return-link:hover {
+  color: #67e8f9;
+}
+
+html[data-theme="light"] body .blog-return-link:hover {
+  color: #075985;
+}
+
+/* Keep long display formulae inside the reading column on narrow screens. */
+.blog-reader .katex-display {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 0.25rem 0.5rem;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.blog-reader .katex-display::-webkit-scrollbar {
+  height: 6px;
+}
+
+@media (max-width: 640px) {
+  .blog-reader .katex-display {
+    margin-block: 0.75rem;
+    font-size: 0.94em;
+  }
 }
 
 /* 隐藏知乎侧边栏滚动条 */

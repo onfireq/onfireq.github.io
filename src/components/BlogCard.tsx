@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { HiCalendar, HiFolder } from "react-icons/hi";
 import { getCategoryName } from "@/lib/categories";
 
@@ -15,15 +14,11 @@ interface BlogCardProps {
   category?: string;
 }
 
-export default function BlogCard({ slug, title, date, tags, description, index, category }: BlogCardProps) {
+export default function BlogCard({ slug, title, date, tags, description, category }: BlogCardProps) {
   return (
     <Link href={`/blog/${slug}`} className="block">
-      <motion.article
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: index * 0.06, duration: 0.4 }}
-        whileHover={{ y: -4 }}
-        className="glass p-6 transition-colors hover:border-brand-purple/30"
+      <article
+        className="glass p-6 transition-[border-color,transform] hover:-translate-y-1 hover:border-brand-purple/30 motion-reduce:transform-none"
       >
         <h3 className="text-lg font-semibold mb-2 text-gradient">{title}</h3>
         <p className="text-sm text-gray-400 mb-4 line-clamp-2">
@@ -53,7 +48,7 @@ export default function BlogCard({ slug, title, date, tags, description, index, 
             ))}
           </ul>
         </div>
-      </motion.article>
+      </article>
     </Link>
   );
 }

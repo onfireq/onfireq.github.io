@@ -10,10 +10,15 @@
     "typecheck": "tsc --noEmit --incremental false",
     "worker:types": "wrangler types workers/zhihu-sync/worker-configuration.d.ts --include-runtime false",
     "worker:typecheck": "tsc -p workers/zhihu-sync/tsconfig.json",
+    "worker:test:typecheck": "tsc -p workers/zhihu-sync/test/tsconfig.json",
+    "worker:test": "npm run worker:test:typecheck && vitest run --config workers/zhihu-sync/vitest.config.mts",
     "worker:check": "npm run worker:types && npm run worker:typecheck && wrangler deploy --dry-run",
     "worker:startup": "wrangler check startup",
     "worker:dev": "wrangler dev",
-    "check": "npm run lint && npm run typecheck && npm run worker:check && npm run build",
+    "snapshot:check": "python sync_zhihu.py --check",
+    "snapshot:test": "python workers/zhihu-sync/test/test_sync_zhihu.py",
+    "check": "npm run lint && npm run typecheck && npm run snapshot:check && npm run snapshot:test && npm run worker:check && npm run worker:test:typecheck && npm run build",
+    "check:ci": "npm run check && npm run worker:test",
     "elog:sync": "elog sync -e .elog.env",
     "blog:publish": "npm run elog:sync && git add content/blog && git commit -m '📝 同步 wolai 博客' && git push"
   },
@@ -40,6 +45,7 @@
     "zod": "^4.5.4"
   },
   "devDependencies": {
+    "@cloudflare/vitest-plugin": "^1.1.2",
     "@cloudflare/workers-types": "^5.20260831.1",
     "@elog/cli": "^1.0.0-beta.2",
     "@tailwindcss/postcss": "^4",
@@ -50,6 +56,7 @@
     "eslint-config-next": "^16.3.3",
     "tailwindcss": "^4",
     "typescript": "^5",
+    "vitest": "^4.1.11",
     "wrangler": "^4.127.1"
   }
 }

@@ -1,5 +1,7 @@
 "use client";
 
+import { Children, isValidElement, useEffect, useState, type ReactNode } from "react";
+import { HiCheck, HiClipboardCopy, HiExclamation } from "react-icons/hi";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
@@ -9,6 +11,124 @@ import rehypeSlug from "rehype-slug";
 import { prepareBlogContent, type BlogFormat } from "@/lib/blog-content";
 import rehypeCallouts from "@/lib/rehype-callouts";
 
+type CopyStatus = "idle" | "copied" | "error";
+
+const languageLabels: Record<string, string> = {
+  bash: "Bash",
+  c: "C",
+  console: "终端",
+  cpp: "C++",
+  css: "CSS",
+  html: "HTML",
+  javascript: "JavaScript",
+  js: "JavaScript",
+  json: "JSON",
+  jsx: "JSX",
+  markdown: "Markdown",
+  md: "Markdown",
+  powershell: "PowerShell",
+  plaintext: "文本",
+  python: "Python",
+  py: "Python",
+  sh: "Shell",
+  shell: "Shell",
+  terminal: "终端",
+  text: "文本",
+  ts: "TypeScript",
+  tsx: "TSX",
+  typescript: "TypeScript",
+  verilog: "Verilog",
+  yaml: "YAML",
+  yml: "YAML",
+};
+
+const displayMathOpenMarker = "\uE000BLOG_DISPLAY_MATH_OPEN\uE000";
+const displayMathCloseMarker = "\uE000BLOG_DISPLAY_MATH_CLOSE\uE000";
+
+function prepareRenderedContent(content: string, format: BlogFormat): string {
+  if (format !== "tex") return prepareBlogContent(content, format);
+
+  const markedContent = content
+    .replace(/\\\[/g, displayMathOpenMarker)
+    .replace(/\\\]/g, displayMathCloseMarker);
+
+  return prepareBlogContent(markedContent, format)
+    .replaceAll(displayMathOpenMarker, () => "$$")
+    .replaceAll(displayMathCloseMarker, () => "$$");
+}
+
+function getTextContent(node: ReactNode): string {
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(getTextContent).join("");
+  if (isValidElement<{ children?: ReactNode }>(node)) return getTextContent(node.props.children);
+  return "";
+}
+
+function getCodeLanguage(children: ReactNode): string {
+  const codeElement = Children.toArray(children).find((child) =>
+    isValidElement<{ className?: string }>(child),
+  );
+  if (!isValidElement<{ className?: string }>(codeElement)) return "";
+
+  return codeElement.props.className?.match(/(?:^|\s)language-([\w+-]+)/)?.[1].toLowerCase() ?? "";
+}
+
+function CodeBlock({ children }: { children: ReactNode }) {
+  const [copyStatus, setCopyStatus] = useState<CopyStatus>("idle");
+  const language = getCodeLanguage(children);
+  const languageLabel = languageLabels[language] ?? (language ? language.toUpperCase() : "代码");
+  const code = getTextContent(children).replace(/\n$/, "");
+
+  useEffect(() => {
+    if (copyStatus === "idle") return;
+    const timeout = window.setTimeout(() => setCopyStatus("idle"), 2_000);
+    return () => window.clearTimeout(timeout);
+  }, [copyStatus]);
+
+  const copyCode = async () => {
+    try {
+      if (!navigator.clipboard) throw new Error("Clipboard API is unavailable");
+      await navigator.clipboard.writeText(code);
+      setCopyStatus("copied");
+    } catch {
+      setCopyStatus("error");
+    }
+  };
+
+  const statusLabel =
+    copyStatus === "copied" ? "已复制" : copyStatus === "error" ? "复制失败" : "复制";
+
+  return (
+    <div className="blog-code-block mb-4 overflow-hidden rounded-xl border border-white/10 bg-surface-950">
+      <div className="flex min-h-10 items-center justify-between gap-3 border-b border-white/10 bg-white/[0.04] px-3">
+        <span className="text-xs font-medium text-gray-400">{languageLabel}</span>
+        <button
+          type="button"
+          onClick={copyCode}
+          aria-label={`${statusLabel}${languageLabel}代码`}
+          className="inline-flex min-h-9 items-center gap-1.5 rounded-lg px-2.5 text-xs text-gray-300 transition-colors hover:bg-white/10 hover:text-white"
+        >
+          {copyStatus === "copied" ? (
+            <HiCheck size={15} aria-hidden="true" />
+          ) : copyStatus === "error" ? (
+            <HiExclamation size={15} aria-hidden="true" />
+          ) : (
+            <HiClipboardCopy size={15} aria-hidden="true" />
+          )}
+          <span aria-live="polite">{statusLabel}</span>
+        </button>
+      </div>
+      <pre
+        tabIndex={0}
+        aria-label={`${languageLabel}代码块，可横向滚动`}
+        className="overflow-x-auto p-4 text-sm"
+      >
+        {children}
+      </pre>
+    </div>
+  );
+}
+
 export default function BlogContent({
   content,
   format = "md",
@@ -16,10 +136,10 @@ export default function BlogContent({
   content: string;
   format?: BlogFormat;
 }) {
-  const preparedContent = prepareBlogContent(content, format);
+  const preparedContent = prepareRenderedContent(content, format);
 
   return (
-    <div className="prose prose-invert prose-lg max-w-none">
+    <div className="blog-reader prose prose-invert prose-lg max-w-none">
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkMath]}
         rehypePlugins={[rehypeSlug, rehypeCallouts, rehypeKatex, rehypeHighlight]}
@@ -48,19 +168,20 @@ export default function BlogContent({
             return (
               <a
                 href={href}
-                className="text-brand-cyan hover:underline"
+                className="blog-link font-medium underline decoration-current/45 underline-offset-4 transition-colors hover:decoration-current"
                 target={external ? "_blank" : undefined}
                 rel={external ? "noopener noreferrer" : undefined}
               >
                 {children}
+                {external && <span className="sr-only">（在新标签页打开）</span>}
               </a>
             );
           },
           ul: ({ children }) => (
-            <ul className="list-disc list-inside text-gray-300 mb-4 space-y-1">{children}</ul>
+            <ul className="mb-4 list-outside list-disc space-y-1 pl-6 text-gray-300">{children}</ul>
           ),
           ol: ({ children }) => (
-            <ol className="list-decimal list-inside text-gray-300 mb-4 space-y-1">{children}</ol>
+            <ol className="mb-4 list-outside list-decimal space-y-1 pl-6 text-gray-300">{children}</ol>
           ),
           li: ({ children }) => <li className="text-gray-300">{children}</li>,
           blockquote: ({ children, node }) => {
@@ -110,18 +231,21 @@ export default function BlogContent({
               </code>
             );
           },
-          pre: ({ children }) => (
-            <pre className="bg-surface-950 border border-white/10 rounded-xl p-4 overflow-x-auto mb-4 text-sm">
-              {children}
-            </pre>
-          ),
+          pre: ({ children }) => <CodeBlock>{children}</CodeBlock>,
           table: ({ children }) => (
-            <div className="overflow-x-auto mb-4">
+            <div
+              role="region"
+              aria-label="数据表，可横向滚动"
+              tabIndex={0}
+              className="mb-4 overflow-x-auto rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-cyan"
+            >
               <table className="w-full text-sm border-collapse">{children}</table>
             </div>
           ),
           th: ({ children }) => (
-            <th className="border border-white/10 px-4 py-2 text-left bg-white/5 font-medium">{children}</th>
+            <th scope="col" className="border border-white/10 px-4 py-2 text-left bg-white/5 font-medium">
+              {children}
+            </th>
           ),
           td: ({ children }) => <td className="border border-white/10 px-4 py-2 text-gray-300">{children}</td>,
           hr: () => <hr className="border-white/10 my-8" />,

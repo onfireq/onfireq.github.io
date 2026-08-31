@@ -74,6 +74,10 @@ jobs:
         shell: pwsh
         run: python sync_zhihu.py
 
+      - name: Validate generated snapshot
+        shell: pwsh
+        run: python sync_zhihu.py --check
+
       - name: Upload generated data
         uses: actions/upload-artifact@v4
         with:
@@ -114,3 +118,11 @@ jobs:
           git commit -m "🤖 自动同步知乎数据 ${timestamp}"
           git pull --rebase origin main
           git push origin HEAD:main
+
+  deploy-pages:
+    needs: commit
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/deploy.yml
