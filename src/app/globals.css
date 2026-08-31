@@ -47,6 +47,7 @@
 
   body {
     background: var(--page-background);
+    background-repeat: no-repeat;
     color: var(--page-foreground);
     font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
     -webkit-font-smoothing: antialiased;

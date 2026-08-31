@@ -80,7 +80,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="zh-CN" suppressHydrationWarning className="h-full">
+    <html lang="zh-CN" suppressHydrationWarning className="min-h-full">
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <script
@@ -90,7 +90,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-sans h-full">
+      <body className="font-sans min-h-full">
         <a href="#main-content" className="skip-link">
           跳至主要内容
         </a>
