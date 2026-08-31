@@ -1,7 +1,11 @@
 import { env } from "cloudflare:workers";
 import { beforeEach, describe, expect, it } from "vitest";
 import type { ZhihuFeed } from "../../../src/lib/zhihu-feed";
-import worker, { assertSafeFeedUpdate, createZhihuApiUrl } from "../src/index";
+import worker, {
+  assertSafeFeedUpdate,
+  createZhihuApiUrl,
+  ifNoneMatchMatches,
+} from "../src/index";
 
 declare module "cloudflare:workers" {
   // Cloudflare's test runtime uses interface augmentation to expose generated Env bindings.
@@ -97,6 +101,21 @@ describe("last-known-good feed protection", () => {
   });
 });
 
+describe("conditional request ETags", () => {
+  it("uses weak comparison for Cloudflare-compressed responses", () => {
+    expect(ifNoneMatchMatches('W/"test-etag"', '"test-etag"')).toBe(true);
+    expect(ifNoneMatchMatches('"test-etag"', 'W/"test-etag"')).toBe(true);
+    expect(ifNoneMatchMatches('"other", W/"test-etag"', '"test-etag"')).toBe(true);
+    expect(ifNoneMatchMatches('W/"value,with,commas"', '"value,with,commas"')).toBe(true);
+    expect(ifNoneMatchMatches("*", '"test-etag"')).toBe(true);
+    expect(ifNoneMatchMatches('W/"other"', '"test-etag"')).toBe(false);
+    expect(ifNoneMatchMatches('w/"test-etag"', '"test-etag"')).toBe(false);
+    expect(ifNoneMatchMatches('*, "test-etag"', '"test-etag"')).toBe(false);
+    expect(ifNoneMatchMatches('W/"test-etag', '"test-etag"')).toBe(false);
+    expect(ifNoneMatchMatches('\u00a0"test-etag"\u00a0', '"test-etag"')).toBe(false);
+  });
+});
+
 describe("public feed endpoint", () => {
   it("returns 503 without a last-known-good snapshot", async () => {
     const request = new IncomingRequest("https://worker.example/api/zhihu");
@@ -124,6 +143,17 @@ describe("public feed endpoint", () => {
     await seedFeed();
     const request = new IncomingRequest("https://worker.example/api/zhihu", {
       headers: { "If-None-Match": '"test-etag"' },
+    });
+    const response = await worker.fetch(request, env);
+
+    expect(response.status).toBe(304);
+    expect(await response.text()).toBe("");
+  });
+
+  it("returns 304 when Cloudflare rewrites the ETag as weak", async () => {
+    await seedFeed();
+    const request = new IncomingRequest("https://worker.example/api/zhihu", {
+      headers: { "If-None-Match": 'W/"test-etag"' },
     });
     const response = await worker.fetch(request, env);
 

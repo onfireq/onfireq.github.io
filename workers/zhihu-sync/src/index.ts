@@ -128,6 +128,32 @@ async function createEtag(value: string): Promise<string> {
   return `"${hex}"`;
 }
 
+const ENTITY_TAG_RE = /^(?:W\/)?("[!#-\x7e\x80-\xff]*")$/;
+const ENTITY_TAG_LIST_RE = /^(?:W\/)?"[!#-\x7e\x80-\xff]*"(?:[ \t]*,[ \t]*(?:W\/)?"[!#-\x7e\x80-\xff]*")*$/;
+const ENTITY_TAG_MEMBER_RE = /(?:W\/)?("[!#-\x7e\x80-\xff]*")/g;
+
+function trimOptionalWhitespace(value: string): string {
+  return value.replace(/^[ \t]+|[ \t]+$/g, "");
+}
+
+function opaqueTag(value: string): string | null {
+  return ENTITY_TAG_RE.exec(trimOptionalWhitespace(value))?.[1] ?? null;
+}
+
+export function ifNoneMatchMatches(headerValue: string | null, currentEtag: string): boolean {
+  if (headerValue === null) return false;
+
+  const value = trimOptionalWhitespace(headerValue);
+  if (value === "*") return true;
+
+  const currentOpaqueTag = opaqueTag(currentEtag);
+  if (currentOpaqueTag === null || !ENTITY_TAG_LIST_RE.test(value)) return false;
+
+  return Array.from(value.matchAll(ENTITY_TAG_MEMBER_RE), (match) => match[1]).includes(
+    currentOpaqueTag,
+  );
+}
+
 export function createZhihuApiUrl(configuredUrl: string): URL {
   let url: URL;
   try {
@@ -328,7 +354,7 @@ async function serveFeed(request: Request, env: Env, origin: string | null): Pro
   headers.set("ETag", result.metadata.etag);
   headers.set("X-Zhihu-Updated-At", result.metadata.updatedAt);
 
-  if (request.headers.get("If-None-Match") === result.metadata.etag) {
+  if (ifNoneMatchMatches(request.headers.get("If-None-Match"), result.metadata.etag)) {
     return new Response(null, { status: 304, headers });
   }
 
