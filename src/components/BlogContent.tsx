@@ -9,13 +9,21 @@ import rehypeHighlight from "rehype-highlight";
 import rehypeKatex from "rehype-katex";
 import rehypeSlug from "rehype-slug";
 import { prepareBlogContent, type BlogFormat } from "@/lib/blog-content";
+import { blogCodeLanguageAliases, blogCodeLanguages } from "@/lib/code-highlighting";
 import rehypeCallouts from "@/lib/rehype-callouts";
 
 type CopyStatus = "idle" | "copied" | "error";
 
 const languageLabels: Record<string, string> = {
   bash: "Bash",
+  arm: "ARM Assembly",
+  armasm: "ARM Assembly",
+  asm: "Assembly",
+  avr: "AVR Assembly",
+  avrasm: "AVR Assembly",
   c: "C",
+  cmake: "CMake",
+  "cmake.in": "CMake",
   console: "终端",
   cpp: "C++",
   css: "CSS",
@@ -26,18 +34,38 @@ const languageLabels: Record<string, string> = {
   jsx: "JSX",
   markdown: "Markdown",
   md: "Markdown",
+  m: "MATLAB",
+  matlab: "MATLAB",
+  nasm: "x86 Assembly",
+  ps: "PowerShell",
+  ps1: "PowerShell",
   powershell: "PowerShell",
+  pwsh: "PowerShell",
   plaintext: "文本",
   python: "Python",
   py: "Python",
   sh: "Shell",
   shell: "Shell",
+  shellsession: "终端",
   terminal: "终端",
   text: "文本",
+  tcl: "Tcl",
+  tex: "LaTeX",
+  tk: "Tcl/Tk",
   ts: "TypeScript",
   tsx: "TSX",
   typescript: "TypeScript",
+  systemverilog: "SystemVerilog",
+  sv: "SystemVerilog",
+  svh: "SystemVerilog",
+  sdc: "SDC / Tcl",
+  qsf: "QSF / Tcl",
+  v: "Verilog",
   verilog: "Verilog",
+  vhd: "VHDL",
+  vhdl: "VHDL",
+  x86asm: "x86 Assembly",
+  xdc: "XDC / Tcl",
   yaml: "YAML",
   yml: "YAML",
 };
@@ -142,7 +170,19 @@ export default function BlogContent({
     <div className="blog-reader prose prose-invert prose-lg max-w-none">
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkMath]}
-        rehypePlugins={[rehypeSlug, rehypeCallouts, rehypeKatex, rehypeHighlight]}
+        rehypePlugins={[
+          rehypeSlug,
+          rehypeCallouts,
+          rehypeKatex,
+          [
+            rehypeHighlight,
+            {
+              languages: blogCodeLanguages,
+              aliases: blogCodeLanguageAliases,
+              detect: false,
+            },
+          ],
+        ]}
         components={{
           h1: ({ children, id }) => (
             <h1 id={id} className="scroll-mt-24 text-3xl font-bold mt-8 mb-4 text-gradient">
