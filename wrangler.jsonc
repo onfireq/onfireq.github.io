@@ -1,0 +1,35 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "onfireq-zhihu-sync",
+  "main": "workers/zhihu-sync/src/index.ts",
+  "compatibility_date": "2026-08-31",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "kv_namespaces": [
+    {
+      "binding": "ZHIHU_CACHE",
+      "id": "4f3773fe25ae4b5a885b311424858727"
+    }
+  ],
+  "secrets": {
+    "required": ["ZHIHU_ACCESS_SECRET"]
+  },
+  "vars": {
+    "ALLOWED_ORIGINS": "https://onfireq.github.io,http://localhost:3000,http://127.0.0.1:3000",
+    "FOLLOWER_COUNT": "18",
+    "ZHIHU_API_URL": "https://developer.zhihu.com/api/v1/user/contents"
+  },
+  "triggers": {
+    "crons": ["*/5 * * * *"]
+  },
+  "observability": {
+    "enabled": true,
+    "logs": {
+      "head_sampling_rate": 1
+    },
+    "traces": {
+      "enabled": true,
+      "head_sampling_rate": 0.01
+    }
+  }
+}

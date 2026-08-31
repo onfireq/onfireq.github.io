@@ -8,7 +8,12 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit --incremental false",
-    "check": "npm run lint && npm run typecheck && npm run build",
+    "worker:types": "wrangler types workers/zhihu-sync/worker-configuration.d.ts --include-runtime false",
+    "worker:typecheck": "tsc -p workers/zhihu-sync/tsconfig.json",
+    "worker:check": "npm run worker:types && npm run worker:typecheck && wrangler deploy --dry-run",
+    "worker:startup": "wrangler check startup",
+    "worker:dev": "wrangler dev",
+    "check": "npm run lint && npm run typecheck && npm run worker:check && npm run build",
     "elog:sync": "elog sync -e .elog.env",
     "blog:publish": "npm run elog:sync && git add content/blog && git commit -m '📝 同步 wolai 博客' && git push"
   },
@@ -35,6 +40,7 @@
     "zod": "^4.5.4"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260831.1",
     "@elog/cli": "^1.0.0-beta.2",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
@@ -43,6 +49,7 @@
     "eslint": "^9",
     "eslint-config-next": "^16.3.3",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.127.1"
   }
 }

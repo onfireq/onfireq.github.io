@@ -2,7 +2,7 @@ name: Sync Zhihu Data
 
 on:
   schedule:
-    # 每天 04:00 UTC（北京时间 12:00）
+    # 每天生成一次静态快照，Cloudflare Worker 负责更高频的动态同步。
     - cron: "0 4 * * *"
   workflow_dispatch:
 
@@ -69,8 +69,6 @@ jobs:
           }
 
           Invoke-ZhihuCli -Arguments @("me", "contents", "--type", "all", "--limit", "50") -OutputFile "zhihu_raw.json" -ErrorFile "zhihu_raw.err"
-          Invoke-ZhihuCli -Arguments @("me", "favorites", "recent", "--limit", "50") -OutputFile "zhihu_favorites.json" -ErrorFile "zhihu_favorites.err"
-          Invoke-ZhihuCli -Arguments @("me", "followees", "--limit", "50") -OutputFile "zhihu_followees.json" -ErrorFile "zhihu_followees.err"
 
       - name: Generate site data
         shell: pwsh
@@ -82,7 +80,6 @@ jobs:
           name: zhihu-data
           path: |
             src/data/zhihu.ts
-            public/zhihu.json
           if-no-files-found: error
 
   commit:
@@ -99,14 +96,14 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: zhihu-data
-          path: .
+          path: src/data
 
       - name: Commit and push
         shell: bash
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add src/data/zhihu.ts public/zhihu.json
+          git add src/data/zhihu.ts
 
           if git diff --staged --quiet; then
             echo "No Zhihu data changes to commit."

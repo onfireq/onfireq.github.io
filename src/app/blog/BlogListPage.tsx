@@ -9,7 +9,7 @@ import BlogCard from "@/components/BlogCard";
 import ZhihuSidebar from "@/components/ZhihuSidebar";
 import { CATEGORIES } from "@/lib/categories";
 import type { Post } from "@/lib/blog";
-import type { ZhihuContent } from "@/data/zhihu";
+import type { ZhihuContent } from "@/lib/zhihu-feed";
 
 type FilterType = "all" | ZhihuContent["type"];
 type PostSummary = Omit<Post, "content">;

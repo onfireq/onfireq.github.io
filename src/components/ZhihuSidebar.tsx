@@ -1,15 +1,29 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useMemo, useEffect } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { HiHeart, HiStar, HiArrowUp, HiUserAdd, HiSparkles } from "react-icons/hi";
-import { zhihuContents, zhihuStats, type ZhihuContent } from "@/data/zhihu";
+import { HiArrowUp, HiChatAlt2, HiSparkles, HiStar, HiUserAdd } from "react-icons/hi";
+import { zhihuContents, zhihuSnapshotUpdatedAt, zhihuStats } from "@/data/zhihu";
+import {
+  zhihuFeedSchema,
+  type ZhihuContent,
+  type ZhihuFeed,
+} from "@/lib/zhihu-feed";
 
 interface ZhihuSidebarProps {
   activeFilter: "all" | ZhihuContent["type"];
   onFilterChange: (type: "all" | ZhihuContent["type"]) => void;
 }
+
+type SyncMode = "snapshot" | "live" | "stale";
+
+const FEED_URL =
+  process.env.NEXT_PUBLIC_ZHIHU_FEED_URL ??
+  "https://onfireq-zhihu-sync.2467708204.workers.dev/api/zhihu";
+const REFRESH_INTERVAL_MS = 2 * 60 * 1000;
+const REQUEST_TIMEOUT_MS = 5_000;
+const FRESH_FOR_MS = 15 * 60 * 1000;
 
 const filters: Array<{ key: "all" | ZhihuContent["type"]; label: string }> = [
   { key: "all", label: "全部" },
@@ -36,300 +50,369 @@ const typeLabels: Record<ZhihuContent["type"], string> = {
   question: "提问",
 };
 
+const staticFeed = zhihuFeedSchema.parse({
+  schemaVersion: 1,
+  updatedAt: zhihuSnapshotUpdatedAt,
+  profile: {
+    followers: 18,
+    followersSource: "manual",
+  },
+  stats: {
+    answerCount: zhihuStats.answerCount,
+    articleCount: zhihuStats.articleCount,
+    pinCount: zhihuStats.pinCount,
+    videoCount: zhihuStats.videoCount,
+    questionCount: zhihuStats.questionCount,
+    totalLikes: zhihuStats.totalLikes,
+    totalComments: zhihuStats.totalComments,
+    totalFavorites: zhihuStats.totalFavorites,
+    windowSize: zhihuContents.length,
+    totalAvailable: Math.max(zhihuStats.totals, zhihuContents.length),
+  },
+  contents: zhihuContents.map((item) => ({
+    type: item.type,
+    title: item.title,
+    url: item.url,
+    summary: item.summary,
+    likeCount: item.likeCount,
+    commentCount: item.commentCount,
+    favoriteCount: item.favoriteCount,
+    createdAt: toEpochSeconds(item.createdAt),
+  })),
+});
+
+function toEpochSeconds(timestamp: number | string): number {
+  if (typeof timestamp === "number") {
+    return Math.floor(timestamp > 10_000_000_000 ? timestamp / 1000 : timestamp);
+  }
+
+  const numeric = Number(timestamp);
+  if (Number.isFinite(numeric)) {
+    return Math.floor(numeric > 10_000_000_000 ? numeric / 1000 : numeric);
+  }
+
+  const parsed = Date.parse(timestamp);
+  return Number.isFinite(parsed) ? Math.floor(parsed / 1000) : 0;
+}
+
 function timeAgo(timestamp: number | string): string {
-  if (!timestamp) return "";
-  const time = typeof timestamp === 'string' ? new Date(timestamp).getTime() / 1000 : timestamp;
-  const diff = (Date.now() / 1000) - time;
+  const time = toEpochSeconds(timestamp);
+  if (!time) return "";
+
+  const diff = Math.max(0, Date.now() / 1000 - time);
   if (diff < 60) return "刚刚";
   if (diff < 3600) return `${Math.floor(diff / 60)}分钟前`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)}小时前`;
-  if (diff < 2592000) return `${Math.floor(diff / 86400)}天前`;
-  if (diff < 31536000) return `${Math.floor(diff / 2592000)}个月前`;
-  return `${Math.floor(diff / 31536000)}年前`;
+  if (diff < 86_400) return `${Math.floor(diff / 3600)}小时前`;
+  if (diff < 2_592_000) return `${Math.floor(diff / 86_400)}天前`;
+  if (diff < 31_536_000) return `${Math.floor(diff / 2_592_000)}个月前`;
+  return `${Math.floor(diff / 31_536_000)}年前`;
+}
+
+function useZhihuFeed(): { feed: ZhihuFeed; mode: SyncMode } {
+  const [feed, setFeed] = useState<ZhihuFeed>(staticFeed);
+  const [mode, setMode] = useState<SyncMode>("snapshot");
+  const newestTimestamp = useRef(Date.parse(staticFeed.updatedAt));
+
+  useEffect(() => {
+    let disposed = false;
+    let inFlight = false;
+    let activeController: AbortController | null = null;
+    const desktopQuery = window.matchMedia("(min-width: 64rem)");
+
+    const refresh = async () => {
+      if (
+        disposed ||
+        inFlight ||
+        !desktopQuery.matches ||
+        document.visibilityState === "hidden"
+      ) {
+        return;
+      }
+
+      inFlight = true;
+      const controller = new AbortController();
+      activeController = controller;
+      const timeout = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+      try {
+        const response = await fetch(FEED_URL, {
+          headers: { Accept: "application/json" },
+          signal: controller.signal,
+        });
+        if (!response.ok) throw new Error(`Zhihu feed returned ${response.status}`);
+
+        const result = zhihuFeedSchema.safeParse(await response.json());
+        if (!result.success) throw new Error("Zhihu feed did not match the expected schema");
+
+        const timestamp = Date.parse(result.data.updatedAt);
+        if (!disposed && timestamp >= newestTimestamp.current) {
+          newestTimestamp.current = timestamp;
+          setFeed(result.data);
+          setMode(Date.now() - timestamp <= FRESH_FOR_MS ? "live" : "stale");
+        }
+      } catch {
+        if (!disposed) {
+          setMode((current) => (current === "live" ? "stale" : current));
+        }
+      } finally {
+        window.clearTimeout(timeout);
+        if (activeController === controller) activeController = null;
+        inFlight = false;
+      }
+    };
+
+    void refresh();
+    const interval = window.setInterval(() => void refresh(), REFRESH_INTERVAL_MS);
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") void refresh();
+    };
+    const handleViewportChange = (event: MediaQueryListEvent) => {
+      if (event.matches) void refresh();
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    desktopQuery.addEventListener("change", handleViewportChange);
+
+    return () => {
+      disposed = true;
+      activeController?.abort();
+      window.clearInterval(interval);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      desktopQuery.removeEventListener("change", handleViewportChange);
+    };
+  }, []);
+
+  return { feed, mode };
 }
 
 export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSidebarProps) {
   const profileUrl = "https://www.zhihu.com/people/bai-ri-meng-you-54-77";
-  const zhihuHome = "https://www.zhihu.com/";
+  const { feed, mode } = useZhihuFeed();
 
-  // 尝试从 public 加载自动抓取的数据
-  const [liveStats, setLiveStats] = useState<{ followers?: number; updated?: string } | null>(null);
-  useEffect(() => {
-    fetch("/zhihu.json", { cache: "no-store" })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (data) setLiveStats({ followers: data.followers, updated: data.updated });
-      })
-      .catch(() => {});
-  }, []);
+  const counts = useMemo(
+    () => ({
+      answer: feed.contents.filter((item) => item.type === "answer").length,
+      article: feed.contents.filter((item) => item.type === "article").length,
+      pin: feed.contents.filter((item) => item.type === "pin").length,
+      video: feed.contents.filter((item) => item.type === "video").length,
+      question: feed.contents.filter((item) => item.type === "question").length,
+    }),
+    [feed.contents],
+  );
 
-  // 从数据中统计
-  const counts = useMemo(() => ({
-    answer: zhihuContents.filter((c) => c.type === "answer").length,
-    article: zhihuContents.filter((c) => c.type === "article").length,
-    pin: zhihuContents.filter((c) => c.type === "pin").length,
-    video: zhihuContents.filter((c) => c.type === "video").length,
-    question: zhihuContents.filter((c) => c.type === "question").length,
-  }), []);
+  const allItems = useMemo(
+    () => [...feed.contents].sort((left, right) => right.createdAt - left.createdAt),
+    [feed.contents],
+  );
 
-  // 显示统计
-  const stats = {
-    answer: zhihuStats?.answerCount || counts.answer,
-    article: zhihuStats?.articleCount || counts.article,
-    pin: zhihuStats?.pinCount || counts.pin,
-    video: zhihuStats?.videoCount || counts.video,
-    question: zhihuStats?.questionCount || counts.question,
-    totalLikes: zhihuStats?.totalLikes ?? 0,
-    totalLoves: zhihuStats?.totalLoves ?? 0,
-    totalFavorites: zhihuStats?.totalFavorites ?? 0,
-    totals: zhihuStats?.totals ?? 0,
-    followers: liveStats?.followers ?? 18,
-  };
+  const filteredItems = useMemo(
+    () =>
+      activeFilter === "all"
+        ? allItems
+        : allItems.filter((item) => item.type === activeFilter),
+    [activeFilter, allItems],
+  );
 
-  const allItems = useMemo(() => {
-    return [...zhihuContents].sort((a, b) => {
-      const aTime = typeof a.createdAt === 'string' ? new Date(a.createdAt).getTime() : a.createdAt;
-      const bTime = typeof b.createdAt === 'string' ? new Date(b.createdAt).getTime() : b.createdAt;
-      return bTime - aTime;
-    });
-  }, []);
-
-  const filteredItems = useMemo(() => {
-    if (activeFilter === "all") return allItems;
-    return allItems.filter((c) => c.type === activeFilter);
-  }, [allItems, activeFilter]);
+  const effectiveMode = mode;
+  const syncLabel =
+    effectiveMode === "live"
+      ? `已同步 · ${timeAgo(feed.updatedAt)}`
+      : effectiveMode === "stale"
+        ? `同步较旧 · ${timeAgo(feed.updatedAt)}`
+        : `静态快照 · ${timeAgo(feed.updatedAt)}`;
+  const dotColor =
+    effectiveMode === "live"
+      ? "bg-green-500"
+      : effectiveMode === "stale"
+        ? "bg-amber-400"
+        : "bg-gray-500";
+  const statsTitle = `最近 ${feed.stats.windowSize} 条内容合计`;
 
   return (
     <motion.aside
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5 }}
-      className="zhihu-sidebar-scroll hidden lg:block w-64 flex-shrink-0 sticky top-24 self-start max-h-[calc(100vh-7rem)] overflow-y-auto pr-1"
+      className="zhihu-sidebar-scroll hidden max-h-[calc(100vh-7rem)] w-64 flex-shrink-0 self-start overflow-y-auto pr-1 lg:sticky lg:top-24 lg:block"
     >
-      {/* 装饰渐变卡片 */}
-      <div className="glass rounded-2xl overflow-hidden">
-        {/* 顶部装饰条 */}
+      <div className="glass overflow-hidden rounded-2xl">
         <div className="h-1 bg-gradient-to-r from-blue-500 via-cyan-400 to-pink-500" />
 
         <div className="p-4">
-            {/* 知乎标题（跳首页） */}
-            <a
-              href={zhihuHome}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-between mb-3 group/title"
-            >
-              <div className="flex items-center gap-2">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-blue-500/30 rounded blur-md" />
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="relative text-blue-400 group-hover/title:text-blue-300 transition-colors">
-                    <path d="M5.721 0C2.251 0 0 2.25 0 5.719V18.28C0 21.75 2.251 24 5.721 24h12.56C21.751 24 24 21.75 24 18.281V5.72C24 2.249 21.751 0 18.281 0H5.721zM3.6 5.4h1.8v6c0 1.657 1.343 3 3 3s3-1.343 3-3V5.4h1.8v6c0 2.652-2.148 4.8-4.8 4.8S3.6 14.052 3.6 11.4V5.4zm10.8 0h1.8v3.6h-1.8V5.4zm-3.6 0h1.8v3.6h-1.8V5.4zm-3.6 0h1.8v3.6h-1.8V5.4zM14.4 11.4h1.8v3.6c0 .5.4.9.9.9h2.7v1.8h-2.7c-1.5 0-2.7-1.2-2.7-2.7V11.4z" />
-                  </svg>
-                </div>
-                <h3 className="text-base font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                  知乎
-                </h3>
+          <a
+            href="https://www.zhihu.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group/title mb-3 flex items-center justify-between"
+          >
+            <div className="flex items-center gap-2">
+              <div className="relative">
+                <div className="absolute inset-0 rounded bg-blue-500/30 blur-md" />
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                  className="relative text-blue-400 transition-colors group-hover/title:text-blue-300"
+                >
+                  <path d="M5.721 0C2.251 0 0 2.25 0 5.719V18.28C0 21.75 2.251 24 5.721 24h12.56C21.751 24 24 21.75 24 18.281V5.72C24 2.249 21.751 0 18.281 0H5.721zM3.6 5.4h1.8v6c0 1.657 1.343 3 3 3s3-1.343 3-3V5.4h1.8v6c0 2.652-2.148 4.8-4.8 4.8S3.6 14.052 3.6 11.4V5.4zm10.8 0h1.8v3.6h-1.8V5.4zm-3.6 0h1.8v3.6h-1.8V5.4zm-3.6 0h1.8v3.6h-1.8V5.4zM14.4 11.4h1.8v3.6c0 .5.4.9.9.9h2.7v1.8h-2.7c-1.5 0-2.7-1.2-2.7-2.7V11.4z" />
+                </svg>
               </div>
-              <HiSparkles className="text-yellow-400/60" size={14} />
-            </a>
-
-            {/* 作者信息（跳个人主页） */}
-            <a
-              href={profileUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-3 mb-4 p-2 -m-2 rounded-xl hover:bg-white/5 transition-all"
-            >
-              {/* 头像带光晕 */}
-              <div className="relative flex-shrink-0">
-                <div className="absolute -inset-0.5 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full blur opacity-60" />
-                <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-cyan-500 ring-2 ring-white/10">
-                  <Image
-                    src="/images/avatar.jpg"
-                    alt="OnfireQ 的头像"
-                    width={48}
-                    height={48}
-                    sizes="48px"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                {/* 在线点 */}
-                <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full ring-2 ring-gray-900" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-1">
-                  <span className="font-semibold text-sm">白日梦游</span>
-                  <span className="text-blue-400 text-xs">✓</span>
-                </div>
-                <div className="text-[10px] text-gray-400 mt-0.5">中山大学 · 光学工程硕士在读</div>
-              </div>
-            </a>
-
-            {/* 四个统计卡片：关注者、赞同、喜欢、收藏 */}
-            <div className="grid grid-cols-4 gap-1.5 mb-3">
-              <div
-                className="relative overflow-hidden rounded-lg p-2 text-center bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 ring-1 ring-cyan-500/20"
-                title={liveStats?.updated ? `自动更新: ${liveStats.updated}` : "暂无自动数据"}
-              >
-                <div className="text-lg font-bold text-cyan-400 flex items-center justify-center gap-0.5">
-                  <HiUserAdd size={11} className="opacity-70" />
-                  {stats.followers}
-                </div>
-                <div className="text-[10px] text-gray-400 mt-0.5">关注者</div>
-              </div>
-              <div
-                className="relative overflow-hidden rounded-lg p-2 text-center bg-gradient-to-br from-blue-500/10 to-blue-500/5 ring-1 ring-blue-500/20"
-              >
-                <div className="text-lg font-bold text-blue-400 flex items-center justify-center gap-0.5">
-                  <HiArrowUp size={11} className="opacity-70" />
-                  {stats.totalLikes}
-                </div>
-                <div className="text-[10px] text-gray-400 mt-0.5">赞同</div>
-              </div>
-              <div
-                className="relative overflow-hidden rounded-lg p-2 text-center bg-gradient-to-br from-pink-500/10 to-pink-500/5 ring-1 ring-pink-500/20"
-              >
-                <div className="text-lg font-bold text-pink-400 flex items-center justify-center gap-0.5">
-                  <HiHeart size={11} className="opacity-70" />
-                  {stats.totalLoves}
-                </div>
-                <div className="text-[10px] text-gray-400 mt-0.5">喜欢</div>
-              </div>
-              <div
-                className="relative overflow-hidden rounded-lg p-2 text-center bg-gradient-to-br from-yellow-500/10 to-yellow-500/5 ring-1 ring-yellow-500/20"
-              >
-                <div className="text-lg font-bold text-yellow-400 flex items-center justify-center gap-0.5">
-                  <HiStar size={11} className="opacity-70" />
-                  {stats.totalFavorites}
-                </div>
-                <div className="text-[10px] text-gray-400 mt-0.5">收藏</div>
-              </div>
+              <h3 className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-base font-bold text-transparent">
+                知乎
+              </h3>
             </div>
+            <HiSparkles className="text-yellow-400/60" size={14} aria-hidden="true" />
+          </a>
 
-            {/* 扩展统计：想法/视频/提问 （已隐藏，避免与主卡片重复）*/}
-            {false && (stats.pin > 0 || stats.video > 0 || stats.question > 0) && (
-              <div className="grid grid-cols-3 gap-1.5 mb-3 text-xs">
-                {stats.pin > 0 && (
-                  <a
-                    href={`${profileUrl}/pins`}
-                    target="_blank"
-                    rel="noopener"
-                    className="text-center py-1.5 rounded bg-yellow-500/5 ring-1 ring-yellow-500/20 hover:ring-yellow-400/40 transition-all"
-                  >
-                    <span className="text-yellow-400 font-semibold">{stats.pin}</span>
-                    <span className="text-gray-500 ml-1">想法</span>
-                  </a>
-                )}
-                {stats.video > 0 && (
-                  <a
-                    href={`${profileUrl}/zvideo`}
-                    target="_blank"
-                    rel="noopener"
-                    className="text-center py-1.5 rounded bg-red-500/5 ring-1 ring-red-500/20 hover:ring-red-400/40 transition-all"
-                  >
-                    <span className="text-red-400 font-semibold">{stats.video}</span>
-                    <span className="text-gray-500 ml-1">视频</span>
-                  </a>
-                )}
-                {stats.question > 0 && (
-                  <a
-                    href={`${profileUrl}/asks`}
-                    target="_blank"
-                    rel="noopener"
-                    className="text-center py-1.5 rounded bg-purple-500/5 ring-1 ring-purple-500/20 hover:ring-purple-400/40 transition-all"
-                  >
-                    <span className="text-purple-400 font-semibold">{stats.question}</span>
-                    <span className="text-gray-500 ml-1">提问</span>
-                  </a>
-                )}
+          <a
+            href={profileUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="-m-2 mb-4 flex items-center gap-3 rounded-xl p-2 transition-all hover:bg-white/5"
+          >
+            <div className="relative flex-shrink-0">
+              <div className="absolute -inset-0.5 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 opacity-60 blur" />
+              <div className="relative h-12 w-12 overflow-hidden rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 ring-2 ring-white/10">
+                <Image
+                  src="/images/avatar.jpg"
+                  alt="OnfireQ 的头像"
+                  width={48}
+                  height={48}
+                  sizes="48px"
+                  className="h-full w-full object-cover"
+                />
               </div>
-            )}
-
-            {/* 互动统计（无链接，从抓取内容聚合） 已隐藏，避免与主卡片重复 */}
-            {false && (stats.totalLikes > 0 || stats.totalFavorites > 0) && (
-              <div className="mb-3 pb-3 border-b border-white/10 text-xs space-y-1.5">
-                {stats.totalLikes > 0 && (
-                  <div className="flex items-center gap-2 px-1">
-                    <HiArrowUp className="text-blue-400 flex-shrink-0" size={12} />
-                    <span className="text-gray-400">获得 <span className="text-blue-300 font-semibold">{stats.totalLikes}</span> 次赞同</span>
-                  </div>
-                )}
-                {stats.totalFavorites > 0 && (
-                  <div className="flex items-center gap-2 px-1">
-                    <HiStar className="text-yellow-400 flex-shrink-0" size={12} />
-                    <span className="text-gray-400">获得 <span className="text-yellow-300 font-semibold">{stats.totalFavorites}</span> 次收藏</span>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* 分类筛选（知乎风格，胶囊形） */}
-            <div className="flex flex-wrap gap-1.5 mb-3">
-              {filters.map((f) => {
-                const count = f.key === "answer" ? counts.answer : f.key === "article" ? counts.article : f.key === "pin" ? counts.pin : f.key === "video" ? counts.video : f.key === "question" ? counts.question : counts.answer + counts.article + counts.pin + counts.video + counts.question;
-                if (count === 0) return null;
-                return (
-                  <button
-                    key={f.key}
-                    onClick={() => onFilterChange(f.key)}
-                    className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-all ${
-                      activeFilter === f.key
-                        ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/30"
-                        : "bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white"
-                    }`}
-                  >
-                    {f.label} <span className="opacity-70">{count}</span>
-                  </button>
-                );
-              })}
+              <span
+                className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full ring-2 ring-gray-900 ${dotColor}`}
+                title={syncLabel}
+                aria-label={syncLabel}
+              />
             </div>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-1">
+                <span className="text-sm font-semibold">白日梦游</span>
+                <span className="text-xs text-blue-400">✓</span>
+              </div>
+              <div className="mt-0.5 text-[10px] text-gray-400">中山大学 · 光学工程硕士在读</div>
+            </div>
+          </a>
 
-            {/* 作品列表 */}
-            {filteredItems.length === 0 ? (
-              <div className="text-center text-gray-500 text-xs py-6">
-                <div className="opacity-50 text-2xl mb-1">📭</div>
-                暂无内容
+          <div className="mb-3 grid grid-cols-4 gap-1.5">
+            <div
+              className="relative overflow-hidden rounded-lg bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 p-2 text-center ring-1 ring-cyan-500/20"
+              title="粉丝数由手动维护，知乎开放接口暂不提供此数据"
+            >
+              <div className="flex items-center justify-center gap-0.5 text-lg font-bold text-cyan-400">
+                <HiUserAdd size={11} className="opacity-70" aria-hidden="true" />
+                {feed.profile.followers ?? "—"}
               </div>
-            ) : (
-              <div className="space-y-2 max-h-96 overflow-y-auto pr-1 -mr-1">
-                {filteredItems.map((item, i) => (
-                  <motion.a
-                    key={item.url}
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    className="block group/item p-2.5 rounded-xl bg-white/5 hover:bg-white/10 ring-1 ring-white/5 hover:ring-blue-400/30 transition-all"
-                  >
-                    <div className="flex items-center gap-1.5 mb-1">
-                      <span className={`px-1.5 py-0.5 text-[9px] font-medium rounded ${typeColors[item.type].bg} ${typeColors[item.type].text}`}>
-                        {typeLabels[item.type]}
-                      </span>
-                      <span className="text-[10px] text-gray-500">{timeAgo(item.createdAt)}</span>
-                    </div>
-                    <div className="text-xs font-medium leading-relaxed line-clamp-2 group-hover/item:text-blue-400 transition-colors">
-                      {item.title}
-                    </div>
-                    {item.likeCount > 0 && (
-                      <div className="flex items-center gap-0.5 text-[10px] text-pink-400 mt-1">
-                        <HiHeart size={9} /> {item.likeCount}
-                      </div>
-                    )}
-                  </motion.a>
-                ))}
+              <div className="mt-0.5 text-[10px] text-gray-400">关注者</div>
+            </div>
+            <div
+              className="relative overflow-hidden rounded-lg bg-gradient-to-br from-blue-500/10 to-blue-500/5 p-2 text-center ring-1 ring-blue-500/20"
+              title={statsTitle}
+            >
+              <div className="flex items-center justify-center gap-0.5 text-lg font-bold text-blue-400">
+                <HiArrowUp size={11} className="opacity-70" aria-hidden="true" />
+                {feed.stats.totalLikes}
               </div>
-            )}
-
-            {/* 底部时间戳 */}
-            {liveStats?.updated && (
-              <div className="mt-3 pt-2 border-t border-white/5 text-[9px] text-gray-500 text-center flex items-center justify-center gap-1">
-                <span className="w-1 h-1 rounded-full bg-green-500 animate-pulse" />
-                自动更新于 {liveStats.updated}
+              <div className="mt-0.5 text-[10px] text-gray-400">赞同</div>
+            </div>
+            <div
+              className="relative overflow-hidden rounded-lg bg-gradient-to-br from-pink-500/10 to-pink-500/5 p-2 text-center ring-1 ring-pink-500/20"
+              title={statsTitle}
+            >
+              <div className="flex items-center justify-center gap-0.5 text-lg font-bold text-pink-400">
+                <HiChatAlt2 size={11} className="opacity-70" aria-hidden="true" />
+                {feed.stats.totalComments}
               </div>
-            )}
+              <div className="mt-0.5 text-[10px] text-gray-400">评论</div>
+            </div>
+            <div
+              className="relative overflow-hidden rounded-lg bg-gradient-to-br from-yellow-500/10 to-yellow-500/5 p-2 text-center ring-1 ring-yellow-500/20"
+              title={statsTitle}
+            >
+              <div className="flex items-center justify-center gap-0.5 text-lg font-bold text-yellow-400">
+                <HiStar size={11} className="opacity-70" aria-hidden="true" />
+                {feed.stats.totalFavorites}
+              </div>
+              <div className="mt-0.5 text-[10px] text-gray-400">收藏</div>
+            </div>
           </div>
+
+          <div className="mb-3 flex flex-wrap gap-1.5" aria-label="筛选知乎内容">
+            {filters.map((filter) => {
+              const count =
+                filter.key === "all"
+                  ? feed.contents.length
+                  : counts[filter.key];
+              if (count === 0) return null;
+
+              return (
+                <button
+                  key={filter.key}
+                  type="button"
+                  onClick={() => onFilterChange(filter.key)}
+                  className={`rounded-full px-2.5 py-1 text-[11px] font-medium transition-all ${
+                    activeFilter === filter.key
+                      ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/30"
+                      : "bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white"
+                  }`}
+                >
+                  {filter.label} <span className="opacity-70">{count}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {filteredItems.length === 0 ? (
+            <div className="py-6 text-center text-xs text-gray-500">
+              <div className="mb-1 text-2xl opacity-50">📭</div>
+              暂无内容
+            </div>
+          ) : (
+            <div className="-mr-1 max-h-96 space-y-2 overflow-y-auto pr-1">
+              {filteredItems.map((item, index) => (
+                <motion.a
+                  key={`${item.type}-${item.url}`}
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: Math.min(index * 0.03, 0.3) }}
+                  className="group/item block rounded-xl bg-white/5 p-2.5 ring-1 ring-white/5 transition-all hover:bg-white/10 hover:ring-blue-400/30"
+                >
+                  <div className="mb-1 flex items-center gap-1.5">
+                    <span
+                      className={`rounded px-1.5 py-0.5 text-[9px] font-medium ${typeColors[item.type].bg} ${typeColors[item.type].text}`}
+                    >
+                      {typeLabels[item.type]}
+                    </span>
+                    <span className="text-[10px] text-gray-500">{timeAgo(item.createdAt)}</span>
+                  </div>
+                  <div className="line-clamp-2 text-xs font-medium leading-relaxed transition-colors group-hover/item:text-blue-400">
+                    {item.title || item.summary || "未命名内容"}
+                  </div>
+                  {item.likeCount > 0 && (
+                    <div className="mt-1 flex items-center gap-0.5 text-[10px] text-blue-400">
+                      <HiArrowUp size={9} aria-hidden="true" /> {item.likeCount}
+                    </div>
+                  )}
+                </motion.a>
+              ))}
+            </div>
+          )}
+
+          <div
+            className="mt-3 flex items-center justify-center gap-1 border-t border-white/5 pt-2 text-center text-[9px] text-gray-500"
+            title={`${new Date(feed.updatedAt).toLocaleString("zh-CN")}；作品与互动数据每 5 分钟同步一次`}
+          >
+            <span className={`h-1 w-1 rounded-full ${dotColor}`} aria-hidden="true" />
+            {syncLabel} · 最近 {feed.stats.windowSize} 条
+          </div>
+        </div>
       </div>
     </motion.aside>
   );
