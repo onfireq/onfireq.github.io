@@ -220,7 +220,7 @@ export default function BlogContent({
             const isInline = !className;
             if (isInline) {
               return (
-                <code className="bg-white/10 px-1.5 py-0.5 rounded text-brand-cyan text-sm" {...props}>
+                <code className="blog-inline-code bg-white/10 px-1.5 py-0.5 rounded text-brand-cyan text-sm" {...props}>
                   {children}
                 </code>
               );

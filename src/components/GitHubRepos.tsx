@@ -114,7 +114,7 @@ export default function GitHubRepos() {
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-2">
-                    <FaGithub className="text-gray-400 group-hover:text-white transition" size={18} aria-hidden="true" />
+                    <FaGithub className="github-repo-icon text-gray-400 group-hover:text-white transition" size={18} aria-hidden="true" />
                     <h4 className="font-semibold text-brand-cyan">{repo.name}</h4>
                   </div>
                   <p className="text-sm text-gray-400 mb-3 line-clamp-2">

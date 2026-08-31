@@ -261,7 +261,7 @@ function ZhihuMobileSummary({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 8, scale: 0.98 }}
             transition={reduceMotion ? { duration: 0 } : { duration: 0.18 }}
-            className="zhihu-panel glass absolute bottom-full right-0 mb-3 max-h-[calc(100dvh-6rem)] w-[min(22rem,calc(100vw-2rem))] overflow-y-auto shadow-2xl shadow-black/35"
+            className="zhihu-panel zhihu-panel-flyout glass absolute bottom-full right-0 mb-3 max-h-[calc(100dvh-6rem)] w-[min(22rem,calc(100vw-2rem))] overflow-y-auto shadow-2xl shadow-black/35"
           >
             <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-3">
               <div>
@@ -281,7 +281,7 @@ function ZhihuMobileSummary({
                       href={item.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group/mobile-item flex min-h-14 items-start gap-3 rounded-xl bg-white/5 p-3 ring-1 ring-white/5 transition-colors hover:bg-white/10 hover:ring-blue-400/30"
+                      className="zhihu-item group/mobile-item flex min-h-14 items-start gap-3 rounded-xl bg-white/5 p-3 ring-1 ring-white/5 transition-colors hover:bg-white/10 hover:ring-blue-400/30"
                     >
                       <span
                         className={`mt-0.5 rounded px-1.5 py-0.5 text-[10px] font-medium ${typeColors[item.type].bg} ${typeColors[item.type].text}`}
@@ -429,7 +429,7 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
             href={profileUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="-m-2 mb-4 flex items-center gap-3 rounded-xl p-2 transition-all hover:bg-white/5"
+            className="zhihu-profile-link -m-2 mb-4 flex items-center gap-3 rounded-xl p-2 transition-all hover:bg-white/5"
           >
             <div className="relative flex-shrink-0">
               <div className="absolute -inset-0.5 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 opacity-60 blur" />
@@ -518,7 +518,7 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
                   className={`rounded-full px-2.5 py-1 text-[11px] font-medium transition-all ${
                     activeFilter === filter.key
                       ? "zhihu-filter-active shadow-lg shadow-blue-500/30"
-                      : "bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white"
+                      : "zhihu-filter-inactive bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white"
                   }`}
                 >
                   {filter.label} <span className="opacity-70">{count}</span>
@@ -547,7 +547,7 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
                       ? { duration: 0 }
                       : { delay: Math.min(index * 0.03, 0.3) }
                   }
-                  className="group/item block rounded-xl bg-white/5 p-2.5 ring-1 ring-white/5 transition-all hover:bg-white/10 hover:ring-blue-400/30"
+                  className="zhihu-item group/item block rounded-xl bg-white/5 p-2.5 ring-1 ring-white/5 transition-all hover:bg-white/10 hover:ring-blue-400/30"
                 >
                   <div className="mb-1 flex items-center gap-1.5">
                     <span

@@ -50,7 +50,7 @@ export default function Navbar() {
       initial={reduceMotion ? false : { y: -80 }}
       animate={{ y: 0 }}
       aria-label="主导航"
-      className="fixed top-0 w-full z-50 glass rounded-none border-b border-white/5"
+      className="site-nav fixed top-0 w-full z-50 glass rounded-none border-b border-white/5"
     >
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link href="/" className="text-xl font-bold text-gradient" aria-label="OnfireQ 首页">
@@ -75,7 +75,7 @@ export default function Navbar() {
           ))}
 
           {/* Divider */}
-          <div className="w-px h-5 bg-white/10 mx-1" />
+          <div className="nav-divider w-px h-5 bg-white/10 mx-1" />
 
           {/* Social icons */}
           {socials.map((s) => (
@@ -128,7 +128,7 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass border-t border-white/5"
+            className="site-nav-menu md:hidden glass border-t border-white/5"
           >
             <div className="flex flex-col gap-1 p-4">
               {links.map((l) => (
@@ -148,7 +148,7 @@ export default function Navbar() {
               ))}
 
               {/* Mobile social icons */}
-              <div className="flex items-center gap-2 mt-2 pt-2 border-t border-white/10">
+              <div className="nav-divider-border flex items-center gap-2 mt-2 pt-2 border-t border-white/10">
                 {socials.map((s) => (
                   <a
                     key={s.label}

@@ -5,6 +5,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Points, PointMaterial } from "@react-three/drei";
 import { useReducedMotion } from "framer-motion";
 import * as THREE from "three";
+import { useTheme } from "./ThemeProvider";
 
 const PARTICLE_COUNT = 1400;
 
@@ -30,7 +31,7 @@ function createParticlePositions(count: number) {
 
 const PARTICLE_POSITIONS = createParticlePositions(PARTICLE_COUNT);
 
-function ParticleField({ animate }: { animate: boolean }) {
+function ParticleField({ animate, light }: { animate: boolean; light: boolean }) {
   const ref = useRef<THREE.Points>(null!);
 
   useFrame((state) => {
@@ -44,17 +45,18 @@ function ParticleField({ animate }: { animate: boolean }) {
     <Points ref={ref} positions={PARTICLE_POSITIONS} stride={3} frustumCulled={false}>
       <PointMaterial
         transparent
-        color="#6c63ff"
+        color={light ? "#4338ca" : "#6c63ff"}
+        opacity={light ? 0.42 : 1}
         size={0.015}
         sizeAttenuation={true}
         depthWrite={false}
-        blending={THREE.AdditiveBlending}
+        blending={light ? THREE.NormalBlending : THREE.AdditiveBlending}
       />
     </Points>
   );
 }
 
-function WireframeSphere({ animate }: { animate: boolean }) {
+function WireframeSphere({ animate, light }: { animate: boolean; light: boolean }) {
   const ref = useRef<THREE.Mesh>(null!);
 
   useFrame((state) => {
@@ -68,16 +70,16 @@ function WireframeSphere({ animate }: { animate: boolean }) {
     <mesh ref={ref}>
       <icosahedronGeometry args={[1.8, 1]} />
       <meshBasicMaterial
-        color="#00d9ff"
+        color={light ? "#0369a1" : "#00d9ff"}
         wireframe
         transparent
-        opacity={0.08}
+        opacity={light ? 0.13 : 0.08}
       />
     </mesh>
   );
 }
 
-function FloatingRings({ animate }: { animate: boolean }) {
+function FloatingRings({ animate, light }: { animate: boolean; light: boolean }) {
   const rings = useMemo(() => {
     const items = [];
     for (let i = 0; i < 4; i++) {
@@ -97,6 +99,7 @@ function FloatingRings({ animate }: { animate: boolean }) {
           initialRotation={ring.rotation}
           speed={ring.speed}
           animate={animate}
+          light={light}
         />
       ))}
     </>
@@ -108,11 +111,13 @@ function Ring({
   initialRotation,
   speed,
   animate,
+  light,
 }: {
   radius: number;
   initialRotation: number;
   speed: number;
   animate: boolean;
+  light: boolean;
 }) {
   const ref = useRef<THREE.Mesh>(null!);
 
@@ -129,17 +134,19 @@ function Ring({
     <mesh ref={ref}>
       <torusGeometry args={[radius, 0.004, 16, 100]} />
       <meshBasicMaterial
-        color={new THREE.Color().setHSL(0.7 + initialRotation * 0.1, 0.8, 0.6)}
+        color={new THREE.Color().setHSL(0.7 + initialRotation * 0.1, 0.8, light ? 0.38 : 0.6)}
         transparent
-        opacity={0.15}
+        opacity={light ? 0.13 : 0.15}
       />
     </mesh>
   );
 }
 
 export default function ThreeBackground() {
+  const { theme } = useTheme();
   const reduceMotion = useReducedMotion();
   const animate = !reduceMotion;
+  const light = theme === "light";
 
   return (
     <div className="absolute inset-0 -z-10" aria-hidden="true">
@@ -151,9 +158,9 @@ export default function ThreeBackground() {
         style={{ background: "transparent" }}
       >
         <ambientLight intensity={0.3} />
-        <ParticleField animate={animate} />
-        <WireframeSphere animate={animate} />
-        <FloatingRings animate={animate} />
+        <ParticleField animate={animate} light={light} />
+        <WireframeSphere animate={animate} light={light} />
+        <FloatingRings animate={animate} light={light} />
       </Canvas>
     </div>
   );

@@ -134,7 +134,7 @@ export default function BlogExplorer({ localPosts }: { localPosts: PostSummary[]
         <section aria-labelledby="post-list-heading">
           {activeCategory ? (
             <div className="sticky top-20 z-30 mb-6 py-2">
-              <div className="glass grid min-h-14 grid-cols-[auto_1px_minmax(0,1fr)_auto] items-center gap-3 px-3 py-2 shadow-lg shadow-black/20 sm:px-4">
+              <div className="blog-category-toolbar glass grid min-h-14 grid-cols-[auto_1px_minmax(0,1fr)_auto] items-center gap-3 px-3 py-2 shadow-lg shadow-black/20 sm:px-4">
                 <Link
                   href="/blog"
                   onClick={(event) => handleCategoryLink(event, "")}
