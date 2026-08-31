@@ -1,7 +1,7 @@
 // 知乎数据（自动生成，请勿手动编辑）
-// 最后更新: 2026-08-30T09:52:48+08:00
+// 最后更新: 2026-08-31T10:45:00+00:00
 
-export const zhihuSnapshotUpdatedAt = "2026-08-30T09:52:48+08:00";
+export const zhihuSnapshotUpdatedAt = "2026-08-31T10:45:00+00:00";
 
 export interface ZhihuContent {
   type: 'answer' | 'article' | 'pin' | 'video' | 'question';
@@ -28,6 +28,26 @@ export interface ZhihuStats {
 }
 
 export const zhihuContents: ZhihuContent[] = [
+  {
+    "type": "answer",
+    "title": "收到了西北工业大学课题组的回信，我是否应该放弃科研，专注工程开发？",
+    "url": "https://www.zhihu.com/answer/2077757686435861565",
+    "summary": "这个回信的人一点礼貌都没有，不用跟他多掰扯了。",
+    "likeCount": 1,
+    "commentCount": 0,
+    "favoriteCount": 0,
+    "createdAt": 1788156035
+  },
+  {
+    "type": "answer",
+    "title": "当我们发现毕生追求的知识在AI面前毫无价值时，如何重建存在的意义？",
+    "url": "https://www.zhihu.com/answer/2077570840271632365",
+    "summary": "AI固然强大。但AI再强大也只是一个人类发明出来帮助人类改造世界的工具而已。 个人的感受是任何东西都替代不了的。 功利点的东西也是需要人和工具合作的。",
+    "likeCount": 1,
+    "commentCount": 0,
+    "favoriteCount": 0,
+    "createdAt": 1788111487
+  },
   {
     "type": "pin",
     "title": "AI的能力确实是比世界上任何一个人都强的。如此强大的发动机需要懂得驾驭。",
@@ -421,13 +441,13 @@ export const zhihuContents: ZhihuContent[] = [
 ];
 
 export const zhihuStats: ZhihuStats = {
-  "answerCount": 18,
+  "answerCount": 20,
   "articleCount": 2,
   "pinCount": 14,
   "videoCount": 0,
   "questionCount": 5,
-  "totalLikes": 91,
+  "totalLikes": 93,
   "totalComments": 9,
   "totalFavorites": 60,
-  "totals": 39
+  "totals": 41
 };
