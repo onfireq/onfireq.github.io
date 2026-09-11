@@ -205,6 +205,47 @@ html[data-theme="light"] body .blog-code-block {
   color: #e2e8f0;
 }
 
+.blog-wavedrom {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: #0b1120;
+  color: #cbd5e1;
+}
+
+.blog-wavedrom-header {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.blog-wavedrom-canvas {
+  background: #020617;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
+}
+
+.blog-wavedrom-error {
+  color: #fca5a5;
+}
+
+html[data-theme="light"] body .blog-wavedrom {
+  border-color: rgba(15, 23, 42, 0.12);
+  background: #ffffff;
+  color: #334155;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+html[data-theme="light"] body .blog-wavedrom-header {
+  border-color: rgba(15, 23, 42, 0.1);
+  background: #f8fafc;
+}
+
+html[data-theme="light"] body .blog-wavedrom-canvas {
+  background: #ffffff;
+}
+
+html[data-theme="light"] body .blog-wavedrom-error {
+  color: #b91c1c;
+}
+
 html[data-theme="light"] body .zhihu-item,
 html[data-theme="light"] body .zhihu-filter-inactive {
   background: var(--muted-surface);

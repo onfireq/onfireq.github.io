@@ -2,6 +2,7 @@
 
 import { Children, isValidElement, useEffect, useState, type ReactNode } from "react";
 import { HiCheck, HiClipboardCopy, HiExclamation } from "react-icons/hi";
+import dynamic from "next/dynamic";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
@@ -13,6 +14,16 @@ import { blogCodeLanguageAliases, blogCodeLanguages } from "@/lib/code-highlight
 import rehypeCallouts from "@/lib/rehype-callouts";
 
 type CopyStatus = "idle" | "copied" | "error";
+
+const WaveDromDiagram = dynamic(() => import("@/components/WaveDromDiagram"), {
+  loading: () => (
+    <div className="blog-wavedrom mb-5 rounded-xl border px-4 py-5 text-sm text-gray-400">
+      正在渲染 WaveDrom 时序图…
+    </div>
+  ),
+});
+
+const waveDromLanguages = new Set(["wavedrom", "wavejson"]);
 
 const languageLabels: Record<string, string> = {
   bash: "Bash",
@@ -64,6 +75,8 @@ const languageLabels: Record<string, string> = {
   verilog: "Verilog",
   vhd: "VHDL",
   vhdl: "VHDL",
+  wavedrom: "WaveDrom",
+  wavejson: "WaveJSON",
   x86asm: "x86 Assembly",
   xdc: "XDC / Tcl",
   yaml: "YAML",
@@ -101,11 +114,17 @@ function getCodeLanguage(children: ReactNode): string {
   return codeElement.props.className?.match(/(?:^|\s)language-([\w+-]+)/)?.[1].toLowerCase() ?? "";
 }
 
-function CodeBlock({ children }: { children: ReactNode }) {
+function SourceCodeBlock({
+  children,
+  language,
+  code,
+}: {
+  children: ReactNode;
+  language: string;
+  code: string;
+}) {
   const [copyStatus, setCopyStatus] = useState<CopyStatus>("idle");
-  const language = getCodeLanguage(children);
   const languageLabel = languageLabels[language] ?? (language ? language.toUpperCase() : "代码");
-  const code = getTextContent(children).replace(/\n$/, "");
 
   useEffect(() => {
     if (copyStatus === "idle") return;
@@ -157,6 +176,21 @@ function CodeBlock({ children }: { children: ReactNode }) {
   );
 }
 
+function CodeBlock({ children }: { children: ReactNode }) {
+  const language = getCodeLanguage(children);
+  const code = getTextContent(children).replace(/\n$/, "");
+
+  if (waveDromLanguages.has(language)) {
+    return <WaveDromDiagram source={code} />;
+  }
+
+  return (
+    <SourceCodeBlock language={language} code={code}>
+      {children}
+    </SourceCodeBlock>
+  );
+}
+
 export default function BlogContent({
   content,
   format = "md",
@@ -180,6 +214,7 @@ export default function BlogContent({
               languages: blogCodeLanguages,
               aliases: blogCodeLanguageAliases,
               detect: false,
+              plainText: ["wavedrom", "wavejson"],
             },
           ],
         ]}
