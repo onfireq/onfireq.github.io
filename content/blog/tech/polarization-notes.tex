@@ -30,22 +30,25 @@
 
 Adam 优化器的一阶矩估计：
 \[
-m_t = \beta_1 m_{t-1} + (1-\beta_1) g_t
+m_t = \beta_{1}\,m_{t-1} + \left(1-\beta_{1}\right)g_t
 \]
 
 二阶矩估计：
 \[
-v_t = \beta_2 v_{t-1} + (1-\beta_2) g_t^2
+v_t = \beta_{2}\,v_{t-1} + \left(1-\beta_{2}\right)g_t^2
 \]
 
 偏差修正：
 \[
-\hat{m}_t = \frac{m_t}{1-\beta_1^t}, \quad \hat{v}_t = \frac{v_t}{1-\beta_2^t}
+\begin{aligned}
+\hat{m}_t &= \frac{m_t}{1-\beta_{1}^{\,t}}, \\
+\hat{v}_t &= \frac{v_t}{1-\beta_{2}^{\,t}}.
+\end{aligned}
 \]
 
 参数更新：
 \[
-\theta_t = \theta_{t-1} - \eta \frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \epsilon}
+\theta_t = \theta_{t-1} - \eta\,\frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \varepsilon}
 \]
 
 \section{Jones 向量}
