@@ -1,7 +1,7 @@
 // 知乎数据（自动生成，请勿手动编辑）
-// 最后更新: 2026-09-13T09:24:34+00:00
+// 最后更新: 2026-09-14T09:45:44+00:00
 
-export const zhihuSnapshotUpdatedAt = "2026-09-13T09:24:34+00:00";
+export const zhihuSnapshotUpdatedAt = "2026-09-14T09:45:44+00:00";
 
 export interface ZhihuContent {
   type: 'answer' | 'article' | 'pin' | 'video' | 'question';
@@ -84,7 +84,7 @@ export const zhihuContents: ZhihuContent[] = [
     "url": "https://www.zhihu.com/answer/1952395766413899739",
     "summary": "相对而言的，一束偏振光总可以分解为水平偏振光和垂直偏振光的叠加。在晶体中为了描述上的方便，就沿着o光和e光方向分解了。 当然o光和e光实质上是双折射晶体的一对本征解。但是理解到这里就可以解决问题了。可以重合，但不是一个东西。 分解是方法，是数学工具。 o光、e光是光在晶体中传播的规律，是物理特性。",
     "likeCount": 7,
-    "commentCount": 0,
+    "commentCount": 1,
     "favoriteCount": 4,
     "createdAt": 1758267424
   },
@@ -104,7 +104,7 @@ export const zhihuContents: ZhihuContent[] = [
     "url": "https://zhuanlan.zhihu.com/p/1911352839244092570",
     "summary": "我们首先进入库的github网站： espressif/arduino-esp32: Arduino core for the ESP32 在网站中找到最新的发行版本 [图片] 点击后就变成了这个页面 [图片] 拉到最下面找到JSON文件 [图片] 打开后的JSON文件长这个样子 [图片] 简单分析一下结构 [图片] Arduino中ESP32包的所有信息都在package里面，前面交代了基本信息，platforms里面是ESP32库所有版本的信息，tools是所有工具的所有版本，platforms里用到的所有的工具库的下载链接都可以在tools里面找到。我们进行更…",
     "likeCount": 32,
-    "commentCount": 0,
+    "commentCount": 2,
     "favoriteCount": 9,
     "createdAt": 1748485339
   },
@@ -274,7 +274,7 @@ export const zhihuContents: ZhihuContent[] = [
     "url": "https://www.zhihu.com/answer/3615987725",
     "summary": "今天弄明白了，我写下来供各位学习参考。 傅里叶光学（或者信息光学）是以“物”和“像”作为对象进行分析的。物面就是系统的输入，像面就是系统的输出。主要研究光的空间信息。更多的关注光的“空间频率”而非“时间频率”。研究关注的是光的二维信息，即一个相对来说比较大的平面上光强的分布情况。而非在一维时间上光强的有无（类似于高电平1和低电平0）。影响光强变动的偏振信息、波长/频率信息这些细节部分更不是傅里叶光学…",
     "likeCount": 21,
-    "commentCount": 0,
+    "commentCount": 1,
     "favoriteCount": 13,
     "createdAt": 1725463123
   },
@@ -284,7 +284,7 @@ export const zhihuContents: ZhihuContent[] = [
     "url": "https://www.zhihu.com/question/665465623",
     "summary": "在数字图像处理中，边缘部位灰度值急剧变化，所以会有丰富的高频分量，这是显而易见的。 但是为什么我看了很多傅里叶光学、信息光学、光学等等的书，都是在脱离了数字图像灰度背景下，还说的边缘部分是高频分量，这难道与那个空间频率定义式不会有冲突吗？ 一直没理清，谢谢大家的帮助！",
     "likeCount": 0,
-    "commentCount": 0,
+    "commentCount": 3,
     "favoriteCount": 0,
     "createdAt": 1724769728
   },
@@ -334,7 +334,7 @@ export const zhihuContents: ZhihuContent[] = [
     "url": "https://zhuanlan.zhihu.com/p/664413120",
     "summary": "介绍时间常数之前，我们可以先从一个光线性吸收的例子开始。 假设有一束单色平行光沿x方向通过均匀介质（如图所示）。 [图片] 设光的强度在经过厚度为 [公式] 的一层介质时，强度由 [公式] 减为 [公式] 。实验表明，在相当广阔的光强范围内， [公式] 正比于 [公式] 和 [公式] ，有： [公式] 式中， [公式] 是个与光强无关的比例系数，称为该物质的吸收系数。为了求出光束穿过厚度为 [公式] 的介质后…",
     "likeCount": 5,
-    "commentCount": 0,
+    "commentCount": 2,
     "favoriteCount": 5,
     "createdAt": 1698770586
   },
@@ -447,7 +447,7 @@ export const zhihuStats: ZhihuStats = {
   "videoCount": 0,
   "questionCount": 5,
   "totalLikes": 93,
-  "totalComments": 0,
+  "totalComments": 9,
   "totalFavorites": 60,
   "totals": 41
 };
