@@ -1,14 +1,13 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getAdjacentPosts, getAllPosts, getPostBySlug } from "@/lib/blog";
+import { getAdjacentPosts, getAllPostRouteSlugs, getPostBySlug } from "@/lib/blog";
 import { getBlogHeadings } from "@/lib/blog-headings";
 import BlogPostPage from "./BlogPostPage";
 
 const siteUrl = "https://onfireq.github.io";
 
 export function generateStaticParams() {
-  const posts = getAllPosts();
-  return posts.map((p) => ({ slug: p.slug }));
+  return getAllPostRouteSlugs().map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {

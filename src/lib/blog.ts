@@ -27,6 +27,10 @@ export interface AdjacentPosts {
   next: PostSummary | null;
 }
 
+interface ParsedPost extends Post {
+  legacySlugs: string[];
+}
+
 export { CATEGORIES, gcn as getCategoryName };
 
 const postsDir = path.join(process.cwd(), "content/blog");
@@ -162,18 +166,27 @@ function getCategoryFromPath(filePath: string): string {
   return category?.slug ?? "default";
 }
 
-function computeSlug(fileName: string, data: Frontmatter, category: string): string {
-  let slug = data.slug || fileName;
-  if (/[^\x00-\x7F]/.test(slug)) {
-    slug = Buffer.from(slug).toString("hex");
-  }
+function withCategoryPrefix(slug: string, category: string): string {
   if (category !== "default" && !slug.startsWith(`${category}-`)) {
-    slug = `${category}-${slug}`;
+    return `${category}-${slug}`;
   }
   return slug;
 }
 
-function parsePostFile(filePath: string): Post {
+function computeSlug(fileName: string, data: Frontmatter, category: string): string {
+  const source = data.slug || fileName;
+  return withCategoryPrefix(Buffer.from(source, "utf8").toString("hex"), category);
+}
+
+function computeLegacySlug(fileName: string, data: Frontmatter, category: string): string {
+  let slug = data.slug || fileName;
+  if (/[^\x00-\x7F]/.test(slug)) {
+    slug = Buffer.from(slug, "utf8").toString("hex");
+  }
+  return withCategoryPrefix(slug, category);
+}
+
+function parsePostFile(filePath: string): ParsedPost {
   const fileName = path.basename(filePath);
   const fileNameSlug = fileName.replace(/\.(md|tex)$/, "");
   const category = getCategoryFromPath(filePath);
@@ -182,8 +195,12 @@ function parsePostFile(filePath: string): Post {
   const parsed = isTex ? parseTexFile(raw) : matter(raw);
   const data = validateFrontmatter(parsed.data, filePath);
 
+  const slug = computeSlug(fileNameSlug, data, category);
+  const legacySlug = computeLegacySlug(fileNameSlug, data, category);
+
   return {
-    slug: computeSlug(fileNameSlug, data, category),
+    slug,
+    legacySlugs: legacySlug === slug ? [] : [legacySlug],
     originalSlug: data.slug || fileNameSlug,
     title: data.title,
     date: data.date,
@@ -230,10 +247,30 @@ export function getPostBySlug(slug: string): Post | null {
   if (!fs.existsSync(postsDir)) return null;
 
   for (const filePath of getAllFiles(postsDir)) {
-    const post = parsePostFile(filePath);
-    if (post.slug === slug && post.published) return post;
+    const parsedPost = parsePostFile(filePath);
+    if (
+      parsedPost.published &&
+      (parsedPost.slug === slug || parsedPost.legacySlugs.includes(slug))
+    ) {
+      const { legacySlugs, ...post } = parsedPost;
+      void legacySlugs;
+      return post;
+    }
   }
   return null;
+}
+
+export function getAllPostRouteSlugs(): string[] {
+  if (!fs.existsSync(postsDir)) return [];
+
+  const slugs = new Set<string>();
+  for (const filePath of getAllFiles(postsDir)) {
+    const post = parsePostFile(filePath);
+    if (!post.published) continue;
+    slugs.add(post.slug);
+    post.legacySlugs.forEach((legacySlug) => slugs.add(legacySlug));
+  }
+  return Array.from(slugs).sort();
 }
 
 export function getAllTags(): string[] {
