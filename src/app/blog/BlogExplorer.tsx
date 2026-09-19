@@ -12,6 +12,34 @@ type PostSummary = Omit<Post, "content">;
 
 const CATEGORY_CHANGE_EVENT = "blog-category-change";
 
+function getSequenceParts(post: PostSummary): number[] | null {
+  const match = post.originalSlug?.match(/^(\d+(?:\.\d+)*)/);
+  return match ? match[1].split(".").map(Number) : null;
+}
+
+function compareCourseSequence(a: PostSummary, b: PostSummary): number {
+  const aParts = getSequenceParts(a);
+  const bParts = getSequenceParts(b);
+
+  if (aParts && bParts) {
+    const length = Math.max(aParts.length, bParts.length);
+    for (let index = 0; index < length; index += 1) {
+      const difference = (aParts[index] ?? 0) - (bParts[index] ?? 0);
+      if (difference) return difference;
+    }
+  } else if (aParts) {
+    return -1;
+  } else if (bParts) {
+    return 1;
+  }
+
+  return (a.originalSlug || a.title).localeCompare(
+    b.originalSlug || b.title,
+    "zh-CN",
+    { numeric: true },
+  );
+}
+
 const FOLDER_STYLES: Record<string, { color: string; icon: string }> = {
   tech: { color: "#3b82f6", icon: "💻" },
   timing: { color: "#06b6d4", icon: "⏱️" },
@@ -75,13 +103,15 @@ export default function BlogExplorer({ localPosts }: { localPosts: PostSummary[]
 
   const filteredPosts = useMemo(() => {
     const query = search.trim().toLocaleLowerCase("zh-CN");
-    return localPosts.filter((post) => {
+    const posts = localPosts.filter((post) => {
       const matchesCategory = !activeCategory || post.category === activeCategory;
       const searchableText = [post.title, post.description, ...post.tags]
         .join(" ")
         .toLocaleLowerCase("zh-CN");
       return matchesCategory && (!query || searchableText.includes(query));
     });
+
+    return activeCategory === "libo" ? posts.sort(compareCourseSequence) : posts;
   }, [activeCategory, localPosts, search]);
 
   const showPosts = Boolean(activeCategory || search.trim());
