@@ -5,9 +5,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   HiArrowUp,
-  HiChatAlt2,
   HiChevronUp,
   HiExternalLink,
+  HiHeart,
   HiSparkles,
   HiStar,
   HiUserAdd,
@@ -484,10 +484,10 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
               title={statsTitle}
             >
               <div className="flex items-center justify-center gap-0.5 text-lg font-bold text-pink-400">
-                <HiChatAlt2 size={11} className="opacity-70" aria-hidden="true" />
+                <HiHeart size={11} className="opacity-70" aria-hidden="true" />
                 {feed.stats.totalComments}
               </div>
-              <div className="mt-0.5 text-[10px] text-gray-400">评论</div>
+              <div className="mt-0.5 text-[10px] text-gray-400">喜欢</div>
             </div>
             <div
               className="relative overflow-hidden rounded-lg bg-gradient-to-br from-yellow-500/10 to-yellow-500/5 p-2 text-center ring-1 ring-yellow-500/20"

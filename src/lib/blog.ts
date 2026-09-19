@@ -154,8 +154,12 @@ function getAllFiles(dir: string): string[] {
 }
 
 function getCategoryFromPath(filePath: string): string {
-  const [category] = path.relative(postsDir, filePath).split(path.sep);
-  return CATEGORIES.some((candidate) => candidate.slug === category) ? category : "default";
+  const [directory] = path.relative(postsDir, filePath).split(path.sep);
+  const category = CATEGORIES.find(
+    (candidate) =>
+      candidate.slug === directory || candidate.directories?.includes(directory),
+  );
+  return category?.slug ?? "default";
 }
 
 function computeSlug(fileName: string, data: Frontmatter, category: string): string {
