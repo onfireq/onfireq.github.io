@@ -20,14 +20,20 @@
   html {
     scroll-behavior: smooth;
     color-scheme: dark;
-    --page-background: var(--color-surface-900);
-    --page-foreground: #e2e8f0;
-    --glass-background: rgba(15, 23, 42, 0.6);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --glass-shadow: none;
-    --muted-surface: rgba(255, 255, 255, 0.05);
-    --muted-surface-hover: rgba(255, 255, 255, 0.1);
-    --muted-surface-border: rgba(255, 255, 255, 0.08);
+    --page-background: linear-gradient(180deg, #0b1222 0%, #101b30 52%, #0a1221 100%);
+    --page-foreground: #e7eef9;
+    --glass-background: linear-gradient(145deg, rgba(34, 49, 75, 0.94), rgba(23, 35, 55, 0.97));
+    --glass-border: rgba(160, 181, 216, 0.2);
+    --glass-shadow: inset 0 1px 0 rgba(230, 240, 255, 0.06), 0 2px 6px rgba(2, 6, 23, 0.18), 0 16px 36px rgba(2, 6, 23, 0.25);
+    --muted-surface: rgba(148, 163, 184, 0.09);
+    --muted-surface-hover: rgba(148, 163, 184, 0.16);
+    --muted-surface-border: rgba(160, 181, 216, 0.16);
+    --floating-background: #22314b;
+    --floating-foreground: #b2aaff;
+    --floating-shadow: inset 0 1px 0 rgba(230, 240, 255, 0.1), 0 6px 22px rgba(2, 6, 23, 0.4);
+    --color-gray-300: #cbd5e1;
+    --color-gray-400: #a8b6cb;
+    --color-gray-500: #93a6c3;
   }
 
   html[data-theme="light"] {
@@ -40,6 +46,9 @@
     --muted-surface: rgba(15, 23, 42, 0.045);
     --muted-surface-hover: rgba(91, 33, 182, 0.09);
     --muted-surface-border: rgba(15, 23, 42, 0.08);
+    --floating-background: #ffffff;
+    --floating-foreground: #6c63ff;
+    --floating-shadow: 0 3px 16px rgba(15, 23, 42, 0.14);
     --color-gray-300: #334155;
     --color-gray-400: #475569;
     --color-gray-500: #526075;
@@ -120,6 +129,63 @@
  * The surfaces themselves consume variables, while scoped color variables
  * make white-alpha utilities render as dark ink on light cards.
  */
+html:not([data-theme="light"]) body .site-nav,
+html:not([data-theme="light"]) body .site-nav-menu {
+  background: rgba(22, 34, 55, 0.94);
+  border-color: rgba(160, 181, 216, 0.18);
+  box-shadow: 0 1px 0 rgba(230, 240, 255, 0.04), 0 8px 28px rgba(2, 6, 23, 0.24);
+}
+
+html:not([data-theme="light"]) body :is(a.glass:hover, a:hover > .glass) {
+  border-color: rgba(167, 155, 255, 0.5);
+  box-shadow: inset 0 1px 0 rgba(230, 240, 255, 0.08), 0 6px 12px rgba(2, 6, 23, 0.2), 0 20px 40px rgba(2, 6, 23, 0.32);
+}
+
+html:not([data-theme="light"]) body :is(input, textarea) {
+  background: #0e192c;
+  border-color: rgba(160, 181, 216, 0.26);
+  color: var(--page-foreground);
+  box-shadow: inset 0 1px 3px rgba(2, 6, 23, 0.24);
+}
+
+html:not([data-theme="light"]) body :is(input, textarea):focus {
+  border-color: #a79bff;
+  box-shadow: 0 0 0 3px rgba(167, 155, 255, 0.16);
+}
+
+html:not([data-theme="light"]) body .text-brand-purple {
+  color: #b2aaff;
+}
+
+html:not([data-theme="light"]) body .text-brand-cyan {
+  color: #67e8f9;
+}
+
+html:not([data-theme="light"]) body .text-gradient {
+  background: linear-gradient(135deg, #a89bff, #67e8f9);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+html:not([data-theme="light"]) body :is(.zhihu-item, .zhihu-filter-inactive) {
+  background: var(--muted-surface);
+  --tw-ring-color: var(--muted-surface-border);
+}
+
+html:not([data-theme="light"]) body :is(.zhihu-item, .zhihu-filter-inactive, .zhihu-profile-link):hover {
+  background: var(--muted-surface-hover);
+}
+
+html:not([data-theme="light"]) body :is(.zhihu-panel-flyout, .blog-category-toolbar) {
+  box-shadow: var(--glass-shadow);
+}
+
+html:not([data-theme="light"]) body footer {
+  background: rgba(2, 6, 23, 0.24);
+  border-top-color: rgba(160, 181, 216, 0.14);
+}
+
 html[data-theme="light"] body .glass {
   --color-white: #0f172a;
 }

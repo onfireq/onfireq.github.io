@@ -10,16 +10,11 @@
   padding: 0;
   border: 0;
   border-radius: 50%;
-  color: var(--color-brand-purple);
-  background: var(--color-surface-900);
-  box-shadow: 0 3px 16px rgb(0 0 0 / 20%);
+  color: var(--floating-foreground);
+  background: var(--floating-background);
+  box-shadow: var(--floating-shadow);
   cursor: pointer;
   transition: transform 160ms ease, box-shadow 160ms ease;
-}
-
-:global(html[data-theme="light"]) .button {
-  background: #fff;
-  box-shadow: 0 3px 16px rgb(15 23 42 / 14%);
 }
 
 .button:hover {
