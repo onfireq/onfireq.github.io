@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Points, PointMaterial } from "@react-three/drei";
 import * as THREE from "three";
@@ -139,7 +139,25 @@ function Ring({
   );
 }
 
-export default function ThreeBackground() {
+function SceneReady({ onReady }: { onReady: () => void }) {
+  const frame = useRef<number | null>(null);
+
+  useFrame(() => {
+    if (frame.current !== null) return;
+    // useFrame runs before drawing. Reveal on the next browser frame, once the
+    // first scene frame has actually rendered, rather than when Canvas mounts.
+    frame.current = requestAnimationFrame(onReady);
+  });
+
+  useEffect(() => () => {
+    if (frame.current !== null) cancelAnimationFrame(frame.current);
+    frame.current = null;
+  }, []);
+
+  return null;
+}
+
+export default function ThreeBackground({ onReady }: { onReady: () => void }) {
   const { theme } = useTheme();
   const light = theme === "light";
 
@@ -156,6 +174,7 @@ export default function ThreeBackground() {
         <ParticleField light={light} />
         <WireframeSphere light={light} />
         <FloatingRings light={light} />
+        <SceneReady onReady={onReady} />
       </Canvas>
     </div>
   );
