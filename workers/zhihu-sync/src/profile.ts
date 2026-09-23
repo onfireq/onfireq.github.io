@@ -50,7 +50,7 @@ export async function syncZhihuProfile(env: Env): Promise<ZhihuProfile> {
   // This is a public endpoint: never forward the developer API access secret.
   const response = await fetch(PROFILE_API_URL, {
     headers: { Accept: "application/json" },
-    redirect: "error",
+    redirect: "manual",
     signal: AbortSignal.timeout(10_000),
   });
   const upstream = upstreamProfileSchema.parse(await readProfileResponse(response));

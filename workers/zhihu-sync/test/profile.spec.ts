@@ -29,6 +29,7 @@ describe("profile likes automatic synchronization", () => {
     expect(next.receivedLikes).toBe(48);
     expect(fetchMock.mock.calls[0][0]).toBe(PROFILE_API_URL);
     expect(fetchMock.mock.calls[0][1].headers).toEqual({ Accept: "application/json" });
+    expect(fetchMock.mock.calls[0][1].redirect).toBe("manual");
     const response = await worker.fetch(new IncomingRequest("https://worker.example/api/zhihu/profile", {
       headers: { Origin: "https://onfireq.github.io" },
     }), env);
@@ -55,7 +56,7 @@ describe("profile likes automatic synchronization", () => {
     expect((await syncZhihuProfile(env)).receivedLikes).toBe(0);
   });
 
-  it.each([403, 429, 500])("retains last successful value after HTTP %s", async (status) => {
+  it.each([302, 403, 429, 500])("retains last successful value after HTTP %s", async (status) => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response("unavailable", { status })));
     await expect(syncZhihuProfile(env)).rejects.toThrow();
     expect(await env.ZHIHU_CACHE.get(PROFILE_CACHE_KEY, "json")).toEqual(previous);
@@ -74,7 +75,8 @@ describe("profile likes automatic synchronization", () => {
   });
 
   it("still syncs profile likes when the content feed fails", async () => {
-    vi.stubGlobal("fetch", vi.fn(async (url: string | URL) => {
+    vi.stubGlobal("fetch", vi.fn(async (url: string | URL, init: RequestInit) => {
+      expect(init.redirect).toBe("manual");
       if (String(url) === PROFILE_API_URL) {
         return Response.json({ url_token: ZHIHU_PROFILE_TOKEN, thanked_count: 49 });
       }

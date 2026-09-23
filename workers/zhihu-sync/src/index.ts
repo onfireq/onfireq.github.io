@@ -201,7 +201,7 @@ async function fetchZhihuFeed(env: Env): Promise<ZhihuFeed> {
       "Content-Type": "application/json",
       "X-Request-Timestamp": String(Math.floor(Date.now() / 1000)),
     },
-    redirect: "error",
+    redirect: "manual",
     signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
   });
 
