@@ -1,8 +1,7 @@
 import { env } from "cloudflare:workers";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { ZHIHU_PROFILE_TOKEN } from "../../../src/lib/zhihu-profile";
 import worker from "../src/index";
-import { PROFILE_API_URL, PROFILE_CACHE_KEY, syncZhihuProfile } from "../src/profile";
+import { PROFILE_API_URL, PROFILE_ATTEMPT_KEY, PROFILE_CACHE_KEY, syncZhihuProfile } from "../src/profile";
 
 const previous = {
   schemaVersion: 1,
@@ -12,23 +11,38 @@ const previous = {
 const IncomingRequest = Request<unknown, IncomingRequestCfProperties>;
 
 beforeEach(async () => {
+  await env.ZHIHU_CACHE.delete(PROFILE_ATTEMPT_KEY);
   await env.ZHIHU_CACHE.put(PROFILE_CACHE_KEY, JSON.stringify(previous));
 });
 afterEach(() => vi.unstubAllGlobals());
 
 describe("profile likes automatic synchronization", () => {
-  it("updates from thanked_count, independently of comments and voteups", async () => {
+  it("limits attempts to once per hour, including failed requests", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response("unavailable", { status: 429 }));
+    vi.stubGlobal("fetch", fetchMock);
+    await expect(syncZhihuProfile(env)).rejects.toThrow();
+    expect(await syncZhihuProfile(env)).toBeNull();
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(await env.ZHIHU_CACHE.get(PROFILE_CACHE_KEY, "json")).toEqual(previous);
+  });
+
+  it("refreshes again after the hourly interval", async () => {
+    await env.ZHIHU_CACHE.put(PROFILE_ATTEMPT_KEY, String(Date.now() - 61 * 60 * 1000));
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(Response.json({
+      Code: 0, Data: { ContentType: "all", Metrics: { LikeCount: 50 } },
+    })));
+    expect((await syncZhihuProfile(env))?.receivedLikes).toBe(50);
+  });
+
+  it("updates from account LikeCount, independently of comments and voteups", async () => {
     const fetchMock = vi.fn().mockResolvedValue(Response.json({
-      url_token: ZHIHU_PROFILE_TOKEN,
-      thanked_count: 48,
-      voteup_count: 93,
-      comment_count: 9,
+      Code: 0, Data: { ContentType: "all", Metrics: { LikeCount: 48, UpvoteCount: 93, CommentCount: 9 } },
     }));
     vi.stubGlobal("fetch", fetchMock);
     const next = await syncZhihuProfile(env);
-    expect(next.receivedLikes).toBe(48);
+    expect(next?.receivedLikes).toBe(48);
     expect(fetchMock.mock.calls[0][0]).toBe(PROFILE_API_URL);
-    expect(fetchMock.mock.calls[0][1].headers).toEqual({ Accept: "application/json" });
+    expect(fetchMock.mock.calls[0][1].headers.Authorization).toBe(`Bearer ${env.ZHIHU_ACCESS_SECRET}`);
     expect(fetchMock.mock.calls[0][1].redirect).toBe("manual");
     const response = await worker.fetch(new IncomingRequest("https://worker.example/api/zhihu/profile", {
       headers: { Origin: "https://onfireq.github.io" },
@@ -39,10 +53,11 @@ describe("profile likes automatic synchronization", () => {
   });
 
   it.each([
-    { url_token: ZHIHU_PROFILE_TOKEN },
-    { url_token: ZHIHU_PROFILE_TOKEN, thanked_count: null },
-    { url_token: ZHIHU_PROFILE_TOKEN, thanked_count: -1 },
-    { url_token: "another-person", thanked_count: 100 },
+    { Code: 0, Data: { ContentType: "all", Metrics: {} } },
+    { Code: 0, Data: { ContentType: "all", Metrics: { LikeCount: null } } },
+    { Code: 0, Data: { ContentType: "all", Metrics: { LikeCount: -1 } } },
+    { Code: 0, Data: { ContentType: "answer", Metrics: { LikeCount: 100 } } },
+    { Code: 30001, Data: null },
   ])("preserves cached data and timestamp for invalid upstream data: %j", async (body) => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(Response.json(body)));
     await expect(syncZhihuProfile(env)).rejects.toThrow();
@@ -51,9 +66,9 @@ describe("profile likes automatic synchronization", () => {
 
   it("accepts a genuine zero instead of treating it as missing", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(Response.json({
-      url_token: ZHIHU_PROFILE_TOKEN, thanked_count: 0,
+      Code: 0, Data: { ContentType: "all", Metrics: { LikeCount: 0 } },
     })));
-    expect((await syncZhihuProfile(env)).receivedLikes).toBe(0);
+    expect((await syncZhihuProfile(env))?.receivedLikes).toBe(0);
   });
 
   it.each([302, 403, 429, 500])("retains last successful value after HTTP %s", async (status) => {
@@ -78,7 +93,7 @@ describe("profile likes automatic synchronization", () => {
     vi.stubGlobal("fetch", vi.fn(async (url: string | URL, init: RequestInit) => {
       expect(init.redirect).toBe("manual");
       if (String(url) === PROFILE_API_URL) {
-        return Response.json({ url_token: ZHIHU_PROFILE_TOKEN, thanked_count: 49 });
+        return Response.json({ Code: 0, Data: { ContentType: "all", Metrics: { LikeCount: 49 } } });
       }
       return Response.json({}, { status: 500 });
     }));

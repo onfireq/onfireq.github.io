@@ -1,7 +1,7 @@
 import type { ZhihuProfile } from "@/lib/zhihu-profile";
 
 // Last successful public profile API response, used until the live cache loads.
-// The Worker refreshes thanked_count independently of the content snapshot.
+// The Worker refreshes account Metrics.LikeCount independently of the content snapshot.
 export const zhihuProfileStats = {
   schemaVersion: 1,
   receivedLikes: 47,

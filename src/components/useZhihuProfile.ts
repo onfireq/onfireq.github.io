@@ -7,7 +7,7 @@ import { zhihuProfileSchema, type ZhihuProfile } from "@/lib/zhihu-profile";
 const PROFILE_URL = `${(process.env.NEXT_PUBLIC_ZHIHU_FEED_URL ??
   "https://onfireq-zhihu-sync.2467708204.workers.dev/api/zhihu").replace(/\/$/, "")}/profile`;
 const REFRESH_MS = 5 * 60 * 1000;
-const FRESH_MS = 15 * 60 * 1000;
+const FRESH_MS = 90 * 60 * 1000;
 
 export function useZhihuProfile() {
   const [profile, setProfile] = useState<ZhihuProfile>(zhihuProfileStats);

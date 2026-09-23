@@ -483,7 +483,7 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
             </div>
             <div
               className="relative overflow-hidden rounded-lg bg-gradient-to-br from-pink-500/10 to-pink-500/5 p-2 text-center ring-1 ring-pink-500/20"
-              title={`知乎主页获喜欢总数，每 5 分钟自动同步；最近成功更新：${profile.updatedAt}`}
+              title={`知乎账号获喜欢数，每小时自动同步；最近成功更新：${profile.updatedAt}`}
             >
               <div className="flex items-center justify-center gap-0.5 text-lg font-bold text-pink-400">
                 <HiHeart size={11} className="opacity-70" aria-hidden="true" />
@@ -505,7 +505,7 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
 
           <p className="mb-3 text-[10px] leading-relaxed text-gray-500">
             {profileStatus === "live"
-              ? "喜欢数每 5 分钟自动同步"
+              ? "喜欢数每小时自动同步"
               : profileStatus === "stale"
                 ? "喜欢数暂未更新，显示最近成功数据"
                 : "喜欢数自动同步中，当前显示缓存"}
