@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { zhihuProfileSchema } from "../../../src/lib/zhihu-profile";
+import { PROFILE_CACHE_KEY, syncZhihuProfile } from "./profile";
 import {
   zhihuFeedSchema,
   type ZhihuContent,
@@ -370,7 +372,7 @@ export default {
       return jsonError("origin_not_allowed", 403, null);
     }
 
-    if (url.pathname !== "/api/zhihu") {
+    if (url.pathname !== "/api/zhihu" && url.pathname !== "/api/zhihu/profile") {
       return jsonError("not_found", 404, origin);
     }
 
@@ -385,6 +387,16 @@ export default {
     }
 
     try {
+      if (url.pathname === "/api/zhihu/profile") {
+        const cached = await env.ZHIHU_CACHE.get(PROFILE_CACHE_KEY, { type: "json", cacheTtl: 60 });
+        const profile = zhihuProfileSchema.safeParse(cached);
+        if (!profile.success) return jsonError("profile_not_ready", 503, origin);
+        const headers = corsHeaders(origin);
+        headers.set("Cache-Control", "public, max-age=60, stale-while-revalidate=300");
+        headers.set("Content-Type", "application/json; charset=utf-8");
+        headers.set("X-Zhihu-Updated-At", profile.data.updatedAt);
+        return new Response(JSON.stringify(profile.data), { headers });
+      }
       return await serveFeed(request, env, origin);
     } catch (error) {
       console.error(
@@ -400,7 +412,14 @@ export default {
 
   async scheduled(_controller, env): Promise<void> {
     try {
-      await syncZhihuFeed(env);
+      const results = await Promise.allSettled([syncZhihuFeed(env), syncZhihuProfile(env)]);
+      const failures = results.filter((result) => result.status === "rejected");
+      if (failures.length) {
+        const reasons = failures.map((result) =>
+          result.reason instanceof Error ? result.reason.message : String(result.reason),
+        );
+        throw new Error(`Zhihu sync failed: ${reasons.join("; ")}`);
+      }
     } catch (error) {
       console.error(
         JSON.stringify({

@@ -1,8 +1,9 @@
-// Account-level likes received, verified from the profile screenshot supplied
-// by the site owner. The contents API's CommentCount is NOT this metric.
-// Keep this separate from the automatically regenerated content snapshot.
+import type { ZhihuProfile } from "@/lib/zhihu-profile";
+
+// Last successful public profile API response, used until the live cache loads.
+// The Worker refreshes thanked_count independently of the content snapshot.
 export const zhihuProfileStats = {
+  schemaVersion: 1,
   receivedLikes: 47,
-  receivedLikesSource: "manual",
-  receivedLikesVerifiedOn: "2026-09-23",
-} as const;
+  updatedAt: "2026-09-23T15:44:21.948Z",
+} satisfies ZhihuProfile;
