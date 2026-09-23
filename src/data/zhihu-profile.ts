@@ -1,9 +1,6 @@
-import type { ZhihuProfile } from "@/lib/zhihu-profile";
+import snapshot from "../../public/zhihu-profile.json";
+import { zhihuProfileSchema } from "@/lib/zhihu-profile";
 
-// Last successful public profile API response, used until the live cache loads.
-// The Worker refreshes account Metrics.LikeCount independently of the content snapshot.
-export const zhihuProfileStats = {
-  schemaVersion: 1,
-  receivedLikes: 47,
-  updatedAt: "2026-09-23T15:44:21.948Z",
-} satisfies ZhihuProfile;
+// Generated hourly from the public profile's cumulative thanked_count.
+// Share the same validated snapshot between the first render and browser refresh.
+export const zhihuProfileStats = zhihuProfileSchema.parse(snapshot);
