@@ -12,7 +12,7 @@ import {
   HiStar,
   HiUserAdd,
 } from "react-icons/hi";
-import { zhihuContents, zhihuSnapshotUpdatedAt, zhihuStats } from "@/data/zhihu";
+import feedSnapshot from "../../public/zhihu-feed.json";
 import { useZhihuProfile } from "./useZhihuProfile";
 import {
   zhihuFeedSchema,
@@ -27,12 +27,10 @@ interface ZhihuSidebarProps {
 
 type SyncMode = "snapshot" | "live" | "stale";
 
-const FEED_URL =
-  process.env.NEXT_PUBLIC_ZHIHU_FEED_URL ??
-  "https://onfireq-zhihu-sync.2467708204.workers.dev/api/zhihu";
+const FEED_URL = "/zhihu-feed.json";
 const REFRESH_INTERVAL_MS = 5 * 60 * 1000;
 const REQUEST_TIMEOUT_MS = 5_000;
-const FRESH_FOR_MS = 15 * 60 * 1000;
+const FRESH_FOR_MS = 90 * 60 * 1000;
 
 const filters: Array<{ key: "all" | ZhihuContent["type"]; label: string }> = [
   { key: "all", label: "全部" },
@@ -59,36 +57,7 @@ const typeLabels: Record<ZhihuContent["type"], string> = {
   question: "提问",
 };
 
-const staticFeed = zhihuFeedSchema.parse({
-  schemaVersion: 1,
-  updatedAt: zhihuSnapshotUpdatedAt,
-  profile: {
-    followers: 18,
-    followersSource: "manual",
-  },
-  stats: {
-    answerCount: zhihuStats.answerCount,
-    articleCount: zhihuStats.articleCount,
-    pinCount: zhihuStats.pinCount,
-    videoCount: zhihuStats.videoCount,
-    questionCount: zhihuStats.questionCount,
-    totalLikes: zhihuStats.totalLikes,
-    totalComments: zhihuStats.totalComments,
-    totalFavorites: zhihuStats.totalFavorites,
-    windowSize: zhihuContents.length,
-    totalAvailable: Math.max(zhihuStats.totals, zhihuContents.length),
-  },
-  contents: zhihuContents.map((item) => ({
-    type: item.type,
-    title: item.title,
-    url: item.url,
-    summary: item.summary,
-    likeCount: item.likeCount,
-    commentCount: item.commentCount,
-    favoriteCount: item.favoriteCount,
-    createdAt: toEpochSeconds(item.createdAt),
-  })),
-});
+const staticFeed = zhihuFeedSchema.parse(feedSnapshot);
 
 function toEpochSeconds(timestamp: number | string): number {
   if (typeof timestamp === "number") {
@@ -158,6 +127,7 @@ function useZhihuFeed(): { feed: ZhihuFeed; mode: SyncMode } {
       try {
         const response = await fetch(FEED_URL, {
           headers: { Accept: "application/json" },
+          cache: "no-cache",
           signal: controller.signal,
         });
         if (!response.ok) throw new Error(`Zhihu feed returned ${response.status}`);
@@ -377,10 +347,10 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
         ? "bg-amber-400"
         : "bg-gray-500";
   const statTitles = {
-    followers: "关注者：知乎账号的关注者总数\n更新：手动维护",
-    votes: `赞同：最近 ${feed.stats.windowSize} 条内容获得的赞同总数\n更新：每 5 分钟自动同步`,
+    followers: "关注者：知乎主页的关注者总数\n更新：每小时自动同步",
+    votes: "赞同：知乎主页累计获得的赞同总数\n更新：每小时自动同步",
     likes: "喜欢：知乎主页累计获得的喜欢总数\n更新：每小时自动同步",
-    favorites: `收藏：最近 ${feed.stats.windowSize} 条内容被收藏的总次数\n更新：每 5 分钟自动同步`,
+    favorites: "收藏：知乎主页累计被收藏的总次数\n更新：每小时自动同步",
   };
   const latestItems = allItems.slice(0, 3);
 
@@ -472,7 +442,7 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
             >
               <div className="flex items-center justify-center gap-0.5 text-lg font-bold text-cyan-400">
                 <HiUserAdd size={11} className="opacity-70" aria-hidden="true" />
-                {feed.profile.followers ?? "—"}
+                {profile.followers}
               </div>
               <div className="mt-0.5 text-[10px] text-gray-400">关注者</div>
             </div>
@@ -482,7 +452,7 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
             >
               <div className="flex items-center justify-center gap-0.5 text-lg font-bold text-blue-400">
                 <HiArrowUp size={11} className="opacity-70" aria-hidden="true" />
-                {feed.stats.totalLikes}
+                {profile.receivedVotes}
               </div>
               <div className="mt-0.5 text-[10px] text-gray-400">赞同</div>
             </div>
@@ -502,7 +472,7 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
             >
               <div className="flex items-center justify-center gap-0.5 text-lg font-bold text-yellow-400">
                 <HiStar size={11} className="opacity-70" aria-hidden="true" />
-                {feed.stats.totalFavorites}
+                {profile.receivedFavorites}
               </div>
               <div className="mt-0.5 text-[10px] text-gray-400">收藏</div>
             </div>
@@ -510,10 +480,10 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
 
           <p className="mb-3 text-[10px] leading-relaxed text-gray-500">
             {profileStatus === "live"
-              ? "喜欢数每小时自动同步"
+              ? "四项数据每小时自动同步"
               : profileStatus === "stale"
-                ? "喜欢数暂未更新，显示最近成功数据"
-                : "喜欢数自动同步中，当前显示缓存"}
+                ? "统计暂未更新，显示最近成功数据"
+                : "统计自动同步中，当前显示缓存"}
           </p>
 
           <div className="mb-3 flex flex-wrap gap-1.5" role="group" aria-label="筛选知乎内容">
@@ -592,7 +562,7 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
 
           <div
             className="mt-3 flex items-center justify-center gap-1 border-t border-white/5 pt-2 text-center text-[9px] text-gray-500"
-            title={`${new Date(feed.updatedAt).toISOString()}；作品与互动数据每 5 分钟同步一次`}
+            title={`${new Date(feed.updatedAt).toISOString()}；知乎数据每小时统一同步一次`}
           >
             <span className={`h-1 w-1 rounded-full ${dotColor}`} aria-hidden="true" />
             {syncLabel} · 最近 {feed.stats.windowSize} 条

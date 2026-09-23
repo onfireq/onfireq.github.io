@@ -58,7 +58,7 @@ export const zhihuFeedSchema = z
     updatedAt: z.string().datetime({ offset: true }),
     profile: z.strictObject({
       followers: nonNegativeInteger.nullable(),
-      followersSource: z.enum(["manual", "unavailable"]),
+      followersSource: z.enum(["manual", "automatic", "unavailable"]),
     }),
     stats: zhihuStatsSchema,
     contents: z.array(zhihuContentSchema).max(50),

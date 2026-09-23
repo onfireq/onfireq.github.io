@@ -20,7 +20,7 @@
     "ZHIHU_API_URL": "https://developer.zhihu.com/api/v1/user/contents"
   },
   "triggers": {
-    "crons": ["*/5 * * * *"]
+    "crons": []
   },
   "observability": {
     "enabled": true,

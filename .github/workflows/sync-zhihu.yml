@@ -1,9 +1,15 @@
 name: Sync Zhihu Data
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/sync-zhihu.yml
+      - scripts/*zhihu*
+      - sync_zhihu.py
   schedule:
-    # 每天生成一次静态快照，Cloudflare Worker 负责更高频的动态同步。
-    - cron: "0 4 * * *"
+    # Profile totals and content snapshots are published together each hour.
+    - cron: "17 * * * *"
   workflow_dispatch:
 
 concurrency:
@@ -26,6 +32,14 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
+      - name: Test profile metric safeguards
+        shell: pwsh
+        run: ./scripts/test-zhihu-profile.ps1
+
+      - name: Fetch all four profile totals
+        shell: pwsh
+        run: ./scripts/sync-zhihu-profile.ps1
 
       - name: Download zhihu-cli
         shell: pwsh
@@ -78,12 +92,18 @@ jobs:
         shell: pwsh
         run: python sync_zhihu.py --check
 
+      - name: Export browser feed
+        shell: pwsh
+        run: python scripts/export-zhihu-feed.py
+
       - name: Upload generated data
         uses: actions/upload-artifact@v4
         with:
           name: zhihu-data
           path: |
             src/data/zhihu.ts
+            public/zhihu-profile.json
+            public/zhihu-feed.json
           if-no-files-found: error
 
   commit:
@@ -95,19 +115,21 @@ jobs:
     steps:
       - name: Checkout latest code
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Download generated data
         uses: actions/download-artifact@v4
         with:
           name: zhihu-data
-          path: src/data
+          path: .
 
       - name: Commit and push
         shell: bash
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add src/data/zhihu.ts
+          git add src/data/zhihu.ts public/zhihu-profile.json public/zhihu-feed.json
 
           if git diff --staged --quiet; then
             echo "No Zhihu data changes to commit."
