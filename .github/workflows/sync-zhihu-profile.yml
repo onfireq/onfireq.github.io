@@ -1,0 +1,29 @@
+name: Sync Zhihu Profile
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/sync-zhihu-profile.yml
+      - scripts/sync-zhihu-profile.ps1
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fetch:
+    runs-on: windows-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Fetch public profile likes
+        shell: pwsh
+        run: ./scripts/sync-zhihu-profile.ps1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: zhihu-profile
+          path: public/zhihu-profile.json
+          if-no-files-found: error
