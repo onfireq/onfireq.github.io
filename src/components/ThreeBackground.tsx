@@ -3,7 +3,6 @@
 import { useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Points, PointMaterial } from "@react-three/drei";
-import { useReducedMotion } from "framer-motion";
 import * as THREE from "three";
 import { useTheme } from "./ThemeProvider";
 
@@ -31,13 +30,14 @@ function createParticlePositions(count: number) {
 
 const PARTICLE_POSITIONS = createParticlePositions(PARTICLE_COUNT);
 
-function ParticleField({ animate, light }: { animate: boolean; light: boolean }) {
+function ParticleField({ light }: { light: boolean }) {
   const ref = useRef<THREE.Points>(null!);
 
-  useFrame((state) => {
-    if (animate && ref.current) {
-      ref.current.rotation.x = state.clock.elapsedTime * 0.05;
-      ref.current.rotation.y = state.clock.elapsedTime * 0.08;
+  useFrame((_, delta) => {
+    if (ref.current) {
+      const step = Math.min(delta, 0.1);
+      ref.current.rotation.x += step * 0.05;
+      ref.current.rotation.y += step * 0.08;
     }
   });
 
@@ -56,13 +56,14 @@ function ParticleField({ animate, light }: { animate: boolean; light: boolean })
   );
 }
 
-function WireframeSphere({ animate, light }: { animate: boolean; light: boolean }) {
+function WireframeSphere({ light }: { light: boolean }) {
   const ref = useRef<THREE.Mesh>(null!);
 
-  useFrame((state) => {
-    if (animate && ref.current) {
-      ref.current.rotation.x = state.clock.elapsedTime * 0.15;
-      ref.current.rotation.y = state.clock.elapsedTime * 0.2;
+  useFrame((_, delta) => {
+    if (ref.current) {
+      const step = Math.min(delta, 0.1);
+      ref.current.rotation.x += step * 0.15;
+      ref.current.rotation.y += step * 0.2;
     }
   });
 
@@ -79,7 +80,7 @@ function WireframeSphere({ animate, light }: { animate: boolean; light: boolean 
   );
 }
 
-function FloatingRings({ animate, light }: { animate: boolean; light: boolean }) {
+function FloatingRings({ light }: { light: boolean }) {
   const rings = useMemo(() => {
     const items = [];
     for (let i = 0; i < 4; i++) {
@@ -98,7 +99,6 @@ function FloatingRings({ animate, light }: { animate: boolean; light: boolean })
           radius={ring.radius}
           initialRotation={ring.rotation}
           speed={ring.speed}
-          animate={animate}
           light={light}
         />
       ))}
@@ -110,28 +110,25 @@ function Ring({
   radius,
   initialRotation,
   speed,
-  animate,
   light,
 }: {
   radius: number;
   initialRotation: number;
   speed: number;
-  animate: boolean;
   light: boolean;
 }) {
   const ref = useRef<THREE.Mesh>(null!);
 
-  useFrame((state) => {
-    if (animate && ref.current) {
-      ref.current.rotation.x =
-        initialRotation + state.clock.elapsedTime * speed;
-      ref.current.rotation.z =
-        initialRotation * 0.5 + state.clock.elapsedTime * speed * 0.7;
+  useFrame((_, delta) => {
+    if (ref.current) {
+      const step = Math.min(delta, 0.1);
+      ref.current.rotation.x += step * speed;
+      ref.current.rotation.z += step * speed * 0.7;
     }
   });
 
   return (
-    <mesh ref={ref}>
+    <mesh ref={ref} rotation={[initialRotation, 0, initialRotation * 0.5]}>
       <torusGeometry args={[radius, 0.004, 16, 100]} />
       <meshBasicMaterial
         color={new THREE.Color().setHSL(0.7 + initialRotation * 0.1, 0.8, light ? 0.38 : 0.6)}
@@ -144,8 +141,6 @@ function Ring({
 
 export default function ThreeBackground() {
   const { theme } = useTheme();
-  const reduceMotion = useReducedMotion();
-  const animate = !reduceMotion;
   const light = theme === "light";
 
   return (
@@ -154,13 +149,13 @@ export default function ThreeBackground() {
         camera={{ position: [0, 0, 5], fov: 60 }}
         gl={{ antialias: true, alpha: true }}
         dpr={[1, 1.25]}
-        frameloop={animate ? "always" : "demand"}
+        frameloop="always"
         style={{ background: "transparent" }}
       >
         <ambientLight intensity={0.3} />
-        <ParticleField animate={animate} light={light} />
-        <WireframeSphere animate={animate} light={light} />
-        <FloatingRings animate={animate} light={light} />
+        <ParticleField light={light} />
+        <WireframeSphere light={light} />
+        <FloatingRings light={light} />
       </Canvas>
     </div>
   );
