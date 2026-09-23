@@ -376,7 +376,12 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
       : effectiveMode === "stale"
         ? "bg-amber-400"
         : "bg-gray-500";
-  const statsTitle = `最近 ${feed.stats.windowSize} 条内容合计`;
+  const statTitles = {
+    followers: "关注者：知乎账号的关注者总数\n更新：手动维护",
+    votes: `赞同：最近 ${feed.stats.windowSize} 条内容获得的赞同总数\n更新：每 5 分钟自动同步`,
+    likes: "喜欢：知乎主页累计获得的喜欢总数\n更新：每小时自动同步",
+    favorites: `收藏：最近 ${feed.stats.windowSize} 条内容被收藏的总次数\n更新：每 5 分钟自动同步`,
+  };
   const latestItems = allItems.slice(0, 3);
 
   return (
@@ -463,7 +468,7 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
           <div className="mb-3 grid grid-cols-4 gap-1.5">
             <div
               className="relative overflow-hidden rounded-lg bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 p-2 text-center ring-1 ring-cyan-500/20"
-              title="粉丝数由手动维护，知乎开放接口暂不提供此数据"
+              title={statTitles.followers}
             >
               <div className="flex items-center justify-center gap-0.5 text-lg font-bold text-cyan-400">
                 <HiUserAdd size={11} className="opacity-70" aria-hidden="true" />
@@ -473,7 +478,7 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
             </div>
             <div
               className="relative overflow-hidden rounded-lg bg-gradient-to-br from-blue-500/10 to-blue-500/5 p-2 text-center ring-1 ring-blue-500/20"
-              title={statsTitle}
+              title={statTitles.votes}
             >
               <div className="flex items-center justify-center gap-0.5 text-lg font-bold text-blue-400">
                 <HiArrowUp size={11} className="opacity-70" aria-hidden="true" />
@@ -483,7 +488,7 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
             </div>
             <div
               className="relative overflow-hidden rounded-lg bg-gradient-to-br from-pink-500/10 to-pink-500/5 p-2 text-center ring-1 ring-pink-500/20"
-              title={`知乎账号获喜欢数，每小时自动同步；最近成功更新：${profile.updatedAt}`}
+              title={statTitles.likes}
             >
               <div className="flex items-center justify-center gap-0.5 text-lg font-bold text-pink-400">
                 <HiHeart size={11} className="opacity-70" aria-hidden="true" />
@@ -493,7 +498,7 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
             </div>
             <div
               className="relative overflow-hidden rounded-lg bg-gradient-to-br from-yellow-500/10 to-yellow-500/5 p-2 text-center ring-1 ring-yellow-500/20"
-              title={statsTitle}
+              title={statTitles.favorites}
             >
               <div className="flex items-center justify-center gap-0.5 text-lg font-bold text-yellow-400">
                 <HiStar size={11} className="opacity-70" aria-hidden="true" />
