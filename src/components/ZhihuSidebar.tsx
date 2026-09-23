@@ -13,6 +13,7 @@ import {
   HiUserAdd,
 } from "react-icons/hi";
 import { zhihuContents, zhihuSnapshotUpdatedAt, zhihuStats } from "@/data/zhihu";
+import { zhihuProfileStats } from "@/data/zhihu-profile";
 import {
   zhihuFeedSchema,
   type ZhihuContent,
@@ -481,11 +482,11 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
             </div>
             <div
               className="relative overflow-hidden rounded-lg bg-gradient-to-br from-pink-500/10 to-pink-500/5 p-2 text-center ring-1 ring-pink-500/20"
-              title={statsTitle}
+              title={`知乎主页获喜欢总数，${zhihuProfileStats.receivedLikesVerifiedOn} 根据主页截图核对；暂不自动更新`}
             >
               <div className="flex items-center justify-center gap-0.5 text-lg font-bold text-pink-400">
                 <HiHeart size={11} className="opacity-70" aria-hidden="true" />
-                {feed.stats.totalComments}
+                {zhihuProfileStats.receivedLikes}
               </div>
               <div className="mt-0.5 text-[10px] text-gray-400">喜欢</div>
             </div>
@@ -500,6 +501,10 @@ export default function ZhihuSidebar({ activeFilter, onFilterChange }: ZhihuSide
               <div className="mt-0.5 text-[10px] text-gray-400">收藏</div>
             </div>
           </div>
+
+          <p className="mb-3 text-[10px] leading-relaxed text-gray-500">
+            喜欢数为主页核对值，暂不自动更新。
+          </p>
 
           <div className="mb-3 flex flex-wrap gap-1.5" role="group" aria-label="筛选知乎内容">
             {filters.map((filter) => {
