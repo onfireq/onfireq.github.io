@@ -1,11 +1,9 @@
 "use client";
+/* eslint-disable @next/next/no-html-link-for-pages -- Native navigation must work before React hydrates. */
 
-import Link from "next/link";
-import { useState } from "react";
+import { useRef } from "react";
 import type { SVGProps } from "react";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { useTheme } from "./ThemeProvider";
 import { HiMenu, HiX, HiSun, HiMoon } from "react-icons/hi";
 import { FaGithub } from "react-icons/fa";
 import { SiZhihu } from "react-icons/si";
@@ -35,10 +33,8 @@ function BilibiliIcon({
 }
 
 export default function Navbar() {
-  const { theme, toggle } = useTheme();
-  const [open, setOpen] = useState(false);
+  const menu = useRef<HTMLDetailsElement>(null);
   const pathname = usePathname();
-  const reduceMotion = useReducedMotion();
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -46,21 +42,19 @@ export default function Navbar() {
   };
 
   return (
-    <motion.nav
-      initial={reduceMotion ? false : { y: -80 }}
-      animate={{ y: 0 }}
+    <nav
       aria-label="主导航"
       className="site-nav fixed top-0 w-full z-50 glass rounded-none border-b border-white/5"
     >
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Link href="/" className="text-xl font-bold text-gradient" aria-label="OnfireQ 首页">
+        <a href="/" className="text-xl font-bold text-gradient" aria-label="OnfireQ 首页">
           OnfireQ
-        </Link>
+        </a>
 
         {/* Desktop */}
         <div className="hidden md:flex items-center gap-1">
           {links.map((l) => (
-            <Link
+            <a
               key={l.href}
               href={l.href}
               aria-current={isActive(l.href) ? "page" : undefined}
@@ -71,7 +65,7 @@ export default function Navbar() {
               }`}
             >
               {l.label}
-            </Link>
+            </a>
           ))}
 
           {/* Divider */}
@@ -95,47 +89,28 @@ export default function Navbar() {
           {/* Theme toggle */}
           <button
             type="button"
-            onClick={toggle}
-            aria-label={theme === "dark" ? "切换到亮色模式" : "切换到暗色模式"}
+            data-theme-toggle
+            aria-label="切换深浅色模式"
             className="ml-1 p-2 rounded-full hover:bg-white/10 transition"
           >
-            {theme === "dark" ? (
-              <HiSun className="text-yellow-400" size={18} />
-            ) : (
-              <HiMoon className="text-brand-purple" size={18} />
-            )}
+            <HiSun className="theme-when-dark text-yellow-400" size={18} />
+            <HiMoon className="theme-when-light text-brand-purple" size={18} />
           </button>
         </div>
 
-        {/* Mobile menu button */}
-        <button
-          type="button"
-          className="md:hidden p-2 min-h-11 min-w-11 inline-flex items-center justify-center"
-          onClick={() => setOpen(!open)}
-          aria-label={open ? "关闭导航菜单" : "打开导航菜单"}
-          aria-expanded={open}
-          aria-controls="mobile-navigation"
-        >
-          {open ? <HiX size={22} /> : <HiMenu size={22} />}
-        </button>
-      </div>
-
-      {/* Mobile menu */}
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            id="mobile-navigation"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="site-nav-menu md:hidden glass border-t border-white/5"
-          >
+        {/* Native disclosure and links work while JavaScript is still loading. */}
+        <details ref={menu} className="group md:hidden">
+          <summary aria-label="导航菜单" className="list-none cursor-pointer p-2 min-h-11 min-w-11 flex items-center justify-center [&::-webkit-details-marker]:hidden">
+            <HiMenu size={22} className="group-open:hidden" />
+            <HiX size={22} className="hidden group-open:block" />
+          </summary>
+          <div id="mobile-navigation" className="site-nav-menu absolute inset-x-0 top-16 glass border-t border-white/5">
             <div className="flex flex-col gap-1 p-4">
               {links.map((l) => (
-                <Link
+                <a
                   key={l.href}
                   href={l.href}
-                  onClick={() => setOpen(false)}
+                  onClick={() => { if (menu.current) menu.current.open = false; }}
                   aria-current={isActive(l.href) ? "page" : undefined}
                   className={`px-4 py-2.5 rounded-lg transition-all ${
                     isActive(l.href)
@@ -144,7 +119,7 @@ export default function Navbar() {
                   }`}
                 >
                   {l.label}
-                </Link>
+                </a>
               ))}
 
               {/* Mobile social icons */}
@@ -165,15 +140,17 @@ export default function Navbar() {
 
               <button
                 type="button"
-                onClick={toggle}
+                data-theme-toggle
+                aria-label="切换深浅色模式"
                 className="px-4 py-2.5 text-left text-gray-400 hover:text-white hover:bg-white/5 rounded-lg"
               >
-                {theme === "dark" ? "🌞 亮色模式" : "🌙 暗色模式"}
+                <span className="theme-when-dark">🌞 亮色模式</span>
+                <span className="theme-when-light">🌙 暗色模式</span>
               </button>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.nav>
+          </div>
+        </details>
+      </div>
+    </nav>
   );
 }

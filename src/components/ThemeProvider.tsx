@@ -2,7 +2,6 @@
 
 import {
   createContext,
-  useCallback,
   useContext,
   useSyncExternalStore,
   type ReactNode,
@@ -12,9 +11,8 @@ type Theme = "dark" | "light";
 
 const THEME_EVENT = "onfireq-theme-change";
 
-const ThemeCtx = createContext<{ theme: Theme; toggle: () => void }>({
+const ThemeCtx = createContext<{ theme: Theme }>({
   theme: "dark",
-  toggle: () => undefined,
 });
 
 function subscribeToTheme(onStoreChange: () => void) {
@@ -45,15 +43,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     getServerThemeSnapshot,
   );
 
-  const toggle = useCallback(() => {
-    const next = theme === "dark" ? "light" : "dark";
-    localStorage.setItem("theme", next);
-    document.documentElement.dataset.theme = next;
-    window.dispatchEvent(new Event(THEME_EVENT));
-  }, [theme]);
-
   return (
-    <ThemeCtx.Provider value={{ theme, toggle }}>
+    <ThemeCtx.Provider value={{ theme }}>
       {children}
     </ThemeCtx.Provider>
   );

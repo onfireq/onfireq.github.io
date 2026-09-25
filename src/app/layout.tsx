@@ -59,6 +59,14 @@ const themeInitScript = `
   } catch (_) {
     document.documentElement.dataset.theme = "dark";
   }
+  // Keep this tiny control available before the application bundles arrive.
+  document.addEventListener("click", (event) => {
+    if (!(event.target instanceof Element) || !event.target.closest("[data-theme-toggle]")) return;
+    const next = document.documentElement.dataset.theme === "light" ? "dark" : "light";
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem("theme", next); } catch (_) {}
+    window.dispatchEvent(new Event("onfireq-theme-change"));
+  }, true);
 `;
 
 const personJsonLd = {

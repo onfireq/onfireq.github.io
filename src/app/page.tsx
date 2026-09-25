@@ -1,4 +1,3 @@
-import Link from "next/link";
 import HeroSection from "@/components/HeroSection";
 
 const destinations = [
@@ -15,7 +14,7 @@ export default function Home() {
       <section id="home-links" aria-label="网站主要内容" className="scroll-mt-20 px-6 py-24">
         <div className="mx-auto grid max-w-4xl gap-6 md:grid-cols-3">
           {destinations.map((item) => (
-            <Link
+            <a
               key={item.href}
               href={item.href}
               className="glass group p-8 text-center transition-all hover:border-brand-purple/30"
@@ -25,7 +24,7 @@ export default function Home() {
               </div>
               <h2 className="mb-2 text-lg font-semibold">{item.title}</h2>
               <p className="text-sm text-gray-400">{item.description}</p>
-            </Link>
+            </a>
           ))}
         </div>
       </section>

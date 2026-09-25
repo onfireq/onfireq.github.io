@@ -1,0 +1,18 @@
+.background {
+  position: absolute;
+  inset: 0;
+  z-index: -10;
+  pointer-events: none;
+}
+.preview, .scene { position: absolute; inset: 0; transition: opacity 0.35s ease; }
+.scene { opacity: 0; }
+.background[data-ready="true"] .scene { opacity: 1; }
+.background[data-ready="true"] .preview { opacity: 0; visibility: hidden; transition: opacity 0.35s ease, visibility 0s 0.35s; }
+.artwork { position: absolute; height: 100%; width: auto; aspect-ratio: 1; left: 50%; transform: translateX(-50%); overflow: visible; }
+.particles { stroke: #6c63ff; opacity: 0.6; }
+.wireframe { stroke: #00d9ff; opacity: 0.08; transform-origin: center; animation: drift 80s linear infinite; }
+.ring { stroke: #a78bfa; opacity: 0.15; }
+:global(html[data-theme="light"]) .particles { stroke: #4338ca; opacity: 0.35; }
+:global(html[data-theme="light"]) .wireframe { stroke: #0369a1; opacity: 0.13; }
+:global(html[data-theme="light"]) .ring { stroke: #8b5cf6; opacity: 0.13; }
+@keyframes drift { to { transform: rotate(360deg); } }

@@ -97,6 +97,10 @@
 
 .skip-link:focus { transform: translateY(0); }
 
+/* Match the early theme bootstrap without waiting for React hydration. */
+html:not([data-theme="light"]) .theme-when-light,
+html[data-theme="light"] .theme-when-dark { display: none; }
+
 @utility glass {
   background: var(--glass-background);
   backdrop-filter: blur(24px);
