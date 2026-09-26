@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import ts from 'typescript';
 import * as THREE from 'three';
+import { setImmediate } from 'node:timers/promises';
 
 function load(file, dependencies = {}, globals = {}) {
   const compiled = { exports: {} };
@@ -38,10 +39,17 @@ const surface = { parentElement: host,
 };
 let effects = [], refs = [], refIndex = 0, nextId = 0, lastPose, ready = 0, unavailable = 0, rendererDisposed = false;
 let failWebGL = false;
+let allocations = 0, renders = 0;
+const compilations = [];
 class Renderer {
   constructor() { if (failWebGL) throw new Error('No WebGL'); }
-  setClearColor() {} setPixelRatio() {} setSize() {}
-  render(model) { lastPose = JSON.stringify(model.children.map(object => object.rotation.toArray())); }
+  setClearColor() {}
+  setDrawingBufferSize(width, height, ratio) {
+    assert.equal(ratio, 2, 'preserve full resolution');
+    allocations++;
+  }
+  compileAsync() { return new Promise((resolve, reject) => compilations.push({ resolve, reject })); }
+  render(model) { renders++; lastPose = JSON.stringify(model.children.map(object => object.rotation.toArray())); }
   dispose() { rendererDisposed = true; }
 }
 const document = { hidden: false, documentElement: { dataset: { theme: 'dark' } },
@@ -67,14 +75,21 @@ const component = load('src/components/ThreeBackground.tsx', {
 });
 const props = { active: false, onReady: () => ready++, onUnavailable: () => unavailable++ };
 component.default(props); effects[0](); const cleanup = effects[1]();
-assert.equal(ready, 1);
-assert.equal(lastPose, initial, 'WebGL must render the actual t=0 pose before revealing');
+assert.equal(ready, 0);
+assert.equal(renders, 0, 'no synchronous first render before shader compilation');
+assert.equal(queue.size, 0, 'no animation while compiling');
+observers.size(); observers.size();
+assert.equal(allocations, 1, 'duplicate size notifications must not reallocate the drawing buffer');
+compilations.shift().resolve(); await setImmediate();
 const advance = time => {
   assert.equal(queue.size, 1);
   const [id, callback] = queue.entries().next().value;
   queue.delete(id); callback(time);
 };
 advance(1000); advance(2000);
+assert.equal(ready, 1);
+assert.equal(lastPose, initial, 'warm-up must render t=0 before revealing');
+assert.equal(renders, 1, 'warm-up draws once, and holds until visible');
 assert.equal(lastPose, initial, 'hidden scene must not start rotating');
 refs[1].current = true;
 advance(3000); assert.equal(lastPose, initial, 'first visible frame must still match the preview');
@@ -88,13 +103,34 @@ observers.intersection([{ isIntersecting: false }]); assert.equal(queue.size, 0)
 observers.intersection([{ isIntersecting: true }]); advance(200000); assert.equal(lastPose, pose);
 surfaceEvents.webglcontextlost({ preventDefault() {} });
 assert.equal(unavailable, 1); assert.equal(queue.size, 0);
-surfaceEvents.webglcontextrestored(); advance(300000); assert.equal(lastPose, pose);
+const rendersBeforeRestore = renders;
+surfaceEvents.webglcontextrestored();
+assert.equal(renders, rendersBeforeRestore, 'restoration must not draw before recompiling');
+assert.equal(queue.size, 0, 'restored context must compile again before playback');
+compilations.shift().resolve(); await setImmediate();
+advance(300000); advance(300016); assert.equal(lastPose, pose);
 cleanup(); assert.equal(queue.size, 0); assert.equal(rendererDisposed, true);
 assert.equal(Object.keys(observers).length + Object.keys(events).length + Object.keys(surfaceEvents).length, 0);
+// Unmount while compilation is pending must neither reveal nor render later.
+refs = []; refIndex = 0; effects = []; rendererDisposed = false;
+component.default(props); effects[0](); const cancelPending = effects[1]();
+const readyBeforeUnmount = ready, rendersBeforeUnmount = renders;
+cancelPending();
+assert.equal(rendererDisposed, false, 'keep compiler resources alive until polling finishes');
+compilations.shift().resolve(); await setImmediate();
+assert.equal(rendererDisposed, true);
+assert.equal(ready, readyBeforeUnmount); assert.equal(renders, rendersBeforeUnmount);
+assert.equal(queue.size, 0);
+// Compilation failure retains the still and never starts playback.
+refs = []; refIndex = 0; effects = [];
+component.default(props); effects[0](); const cleanupFailed = effects[1]();
+compilations.shift().reject(new Error('Compile failed')); await setImmediate();
+assert.equal(unavailable, 2); assert.equal(queue.size, 0);
+cleanupFailed();
 // A machine without WebGL must retain the static preview instead of hiding the hero.
 failWebGL = true; refs = []; refIndex = 0; effects = [];
 component.default(props); effects[0](); effects[1]();
-assert.equal(unavailable, 2); assert.equal(queue.size, 0);
+assert.equal(unavailable, 3); assert.equal(queue.size, 0);
 const css = fs.readFileSync('src/components/HeroBackground.module.css', 'utf8');
 assert.doesNotMatch(css, /(?:animation|transition)\s*:/, 'static preview must not animate or cross-fade');
 console.log('Three.js geometry, first-frame handoff, theme, resize, pause/resume, WebGL recovery and cleanup checks passed.');
