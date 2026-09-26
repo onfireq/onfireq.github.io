@@ -48,6 +48,9 @@ jobs:
       - name: Type check
         run: npm run typecheck
 
+      - name: Test hero animation continuity
+        run: node scripts/test-hero-scene.mjs
+
       - name: Check Cloudflare Worker
         run: npm run worker:check
 

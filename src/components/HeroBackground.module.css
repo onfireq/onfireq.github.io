@@ -1,18 +1,25 @@
 .background {
+  --hero-particles: rgba(108, 99, 255, 0.65);
+  --hero-wire: rgba(0, 217, 255, 0.13);
+  --hero-ring-0: rgba(128, 90, 235, 0.22);
+  --hero-ring-1: rgba(219, 90, 235, 0.20);
+  --hero-ring-2: rgba(235, 90, 160, 0.18);
+  --hero-ring-3: rgba(235, 112, 90, 0.16);
   position: absolute;
   inset: 0;
   z-index: -10;
   pointer-events: none;
 }
-.preview, .scene { position: absolute; inset: 0; transition: opacity 0.35s ease; }
-.scene { opacity: 0; }
-.background[data-ready="true"] .scene { opacity: 1; }
-.background[data-ready="true"] .preview { opacity: 0; visibility: hidden; transition: opacity 0.35s ease, visibility 0s 0.35s; }
+.preview, .canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.canvas { visibility: hidden; }
+.background[data-ready="true"] .canvas { visibility: visible; }
+.background[data-ready="true"] .preview { visibility: hidden; }
 .artwork { position: absolute; height: 100%; width: auto; aspect-ratio: 1; left: 50%; transform: translateX(-50%); overflow: visible; }
-.particles { stroke: #6c63ff; opacity: 0.6; }
-.wireframe { stroke: #00d9ff; opacity: 0.08; transform-origin: center; animation: drift 80s linear infinite; }
-.ring { stroke: #a78bfa; opacity: 0.15; }
-:global(html[data-theme="light"]) .particles { stroke: #4338ca; opacity: 0.35; }
-:global(html[data-theme="light"]) .wireframe { stroke: #0369a1; opacity: 0.13; }
-:global(html[data-theme="light"]) .ring { stroke: #8b5cf6; opacity: 0.13; }
-@keyframes drift { to { transform: rotate(360deg); } }
+:global(html[data-theme="light"]) .background {
+  --hero-particles: rgba(67, 56, 202, 0.35);
+  --hero-wire: rgba(3, 105, 161, 0.18);
+  --hero-ring-0: rgba(111, 31, 174, 0.13);
+  --hero-ring-1: rgba(165, 31, 174, 0.13);
+  --hero-ring-2: rgba(174, 31, 100, 0.13);
+  --hero-ring-3: rgba(174, 69, 31, 0.13);
+}
