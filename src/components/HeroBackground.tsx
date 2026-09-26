@@ -43,7 +43,9 @@ export default function HeroBackground({ children }: { children: ReactNode }) {
         ctx.arc(x, y, radius, 0, Math.PI*2);
       }
       ctx.fill();
-      ctx.lineWidth = 0.8;
+      // Keep a full CSS pixel of coverage, even on shorter viewports.
+      // Match the SVG's non-scaling stroke so startup has no thickness change.
+      ctx.lineWidth = 1000 / height;
       ctx.strokeStyle = palette[1];
       ctx.beginPath();
       frame.edges.forEach(edge => path(edge));
@@ -59,7 +61,7 @@ export default function HeroBackground({ children }: { children: ReactNode }) {
     function resize() {
       width = host.clientWidth;
       height = host.clientHeight;
-      ratio = Math.min(window.devicePixelRatio || 1, 1.5);
+      ratio = Math.min(window.devicePixelRatio || 1, 2);
       surface.width = Math.round(width * ratio);
       surface.height = Math.round(height * ratio);
       draw(); // Redraw at the same phase; resizing must not restart rotation.
