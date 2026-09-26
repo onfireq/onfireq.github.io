@@ -1,25 +1,22 @@
-.background {
-  --hero-particles: rgba(108, 99, 255, 0.8);
-  --hero-wire: rgba(0, 217, 255, 0.20);
-  --hero-ring-0: rgba(128, 90, 235, 0.26);
-  --hero-ring-1: rgba(219, 90, 235, 0.24);
-  --hero-ring-2: rgba(235, 90, 160, 0.22);
-  --hero-ring-3: rgba(235, 112, 90, 0.20);
-  position: absolute;
-  inset: 0;
-  z-index: -10;
-  pointer-events: none;
-}
-.preview, .canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-.canvas { visibility: hidden; }
-.background[data-ready="true"] .canvas { visibility: visible; }
+.background { position: absolute; inset: 0; z-index: -10; pointer-events: none; }
+.preview, .scene { position: absolute; inset: 0; width: 100%; height: 100%; }
+.scene { visibility: hidden; }
+.background[data-ready="true"] .scene { visibility: visible; }
 .background[data-ready="true"] .preview { visibility: hidden; }
-.artwork { position: absolute; height: 100%; width: auto; aspect-ratio: 1; left: 50%; transform: translateX(-50%); overflow: visible; }
-:global(html[data-theme="light"]) .background {
-  --hero-particles: rgba(67, 56, 202, 0.45);
-  --hero-wire: rgba(3, 105, 161, 0.25);
-  --hero-ring-0: rgba(111, 31, 174, 0.18);
-  --hero-ring-1: rgba(165, 31, 174, 0.18);
-  --hero-ring-2: rgba(174, 31, 100, 0.18);
-  --hero-ring-3: rgba(174, 69, 31, 0.18);
+/* The placeholder is a still first frame: no animation or cross-fade. */
+.artwork {
+  position: absolute; height: 100%; width: auto; aspect-ratio: 1;
+  left: 50%; transform: translateX(-50%); overflow: visible;
+  --stars: var(--dark-stars); --star-opacity: var(--dark-star-opacity);
+  --wire: var(--dark-wire); --wire-opacity: var(--dark-wire-opacity);
+  --ring-opacity: var(--dark-ring-opacity);
+  --ring-0: var(--dark-ring-0); --ring-1: var(--dark-ring-1);
+  --ring-2: var(--dark-ring-2); --ring-3: var(--dark-ring-3);
+}
+:global(html[data-theme="light"]) .artwork {
+  --stars: var(--light-stars); --star-opacity: var(--light-star-opacity);
+  --wire: var(--light-wire); --wire-opacity: var(--light-wire-opacity);
+  --ring-opacity: var(--light-ring-opacity);
+  --ring-0: var(--light-ring-0); --ring-1: var(--light-ring-1);
+  --ring-2: var(--light-ring-2); --ring-3: var(--light-ring-3);
 }
