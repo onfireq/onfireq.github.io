@@ -1,7 +1,7 @@
 // 知乎数据（自动生成，请勿手动编辑）
-// 最后更新: 2026-10-02T01:41:17+00:00
+// 最后更新: 2026-10-02T08:29:34+00:00
 
-export const zhihuSnapshotUpdatedAt = "2026-10-02T01:41:17+00:00";
+export const zhihuSnapshotUpdatedAt = "2026-10-02T08:29:34+00:00";
 
 export interface ZhihuContent {
   type: 'answer' | 'article' | 'pin' | 'video' | 'question';
@@ -103,7 +103,7 @@ export const zhihuContents: ZhihuContent[] = [
     "title": "分享一个离线更新Arduino的ESP32库的方法",
     "url": "https://zhuanlan.zhihu.com/p/1911352839244092570",
     "summary": "我们首先进入库的github网站： espressif/arduino-esp32: Arduino core for the ESP32 在网站中找到最新的发行版本 [图片] 点击后就变成了这个页面 [图片] 拉到最下面找到JSON文件 [图片] 打开后的JSON文件长这个样子 [图片] 简单分析一下结构 [图片] Arduino中ESP32包的所有信息都在package里面，前面交代了基本信息，platforms里面是ESP32库所有版本的信息，tools是所有工具的所有版本，platforms里用到的所有的工具库的下载链接都可以在tools里面找到。我们进行更…",
-    "likeCount": 32,
+    "likeCount": 33,
     "commentCount": 2,
     "favoriteCount": 9,
     "createdAt": 1748485339
@@ -446,7 +446,7 @@ export const zhihuStats: ZhihuStats = {
   "pinCount": 14,
   "videoCount": 0,
   "questionCount": 5,
-  "totalLikes": 93,
+  "totalLikes": 94,
   "totalComments": 9,
   "totalFavorites": 60,
   "totals": 41
