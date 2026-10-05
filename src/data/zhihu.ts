@@ -1,7 +1,7 @@
 // 知乎数据（自动生成，请勿手动编辑）
-// 最后更新: 2026-10-04T23:07:18+00:00
+// 最后更新: 2026-10-05T01:58:34+00:00
 
-export const zhihuSnapshotUpdatedAt = "2026-10-04T23:07:18+00:00";
+export const zhihuSnapshotUpdatedAt = "2026-10-05T01:58:34+00:00";
 
 export interface ZhihuContent {
   type: 'answer' | 'article' | 'pin' | 'video' | 'question';
@@ -85,7 +85,7 @@ export const zhihuContents: ZhihuContent[] = [
     "summary": "相对而言的，一束偏振光总可以分解为水平偏振光和垂直偏振光的叠加。在晶体中为了描述上的方便，就沿着o光和e光方向分解了。 当然o光和e光实质上是双折射晶体的一对本征解。但是理解到这里就可以解决问题了。可以重合，但不是一个东西。 分解是方法，是数学工具。 o光、e光是光在晶体中传播的规律，是物理特性。",
     "likeCount": 7,
     "commentCount": 1,
-    "favoriteCount": 0,
+    "favoriteCount": 4,
     "createdAt": 1758267424
   },
   {
@@ -185,7 +185,7 @@ export const zhihuContents: ZhihuContent[] = [
     "summary": "根据 [公式] 函数的性质，里面的可以整体上正负号随便变，所以你指的那两个是初相位为 [公式] ，而传播方向不同的两个波。即 [公式] [公式] 一般我们认为波是从源点处向空间的其他方位传播，自然对应了 [公式] 的那个表达式。",
     "likeCount": 1,
     "commentCount": 0,
-    "favoriteCount": 0,
+    "favoriteCount": 1,
     "createdAt": 1728694267
   },
   {
@@ -205,7 +205,7 @@ export const zhihuContents: ZhihuContent[] = [
     "summary": "在张晓光老师的光纤通信系统中的偏振光学中提到，左右旋光是可以在旋光物质中稳定传播（即不发生本质变化）的两种光的模式，在书中张老师把这种性质的光称作本征光。文中还分析了双折射现象中的o光和e光，它们可以在双折射晶体中稳定传播，这两种光同样是本征光。",
     "likeCount": 2,
     "commentCount": 0,
-    "favoriteCount": 0,
+    "favoriteCount": 2,
     "createdAt": 1728566307
   },
   {
@@ -215,7 +215,7 @@ export const zhihuContents: ZhihuContent[] = [
     "summary": "理想光学系统中是这样的。在有像差的情况下，不同离轴距离的光线的“焦点”会不同，这些焦点分布在理想焦点附近。",
     "likeCount": 1,
     "commentCount": 0,
-    "favoriteCount": 0,
+    "favoriteCount": 1,
     "createdAt": 1728566085
   },
   {
@@ -275,7 +275,7 @@ export const zhihuContents: ZhihuContent[] = [
     "summary": "今天弄明白了，我写下来供各位学习参考。 傅里叶光学（或者信息光学）是以“物”和“像”作为对象进行分析的。物面就是系统的输入，像面就是系统的输出。主要研究光的空间信息。更多的关注光的“空间频率”而非“时间频率”。研究关注的是光的二维信息，即一个相对来说比较大的平面上光强的分布情况。而非在一维时间上光强的有无（类似于高电平1和低电平0）。影响光强变动的偏振信息、波长/频率信息这些细节部分更不是傅里叶光学…",
     "likeCount": 21,
     "commentCount": 1,
-    "favoriteCount": 0,
+    "favoriteCount": 13,
     "createdAt": 1725463123
   },
   {
@@ -315,7 +315,7 @@ export const zhihuContents: ZhihuContent[] = [
     "summary": "其他答案好像并没有说出究竟是什么才让时间常数 [公式] 与众不同的。（能度量时间的数有很多，为什么偏偏要用 [公式] 呢？）我们可以先从一个光线性吸收的例子开始。 假设有一束单色平行光沿x方向通过均匀介质。（如图所示） [图片] 设光的强度在经过厚度为 [公式] 的一层介质时，强度由 [公式] 减为 [公式] 。实验表明，在相当广阔的光强范围内， [公式] 正比于 [公式] 和 [公式] ，有： [公式] 式…",
     "likeCount": 7,
     "commentCount": 0,
-    "favoriteCount": 0,
+    "favoriteCount": 12,
     "createdAt": 1699031198
   },
   {
@@ -345,7 +345,7 @@ export const zhihuContents: ZhihuContent[] = [
     "summary": "上面的回答很好，但是好像有点不够具体。这个问题，我之前也困惑了很久。 我们不妨以光线性吸收的例子开始。 假设有一束单色平行光沿x方向通过均匀介质（如图所示）。 [图片] 设光的强度在经过厚度为 [公式] 的一层介质时，强度由 [公式] 减为 [公式] 。实验表明，在相当广阔的光强范围内， [公式] 正比于 [公式] 和 [公式] ，有： [公式] 式中， [公式] 是个与光强无关的比例系数，称为该物质的…",
     "likeCount": 6,
     "commentCount": 0,
-    "favoriteCount": 0,
+    "favoriteCount": 13,
     "createdAt": 1698766398
   },
   {
@@ -448,6 +448,6 @@ export const zhihuStats: ZhihuStats = {
   "questionCount": 5,
   "totalLikes": 94,
   "totalComments": 9,
-  "totalFavorites": 14,
+  "totalFavorites": 60,
   "totals": 41
 };
