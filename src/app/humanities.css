@@ -1,0 +1,209 @@
+/* Shared by published humanities articles and the editor's reading preview. */
+.humanities-paper {
+  --humanities-paper: #17202c;
+  --humanities-ink: #dcdedc;
+  --humanities-heading: #f1eee7;
+  --humanities-muted: #adb4bc;
+  --humanities-accent: #ddba85;
+  --humanities-line: rgba(221, 186, 133, 0.2);
+  --humanities-tint: rgba(221, 186, 133, 0.065);
+  --humanities-serif: "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", serif;
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--humanities-line);
+  border-radius: 1rem;
+  padding: clamp(1.25rem, 5%, 3.5rem);
+  background: var(--humanities-paper);
+  color: var(--humanities-ink);
+}
+
+html[data-theme="light"] .humanities-paper {
+  --humanities-paper: #fffdf8;
+  --humanities-ink: #413e38;
+  --humanities-heading: #282722;
+  --humanities-muted: #756b5d;
+  --humanities-accent: #8a5624;
+  --humanities-line: #e7ddcb;
+  --humanities-tint: #f6f0e5;
+  box-shadow: 0 12px 36px rgba(80, 63, 35, 0.045);
+}
+
+.humanities-inner {
+  max-width: 38rem;
+  min-width: 0;
+  margin-inline: auto;
+}
+
+.humanities-header {
+  margin-bottom: 2.25rem;
+  padding-bottom: 1.75rem;
+  border-bottom: 1px solid var(--humanities-line);
+}
+
+.humanities-kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 1.25rem;
+  color: var(--humanities-accent);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+}
+
+.humanities-kicker span { opacity: 0.45; }
+
+.humanities-title {
+  margin: 0 0 1rem;
+  font-family: var(--humanities-serif);
+  font-size: clamp(1.65rem, 3.2vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 0.025em;
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+  color: var(--humanities-heading);
+}
+
+.humanities-abstract {
+  margin-bottom: 1.5rem;
+  color: var(--humanities-muted);
+  font-size: 0.95rem;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+
+.humanities-meta,
+.humanities-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1rem;
+  color: var(--humanities-muted);
+  font-size: 0.75rem;
+}
+
+.humanities-meta time { font-variant-numeric: tabular-nums; }
+.humanities-tags { gap: 0.5rem; }
+.humanities-tags li {
+  max-width: 100%;
+  border: 1px solid var(--humanities-line);
+  border-radius: 0.35rem;
+  padding: 0.15rem 0.5rem;
+  overflow-wrap: anywhere;
+}
+
+.humanities-prose {
+  color: var(--humanities-ink);
+  font-size: 1.0625rem;
+  line-height: 1.95;
+  overflow-wrap: anywhere;
+}
+
+.humanities-prose :where(p, li, em) { color: var(--humanities-ink); }
+.humanities-prose p { margin-bottom: 1.25rem; line-height: 1.95; }
+.humanities-prose > :first-child { margin-top: 0; }
+.humanities-prose strong { color: var(--humanities-heading); font-weight: 600; }
+
+.humanities-prose :where(h1, h2, h3, h4) {
+  font-family: var(--humanities-serif);
+  color: var(--humanities-heading);
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.humanities-prose > h2 {
+  margin: 2.75rem 0 1.15rem;
+  border: 0;
+  border-left: 3px solid var(--humanities-accent);
+  padding: 0 0 0 0.8rem;
+  font-size: 1.45rem;
+}
+
+.humanities-prose > h2:first-child { margin-top: 0; }
+html[data-theme="light"] body .humanities-prose > h2 { border-left-color: var(--humanities-accent); }
+.humanities-prose h3 { margin: 1.8rem 0 0.8rem; font-size: 1.15rem; }
+.humanities-prose :where(ul, ol) { margin-bottom: 1.5rem; padding-left: 1.5rem; }
+.humanities-prose li { padding-left: 0.25rem; margin-block: 0.45rem; }
+.humanities-prose li::marker { color: var(--humanities-accent); }
+
+.humanities-prose blockquote {
+  margin-block: 1.75rem;
+  border: 0;
+  border-left: 2px solid var(--humanities-accent);
+  border-radius: 0 0.65rem 0.65rem;
+  padding: 1.2rem 1.4rem;
+  background: var(--humanities-tint);
+  font-family: var(--humanities-serif);
+  font-style: normal;
+}
+
+.humanities-prose blockquote p:last-child { margin-bottom: 0; }
+.humanities-prose blockquote p + p:last-child {
+  color: var(--humanities-muted);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+}
+
+.humanities-prose .blog-callout {
+  margin-block: 1.75rem;
+  border-color: var(--humanities-line);
+  border-radius: 0.65rem;
+  padding: 1.15rem 1.25rem;
+  background: var(--humanities-tint);
+}
+
+.humanities-prose .blog-callout-icon { display: none; }
+.humanities-prose .blog-callout p { font-size: 0.95rem; }
+
+html body .humanities-prose .blog-link {
+  color: var(--humanities-accent);
+  text-decoration-thickness: 1px;
+}
+
+.humanities-prose hr {
+  width: 4rem;
+  margin: 2.5rem auto;
+  border-color: var(--humanities-line);
+}
+
+.humanities-prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.5rem auto 0.75rem;
+  border-radius: 0.5rem;
+}
+
+.humanities-prose p:has(> img) + p:has(> em:only-child) {
+  color: var(--humanities-muted);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.humanities-prose p:has(> img) + p > em:only-child {
+  color: inherit;
+  font-style: normal;
+}
+
+/* Footnote targets need to clear the fixed site navigation in both readers. */
+.blog-reader :is([data-footnote-ref], .footnotes li) { scroll-margin-top: 6rem; }
+.blog-reader [data-footnote-ref] { padding-inline: 0.15em; text-decoration: none; }
+.blog-reader [data-footnote-backref] { padding: 0.35em; }
+.blog-reader .footnotes { margin-top: 2.75rem; border-top: 1px solid var(--glass-border); padding-top: 1.5rem; font-size: 0.875rem; }
+.blog-reader .footnotes .blog-footnote-heading { margin-top: 0; border: 0; padding: 0; font-size: 1rem; }
+.blog-reader .footnotes li { overflow-wrap: anywhere; }
+.blog-reader .footnotes :target { border-radius: 0.25rem; background: var(--muted-surface); }
+
+.humanities-prose .footnotes { border-color: var(--humanities-line); }
+.humanities-prose .footnotes :where(p, li) { color: var(--humanities-muted); font-size: 0.85rem; line-height: 1.85; }
+.humanities-prose .footnotes p { margin-bottom: 0.6rem; }
+.humanities-prose .footnotes :target { background: var(--humanities-tint); }
+.humanities-prose .footnotes > :last-child { margin-bottom: 0; }
+
+@media (max-width: 640px) {
+  .humanities-prose { font-size: 1rem; }
+  .humanities-title { font-size: 1.7rem; }
+  .humanities-prose > h2 { font-size: 1.3rem; }
+  .humanities-prose blockquote { padding: 1rem; }
+}

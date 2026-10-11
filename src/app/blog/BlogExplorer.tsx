@@ -43,6 +43,7 @@ function compareCourseSequence(a: PostSummary, b: PostSummary): number {
 const FOLDER_STYLES: Record<string, { color: string; icon: string }> = {
   tech: { color: "#3b82f6", icon: "💻" },
   timing: { color: "#06b6d4", icon: "⏱️" },
+  humanities: { color: "#d97706", icon: "📖" },
   guide: { color: "#ec4899", icon: "📚" },
   libo: { color: "#8b5cf6", icon: "📝" },
   default: { color: "#64748b", icon: "📁" },
@@ -94,10 +95,10 @@ export default function BlogExplorer({ localPosts }: { localPosts: PostSummary[]
       return result;
     }, {});
 
-    return CATEGORIES.filter((category) => counts[category.slug] > 0).map((category) => ({
+    return CATEGORIES.filter((category) => counts[category.slug] > 0 || category.showWhenEmpty).map((category) => ({
       ...category,
-      count: counts[category.slug],
-      ...FOLDER_STYLES[category.slug],
+      count: counts[category.slug] || 0,
+      ...(FOLDER_STYLES[category.slug] || FOLDER_STYLES.default),
     }));
   }, [localPosts]);
 
@@ -206,7 +207,9 @@ export default function BlogExplorer({ localPosts }: { localPosts: PostSummary[]
             </div>
           ) : (
             <div className="glass p-10 text-center text-sm text-gray-400">
-              没有找到匹配的文章，试试更短的关键词。
+              {search.trim()
+                ? "没有找到匹配的文章，试试更短的关键词。"
+                : "这个主题还没有公开文章，新的阅读与思考将在这里慢慢积累。"}
             </div>
           )}
         </section>
@@ -262,7 +265,7 @@ export default function BlogExplorer({ localPosts }: { localPosts: PostSummary[]
                 <h2 id="recent-posts-heading" className="text-2xl font-bold">
                   最新文章
                 </h2>
-                <p className="mt-2 text-sm text-gray-500">最近更新的技术笔记与学习记录。</p>
+                <p className="mt-2 text-sm text-gray-500">最近发布的技术实践、人文思考与学习记录。</p>
               </div>
               <div className="space-y-4">
                 {recentPosts.map((post, index) => (

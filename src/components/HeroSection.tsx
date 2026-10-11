@@ -32,7 +32,7 @@ export default function HeroSection() {
         <p
           className="text-gray-400 text-base md:text-lg max-w-xl mb-10 leading-relaxed"
         >
-          这里记录我的项目、技术笔记和踩坑过程。
+          这里记录我的项目、学习笔记，以及阅读与生活中的思考。
         </p>
       </div>
 

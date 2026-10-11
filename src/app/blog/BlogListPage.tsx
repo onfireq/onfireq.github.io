@@ -14,10 +14,10 @@ export default function BlogListPage({ localPosts }: { localPosts: PostSummary[]
         <div className="mx-auto min-w-0 max-w-3xl flex-1">
           <header className="mb-8">
             <p className="mb-3 text-sm font-semibold tracking-[0.18em] text-brand-cyan">NOTES & WRITING</p>
-            <h1 className="text-3xl font-bold md:text-4xl">技术博客</h1>
+            <h1 className="text-3xl font-bold md:text-4xl">博客</h1>
             <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
               <p className="text-sm leading-relaxed text-gray-400">
-                偏振控制、FPGA 时序、全栈开发与持续学习的实践记录。
+                记录技术实践，也记录历史、文化、阅读与生活中的思考。
               </p>
               <a
                 href="/rss.xml"

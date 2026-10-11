@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { HiArrowLeft, HiArrowRight, HiCalendar, HiFolder, HiTag } from "react-icons/hi";
 import BlogContent from "@/components/BlogContent";
+import HumanitiesArticle from "@/components/HumanitiesArticle";
 import TableOfContents from "@/components/TableOfContents";
 import { getCategoryName } from "@/lib/categories";
 import type { PostSummary } from "@/lib/blog";
@@ -81,6 +82,7 @@ export default function BlogPostPage({
   nextPost: PostSummary | null;
 }) {
   const hasTableOfContents = headings.length > 0;
+  const isHumanities = post.category === "humanities";
 
   return (
     <div className="min-h-screen px-6 pb-16 pt-24">
@@ -106,7 +108,7 @@ export default function BlogPostPage({
               </Link>
             </motion.nav>
 
-            <motion.header
+            {!isHumanities && <motion.header
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="mb-8"
@@ -137,7 +139,7 @@ export default function BlogPostPage({
                   </div>
                 )}
               </div>
-            </motion.header>
+            </motion.header>}
           </div>
 
           <div
@@ -155,9 +157,11 @@ export default function BlogPostPage({
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="glass p-5 sm:p-8 md:p-10"
+                className={isHumanities ? undefined : "glass p-5 sm:p-8 md:p-10"}
               >
-                <BlogContent content={post.content} format={post.format} />
+                {isHumanities
+                  ? <HumanitiesArticle {...post} />
+                  : <BlogContent content={post.content} format={post.format} />}
               </motion.div>
 
               <ArticleNavigation previousPost={previousPost} nextPost={nextPost} />

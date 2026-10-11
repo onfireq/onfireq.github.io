@@ -1,11 +1,12 @@
 # OnfireQ Portfolio
 
-一个聚焦偏振控制、扰偏算法、FPGA 部署与全栈开发的个人技术站。站点使用 Next.js App Router 构建，静态导出后部署到 GitHub Pages。
+一个记录偏振控制、FPGA 与全栈开发实践，也分享历史、文化与阅读思考的个人网站。站点使用 Next.js App Router 构建，静态导出后部署到 GitHub Pages。
 
 ## 主要内容
 
 - 个人定位、研究方向与 GitHub 仓库
-- Markdown / LaTeX 技术博客，支持 GFM、KaTeX 与代码高亮
+- Markdown / LaTeX 博客，支持技术文章、人文随笔、GFM、KaTeX 与代码高亮
+- 人文写作模板，可在 Markdown 编辑器中一键新建草稿
 - 按主题分类和本地即时搜索
 - GitHub、知乎等公开技术内容入口
 - 暗色 / 亮色主题、响应式布局与减少动态效果支持
@@ -55,6 +56,16 @@ published: true
 - 中文文件名可以保留，但建议显式填写简短、稳定的 ASCII `slug`。
 - 分类配置集中在 `src/lib/categories.ts`。
 - Wolai 同步使用 `npm run elog:sync`；本地凭据保存在 `.elog.env`，不得提交。
+
+### 写历史、文化与读书笔记
+
+- 在「博客 → Markdown 编辑器」点击「人文模板」，新建带当天日期的独立草稿；已有草稿会保留。
+- 也可以复制 [人文文章模板](content/templates/humanities.md) 到 `content/blog/humanities/`，修改文件名和元数据后开始写作。
+- 使用「人文」分类，以 `历史`、`文化`、`读书笔记` 等标签细分主题。`content/blog/人文/` 也会归入同一分类。
+- 模板和编辑器新建文章默认 `published: false`，完成后再改为 `true`。模板源文件不参与博客列表、搜索或 RSS。
+- Wolai 同步后检查本地目录和 frontmatter；分类由文件夹决定。
+
+详细流程、文章结构取舍与引用格式见 [人文写作指南](docs/writing-humanities.md)。
 
 ## 部署
 

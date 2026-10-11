@@ -49,7 +49,7 @@ ${categories}
   <channel>
     <title>OnfireQ 的博客</title>
     <link>${siteUrl}/blog/</link>
-    <description>偏振控制、FPGA、全栈开发与持续学习的实践记录。</description>
+    <description>技术实践、人文思考与阅读笔记，记录持续学习的过程。</description>
     <language>zh-CN</language>
     <lastBuildDate>${lastBuildDate}</lastBuildDate>
     <atom:link href="${feedUrl}" rel="self" type="application/rss+xml" />

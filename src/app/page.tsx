@@ -2,7 +2,7 @@ import HeroSection from "@/components/HeroSection";
 
 const destinations = [
   { href: "/projects", title: "项目经历", description: "从算法到部署的完整链路", icon: "🚀" },
-  { href: "/blog", title: "技术博客", description: "深度思考与学习记录", icon: "✍️" },
+  { href: "/blog", title: "博客", description: "技术实践、人文思考与阅读记录", icon: "✍️" },
   { href: "/about", title: "关于我", description: "硬件 & 软件 全栈工程师", icon: "👨‍💻" },
 ];
 

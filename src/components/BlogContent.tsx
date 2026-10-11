@@ -194,16 +194,24 @@ function CodeBlock({ children }: { children: ReactNode }) {
 export default function BlogContent({
   content,
   format = "md",
+  variant = "default",
 }: {
   content: string;
   format?: BlogFormat;
+  variant?: "default" | "humanities";
 }) {
   const preparedContent = prepareRenderedContent(content, format);
 
   return (
-    <div className="blog-reader prose prose-invert prose-lg max-w-none">
+    <div className={`blog-reader prose prose-invert prose-lg max-w-none${variant === "humanities" ? " humanities-prose" : ""}`}>
       <ReactMarkdown
+        skipHtml={variant === "humanities"}
         remarkPlugins={[remarkGfm, remarkMath]}
+        remarkRehypeOptions={{
+          footnoteLabel: "注释与出处",
+          footnoteLabelProperties: { className: ["blog-footnote-heading"] },
+          footnoteBackLabel: "返回正文中的引用",
+        }}
         rehypePlugins={[
           rehypeSlug,
           rehypeCallouts,
@@ -224,10 +232,10 @@ export default function BlogContent({
               {children}
             </h1>
           ),
-          h2: ({ children, id }) => (
+          h2: ({ children, id, className = "" }) => (
             <h2
               id={id}
-              className="scroll-mt-24 text-2xl font-bold mt-8 mb-3 border-b border-white/10 pb-2"
+              className={`scroll-mt-24 text-2xl font-bold mt-8 mb-3 border-b border-white/10 pb-2 ${className}`}
             >
               {children}
             </h2>
@@ -238,12 +246,17 @@ export default function BlogContent({
             </h3>
           ),
           p: ({ children }) => <p className="text-gray-300 leading-relaxed mb-4">{children}</p>,
-          a: ({ href, children }) => {
+          a: ({ href, children, id, className, ...props }) => {
             const external = href?.startsWith("http://") || href?.startsWith("https://");
             return (
               <a
+                id={id}
+                aria-label={props["aria-label"]}
+                aria-describedby={props["aria-describedby"]}
+                data-footnote-ref={props.node?.properties?.dataFootnoteRef !== undefined ? "" : undefined}
+                data-footnote-backref={props.node?.properties?.dataFootnoteBackref !== undefined ? "" : undefined}
                 href={href}
-                className="blog-link font-medium underline decoration-current/45 underline-offset-4 transition-colors hover:decoration-current"
+                className={`blog-link font-medium underline decoration-current/45 underline-offset-4 transition-colors hover:decoration-current ${className || ""}`}
                 target={external ? "_blank" : undefined}
                 rel={external ? "noopener noreferrer" : undefined}
               >
@@ -258,7 +271,7 @@ export default function BlogContent({
           ol: ({ children }) => (
             <ol className="mb-4 list-outside list-decimal space-y-1 pl-6 text-gray-300">{children}</ol>
           ),
-          li: ({ children }) => <li className="text-gray-300">{children}</li>,
+          li: ({ children, id }) => <li id={id} className="text-gray-300">{children}</li>,
           blockquote: ({ children, node }) => {
             const value = node?.properties?.calloutType;
             const calloutType = typeof value === "string" ? value : "";
@@ -274,9 +287,9 @@ export default function BlogContent({
             if (calloutType && calloutStyles[calloutType]) {
               const style = calloutStyles[calloutType];
               return (
-                <div className={`${style.bg} border ${style.border} rounded-xl p-4 my-4`}>
+                <div className={`blog-callout ${style.bg} border ${style.border} rounded-xl p-4 my-4`}>
                   <div className="flex items-start gap-2">
-                    <span className="text-lg mt-0.5" aria-hidden="true">
+                    <span className="blog-callout-icon text-lg mt-0.5" aria-hidden="true">
                       {style.icon}
                     </span>
                     <div className="text-sm text-gray-300 [&>p:last-child]:mb-0">{children}</div>

@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BackToTop from "@/components/BackToTop";
 import "./globals.css";
+import "./humanities.css";
 
 const siteUrl = new URL("https://onfireq.github.io");
 const siteDescription = "onfireq的个人网站";

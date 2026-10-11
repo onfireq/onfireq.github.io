@@ -3,7 +3,7 @@ import BlogListPage from "./BlogListPage";
 
 export const metadata = {
   title: "博客",
-  description: "偏振控制算法研究与全栈开发的技术博客",
+  description: "OnfireQ 的技术实践、人文思考与阅读笔记，涵盖偏振控制、FPGA、历史与文化。",
   alternates: {
     canonical: "/blog",
     types: { "application/rss+xml": "/rss.xml" },
