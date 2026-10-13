@@ -43,6 +43,7 @@ function compareCourseSequence(a: PostSummary, b: PostSummary): number {
 const FOLDER_STYLES: Record<string, { color: string; icon: string }> = {
   tech: { color: "#3b82f6", icon: "💻" },
   timing: { color: "#06b6d4", icon: "⏱️" },
+  imx6ull: { color: "#10b981", icon: "🔧" },
   humanities: { color: "#d97706", icon: "📖" },
   guide: { color: "#ec4899", icon: "📚" },
   libo: { color: "#8b5cf6", icon: "📝" },

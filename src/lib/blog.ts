@@ -197,10 +197,16 @@ function parsePostFile(filePath: string): ParsedPost {
 
   const slug = computeSlug(fileNameSlug, data, category);
   const legacySlug = computeLegacySlug(fileNameSlug, data, category);
+  const legacySlugs = new Set(legacySlug === slug ? [] : [legacySlug]);
+  // These posts were published under the default category before their own section existed.
+  if (category === "imx6ull") {
+    legacySlugs.add(computeSlug(fileNameSlug, data, "default"));
+    legacySlugs.add(computeLegacySlug(fileNameSlug, data, "default"));
+  }
 
   return {
     slug,
-    legacySlugs: legacySlug === slug ? [] : [legacySlug],
+    legacySlugs: Array.from(legacySlugs),
     originalSlug: data.slug || fileNameSlug,
     title: data.title,
     date: data.date,

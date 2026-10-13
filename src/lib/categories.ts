@@ -11,6 +11,12 @@ export const CATEGORIES: Category[] = [
   { slug: "tech", name: "技术", description: "偏振控制、FPGA、全栈开发等技术笔记" },
   { slug: "timing", name: "时序", description: "FPGA 时序约束、CDC、DAC/ADC 调试" },
   {
+    slug: "imx6ull",
+    name: "i.MX6ULL",
+    description: "嵌入式 Linux、开发板实践与应用编程笔记",
+    directories: ["Linux-imx6ull"],
+  },
+  {
     slug: "humanities",
     name: "人文",
     description: "历史、文化、阅读与日常观察，从一个问题开始思考",
