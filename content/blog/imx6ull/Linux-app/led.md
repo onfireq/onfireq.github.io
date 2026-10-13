@@ -1,12 +1,13 @@
 ---
-title: "笔记1"
+title: "led闪烁"
 date: "2026-10-11"
 tags: ["Linux", "i.MX6ULL"]
-description: ""
-published: false
+description: "记录 Linux 命令行参数、sysfs 接口与 i.MX6ULL LED 控制程序。"
+published: true
 ---
 
-#### 命令行参数
+## 命令行参数
+
 ```text
 命令 [选项] [参数]
 ```
@@ -31,7 +32,7 @@ apt install -y 软件名
 
 操作vim编辑器
 
-```bash 
+```bash
 vim 文件名
 ```
 
@@ -81,7 +82,7 @@ scp 文件名 root@板子ip:板子目录/
 参数：文件名、板子ip、板子目录
 选项：无
 
-#### 带参数的主函数
+## 带参数的主函数
 
 参数并不是写程序的时候决定的，而是在运行的时候决定的。
 
@@ -157,7 +158,7 @@ int main(int argc, char *argv[]){
 }
 ```
 
-#### 使用sysfs控制led灯的亮灭
+## 使用sysfs控制led灯的亮灭
 
 使用sysfs控制led灯的亮灭。
 sysfs：系统文件系统，用于将内核数据结构暴露给用户空间。
@@ -182,7 +183,7 @@ echo 1 > /sys/class/leds/sys-led/brightness
 
 用户空间->内核空间->驱动程序->硬件设备
 
-#### 使用c语言实现led灯的控制灭程序
+## 使用c语言实现led灯的控制灭程序
 
 呼吸灯程序
 

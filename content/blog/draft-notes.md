@@ -1,14 +1,11 @@
 ---
-title: "【私密】研究生阶段学习笔记 - 待整理"
+title: "研究生阶段学习笔记 - 待整理"
 date: "2026-07-25"
 tags: ["学习笔记", "待整理"]
-description: "个人学习记录，暂不公开。"
-published: false
+description: "研究生阶段的学习记录与待整理知识点。"
+published: true
 cover: null
 ---
-
-> [!warning]
-> 这篇草稿不会显示在网站上；如果代码仓库公开，源文件仍然可以被访问。
 
 ## 待整理的知识点
 

@@ -31,6 +31,23 @@ export default function ProjectsPage() {
               </span>
             </div>
           </a>
+          <a
+            href="/laozi/"
+            className="group glass mt-6 block rounded-xl p-8 transition-all hover:border-[var(--color-brand-purple)]/30 hover:shadow-lg"
+          >
+            <div className="flex items-center gap-6">
+              <div className="flex-shrink-0 flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--color-brand-purple)]/15 to-[var(--color-brand-cyan)]/15 text-3xl">
+                道
+              </div>
+              <div className="flex-1">
+                <h2 className="text-xl font-bold mb-1">观道 · 道德经研习</h2>
+                <p className="text-sm text-gray-400">八十一章全文研读 · 核心概念洞察 · 名句速查</p>
+              </div>
+              <span className="hidden text-sm font-medium text-[var(--color-brand-purple)] opacity-0 transition-opacity group-hover:opacity-100 sm:inline">
+                进入研习 →
+              </span>
+            </div>
+          </a>
         </div>
       </section>
 
