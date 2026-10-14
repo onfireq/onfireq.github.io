@@ -4,6 +4,7 @@ date: "2026-10-11"
 tags: ["Linux", "i.MX6ULL"]
 description: "记录 i.MX6ULL 蜂鸣器的工作原理与 Linux 控制程序。"
 published: true
+order: 3
 ---
 
 ## 蜂鸣器蜂鸣

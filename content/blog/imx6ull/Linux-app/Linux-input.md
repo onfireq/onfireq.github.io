@@ -4,6 +4,7 @@ date: "2026-10-11"
 tags: ["Linux", "i.MX6ULL"]
 description: "介绍 Linux input 子系统、输入设备节点与输入事件的读取。"
 published: true
+order: 4
 ---
 
 ## Linux-input子系统

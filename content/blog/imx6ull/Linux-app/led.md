@@ -4,6 +4,7 @@ date: "2026-10-11"
 tags: ["Linux", "i.MX6ULL"]
 description: "记录 Linux 命令行参数、sysfs 接口与 i.MX6ULL LED 控制程序。"
 published: true
+order: 2
 ---
 
 ## 命令行参数

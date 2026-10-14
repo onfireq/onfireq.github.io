@@ -3,6 +3,7 @@ import path from "path";
 import matter from "gray-matter";
 import { z } from "zod";
 import { CATEGORIES, getCategoryName as gcn, type Category } from "./categories";
+import { compareNoteOrder } from "./blog-order";
 
 export type { Category };
 
@@ -13,6 +14,7 @@ export interface Post {
   date: string;
   tags: string[];
   published: boolean;
+  order?: number;
   description: string;
   cover?: string;
   content: string;
@@ -59,6 +61,7 @@ const frontmatterSchema = z
       .max(12, "标签不能超过 12 个")
       .transform((tags) => Array.from(new Set(tags))),
     published: z.boolean(),
+    order: z.number().int().positive().optional(),
     description: z.string().trim().max(240, "摘要不能超过 240 个字符"),
     slug: z
       .string()
@@ -212,6 +215,7 @@ function parsePostFile(filePath: string): ParsedPost {
     date: data.date,
     tags: data.tags,
     published: data.published,
+    order: data.order,
     description: data.description,
     cover: data.cover,
     content: parsed.content,
@@ -228,6 +232,7 @@ function toSummary(post: Post): PostSummary {
     date: post.date,
     tags: post.tags,
     published: post.published,
+    order: post.order,
     description: post.description,
     cover: post.cover,
     format: post.format,
@@ -286,17 +291,17 @@ export function getAllTags(): string[] {
 }
 
 export function getPostsByCategory(category: string): PostSummary[] {
-  return getAllPosts().filter((post) => post.category === category);
+  return getAllPosts().filter((post) => post.category === category).sort(compareNoteOrder);
 }
 
 export function getAdjacentPosts(slug: string, category: string): AdjacentPosts {
-  const posts = getAllPosts().filter((post) => post.category === category);
+  const posts = getPostsByCategory(category);
   const index = posts.findIndex((post) => post.slug === slug);
 
   if (index === -1) return { previous: null, next: null };
 
   return {
-    previous: posts[index + 1] || null,
-    next: posts[index - 1] || null,
+    previous: posts[index - 1] || null,
+    next: posts[index + 1] || null,
   };
 }

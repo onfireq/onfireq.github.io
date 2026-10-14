@@ -6,39 +6,12 @@ import Link from "next/link";
 import { HiArrowLeft, HiPencil, HiSearch } from "react-icons/hi";
 import BlogCard from "@/components/BlogCard";
 import { CATEGORIES } from "@/lib/categories";
+import { compareNoteOrder } from "@/lib/blog-order";
 import type { Post } from "@/lib/blog";
 
 type PostSummary = Omit<Post, "content">;
 
 const CATEGORY_CHANGE_EVENT = "blog-category-change";
-
-function getSequenceParts(post: PostSummary): number[] | null {
-  const match = post.originalSlug?.match(/^(\d+(?:\.\d+)*)/);
-  return match ? match[1].split(".").map(Number) : null;
-}
-
-function compareCourseSequence(a: PostSummary, b: PostSummary): number {
-  const aParts = getSequenceParts(a);
-  const bParts = getSequenceParts(b);
-
-  if (aParts && bParts) {
-    const length = Math.max(aParts.length, bParts.length);
-    for (let index = 0; index < length; index += 1) {
-      const difference = (aParts[index] ?? 0) - (bParts[index] ?? 0);
-      if (difference) return difference;
-    }
-  } else if (aParts) {
-    return -1;
-  } else if (bParts) {
-    return 1;
-  }
-
-  return (a.originalSlug || a.title).localeCompare(
-    b.originalSlug || b.title,
-    "zh-CN",
-    { numeric: true },
-  );
-}
 
 const FOLDER_STYLES: Record<string, { color: string; icon: string }> = {
   tech: { color: "#3b82f6", icon: "💻" },
@@ -113,7 +86,7 @@ export default function BlogExplorer({ localPosts }: { localPosts: PostSummary[]
       return matchesCategory && (!query || searchableText.includes(query));
     });
 
-    return activeCategory === "libo" ? posts.sort(compareCourseSequence) : posts;
+    return activeCategory ? posts.sort(compareNoteOrder) : posts;
   }, [activeCategory, localPosts, search]);
 
   const showPosts = Boolean(activeCategory || search.trim());
