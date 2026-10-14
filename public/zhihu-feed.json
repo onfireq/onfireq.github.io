@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-14T01:56:07+00:00",
+  "updatedAt": "2026-10-14T07:35:03+00:00",
   "profile": {
     "followers": 18,
     "followersSource": "automatic"
@@ -13,7 +13,7 @@
     "questionCount": 5,
     "totalLikes": 95,
     "totalComments": 9,
-    "totalFavorites": 60,
+    "totalFavorites": 61,
     "windowSize": 41,
     "totalAvailable": 41
   },
@@ -335,7 +335,7 @@
       "summary": "上面的回答很好，但是好像有点不够具体。这个问题，我之前也困惑了很久。 我们不妨以光线性吸收的例子开始。 假设有一束单色平行光沿x方向通过均匀介质（如图所示）。 [图片] 设光的强度在经过厚度为 [公式] 的一层介质时，强度由 [公式] 减为 [公式] 。实验表明，在相当广阔的光强范围内， [公式] 正比于 [公式] 和 [公式] ，有： [公式] 式中， [公式] 是个与光强无关的比例系数，称为该物质的…",
       "likeCount": 6,
       "commentCount": 0,
-      "favoriteCount": 13,
+      "favoriteCount": 14,
       "createdAt": 1698766398
     },
     {
