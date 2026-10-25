@@ -1,7 +1,7 @@
 // 知乎数据（自动生成，请勿手动编辑）
-// 最后更新: 2026-10-25T16:12:48+00:00
+// 最后更新: 2026-10-25T19:01:41+00:00
 
-export const zhihuSnapshotUpdatedAt = "2026-10-25T16:12:48+00:00";
+export const zhihuSnapshotUpdatedAt = "2026-10-25T19:01:41+00:00";
 
 export interface ZhihuContent {
   type: 'answer' | 'article' | 'pin' | 'video' | 'question';
