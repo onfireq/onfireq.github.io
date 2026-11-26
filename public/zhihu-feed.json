@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-26T12:24:40+00:00",
+  "updatedAt": "2026-11-26T22:19:08+00:00",
   "profile": {
     "followers": 18,
     "followersSource": "automatic"
@@ -8,16 +8,26 @@
   "stats": {
     "answerCount": 20,
     "articleCount": 2,
-    "pinCount": 14,
+    "pinCount": 15,
     "videoCount": 0,
     "questionCount": 5,
     "totalLikes": 98,
     "totalComments": 9,
     "totalFavorites": 61,
-    "windowSize": 41,
-    "totalAvailable": 41
+    "windowSize": 42,
+    "totalAvailable": 42
   },
   "contents": [
+    {
+      "type": "pin",
+      "title": "[图片] 表示赞同 徽章佩戴留念，期待在知乎继续前行，探索无尽可能。",
+      "url": "https://www.zhihu.com/pin/2109448035843559996",
+      "summary": "[图片] 表示赞同 徽章佩戴留念，期待在知乎继续前行，探索无尽可能。",
+      "likeCount": 0,
+      "commentCount": 0,
+      "favoriteCount": 0,
+      "createdAt": 1795711603
+    },
     {
       "type": "answer",
       "title": "收到了西北工业大学课题组的回信，我是否应该放弃科研，专注工程开发？",

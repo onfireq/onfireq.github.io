@@ -1,7 +1,7 @@
 // 知乎数据（自动生成，请勿手动编辑）
-// 最后更新: 2026-11-26T12:24:40+00:00
+// 最后更新: 2026-11-26T22:19:08+00:00
 
-export const zhihuSnapshotUpdatedAt = "2026-11-26T12:24:40+00:00";
+export const zhihuSnapshotUpdatedAt = "2026-11-26T22:19:08+00:00";
 
 export interface ZhihuContent {
   type: 'answer' | 'article' | 'pin' | 'video' | 'question';
@@ -28,6 +28,16 @@ export interface ZhihuStats {
 }
 
 export const zhihuContents: ZhihuContent[] = [
+  {
+    "type": "pin",
+    "title": "[图片] 表示赞同 徽章佩戴留念，期待在知乎继续前行，探索无尽可能。",
+    "url": "https://www.zhihu.com/pin/2109448035843559996",
+    "summary": "[图片] 表示赞同 徽章佩戴留念，期待在知乎继续前行，探索无尽可能。",
+    "likeCount": 0,
+    "commentCount": 0,
+    "favoriteCount": 0,
+    "createdAt": 1795711603
+  },
   {
     "type": "answer",
     "title": "收到了西北工业大学课题组的回信，我是否应该放弃科研，专注工程开发？",
@@ -443,11 +453,11 @@ export const zhihuContents: ZhihuContent[] = [
 export const zhihuStats: ZhihuStats = {
   "answerCount": 20,
   "articleCount": 2,
-  "pinCount": 14,
+  "pinCount": 15,
   "videoCount": 0,
   "questionCount": 5,
   "totalLikes": 98,
   "totalComments": 9,
   "totalFavorites": 61,
-  "totals": 41
+  "totals": 42
 };
